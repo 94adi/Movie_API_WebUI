@@ -1,0 +1,9 @@
+﻿global using Microsoft.AspNetCore.Identity;
+global using Microsoft.EntityFrameworkCore;
+global using Movie.API.Data;
+global using Movie.API.Models;
+global using Microsoft.Extensions.Configuration;
+global using Microsoft.IdentityModel.Tokens;
+global using Movie.API;
+global using Asp.Versioning;
+global using Microsoft.AspNetCore.Authentication.JwtBearer;
