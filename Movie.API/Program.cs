@@ -23,7 +23,7 @@ builder.Services.AddAuthentication(opt =>
 .AddJwtBearer(opt =>
 {
     //dev settings
-    opt.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+    opt.TokenValidationParameters = new TokenValidationParameters
     {
         
         ValidateIssuer = false,
@@ -51,7 +51,6 @@ var app = builder.Build();
 
 app.ApplyMigration();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

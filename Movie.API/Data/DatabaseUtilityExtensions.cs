@@ -8,8 +8,8 @@ namespace Movie.API.Data
         {
             using (var scope = app.Services.CreateScope())
             {
-                var _db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-              
+                var _db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();            
+
                 if (_db.Database.GetPendingMigrations().Count() > 0)
                 {
                     _db.Database.Migrate();
