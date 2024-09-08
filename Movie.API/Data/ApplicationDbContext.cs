@@ -21,7 +21,26 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.Entity<Movie.API.Models.Movie>()
+        modelBuilder.Entity<Models.Movie>()
             .HasKey(m => m.Id);
+
+        modelBuilder.Entity<Models.Movie>()
+            .Property(m => m.ReleaseDate)
+            .HasConversion(
+                p => p.ToDateTime(TimeOnly.MinValue),
+                p => DateOnly.FromDateTime(p)
+            );
+
+        modelBuilder.Entity<Models.Movie>()
+            .Property(m => m.CreatedDate)
+            .HasColumnType("datetime2");
+
+        modelBuilder.Entity<Models.Movie>()
+            .Property(m => m.LatestUpdateDate)
+            .HasColumnType("datetime2");
+
+        modelBuilder.Entity<Models.Movie>()
+            .Property(m => m.Rating)
+            .HasColumnType("decimal(3,1)");
     }
 }

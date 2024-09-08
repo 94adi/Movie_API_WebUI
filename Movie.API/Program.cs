@@ -1,3 +1,8 @@
+using Movie.API.Mapper;
+using Movie.API.Repository;
+using Movie.API.Repository.Abstractions;
+using System.Reflection;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<ApplicationDbContext>(opt =>
@@ -12,6 +17,17 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddAutoMapper(typeof(MapperProfile));
+
+var assembly = typeof(Program).Assembly;
+
+builder.Services.AddMediatR(config =>
+{
+    config.RegisterServicesFromAssembly(assembly);
+});
+
+builder.Services.AddScoped<IMovieRepository, MovieRepository>();
 
 var key = builder.GetPrivateKey();
 
