@@ -1,6 +1,12 @@
+using Microsoft.Extensions.Options;
 using Movie.API.Mapper;
 using Movie.API.Repository;
 using Movie.API.Repository.Abstractions;
+using Movie.API.Services.Seed;
+using Movie.API.Services.Token;
+using Movie.API.Services.User;
+using Movie.API.Utils;
+using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,9 +20,8 @@ builder.Services.AddIdentity<ApplicationUser,IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
 builder.Services.AddAutoMapper(typeof(MapperProfile));
 
@@ -28,6 +33,14 @@ builder.Services.AddMediatR(config =>
 });
 
 builder.Services.AddScoped<IMovieRepository, MovieRepository>();
+builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
+builder.Services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
+builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<ISeedDataService, SeedDataService>();
+builder.Services.AddScoped<IUserService, UserService>();
+
+builder.Services.AddSwaggerGen();
 
 var key = builder.GetPrivateKey();
 
@@ -65,10 +78,10 @@ builder.Services.AddApiVersioning(opt =>
 
 var app = builder.Build();
 
-app.ApplyMigration();
-
 if (app.Environment.IsDevelopment())
 {
+    await app.ApplyMigration();
+    await app.SeedDatabase();
     app.UseSwagger();
     app.UseSwaggerUI();
 }

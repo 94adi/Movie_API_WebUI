@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace Movie.API
+namespace Movie.API.Utils
 {
     public static class Utilities
     {

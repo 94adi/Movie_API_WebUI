@@ -1,11 +1,4 @@
-﻿using AutoMapper;
-using Movie.API.Models.Requests;
-using Movie.API.Models.Responses;
-using Movie.API.Services.Handlers.Movies.CreateMovie;
-using Movie.API.Services.Handlers.Movies.GetMovie;
-using Movie.API.Services.Handlers.Movies.GetMovies;
-
-namespace Movie.API.Mapper;
+﻿namespace Movie.API.Mapper;
 
 public class MapperProfile : Profile
 {
@@ -21,5 +14,10 @@ public class MapperProfile : Profile
         CreateMap<CreateMovieResult, CreateMovieResponse>();
 
         CreateMap<GetMovieResult, GetMovieResponse>();
+
+        CreateMap<ApplicationUser, RegisterResult>();
+
+        CreateMap<RegisterUserRequest, RegisterCommand>();
+        CreateMap<RegisterResult, RegisterUserResponse>();
     }
 }

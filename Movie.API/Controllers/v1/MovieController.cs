@@ -1,8 +1,6 @@
-﻿using Azure;
-using Movie.API.Models.Requests;
-using Movie.API.Services.Handlers.Movies.CreateMovie;
-using Movie.API.Services.Handlers.Movies.GetMovie;
-using Movie.API.Services.Handlers.Movies.GetMovies;
+﻿using Movie.API.Services.Handlers.Movies.CreateMovie;
+using Movie.API.Services.Handlers.Movies.Queries.GetMovie;
+using Movie.API.Services.Handlers.Movies.Queries.GetMovies;
 
 namespace Movie.API.Controllers.v1;
 
@@ -42,7 +40,7 @@ public class MovieController : Controller
 
         if (pagination.PageSize > 0) 
         {
-            Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(pagination));
+            Response.Headers.Append("X-Pagination", JsonSerializer.Serialize(pagination));
         }
         
         return Ok(apiResponse);

@@ -17,12 +17,17 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 
     public DbSet<ApplicationUser> ApplicationUsers { get; set; }
 
+    public DbSet<RefreshToken> RefreshTokens { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.Entity<Models.Movie>()
             .HasKey(m => m.Id);
+
+        modelBuilder.Entity<RefreshToken>()
+            .HasKey(p => p.Id);
 
         modelBuilder.Entity<Models.Movie>()
             .Property(m => m.ReleaseDate)

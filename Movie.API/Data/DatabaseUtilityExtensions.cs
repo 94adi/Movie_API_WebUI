@@ -1,22 +1,32 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Movie.API.Services.Seed;
 
 namespace Movie.API.Data
 {
     public static class DatabaseUtilityExtensions
     {
-        public static void ApplyMigration(this WebApplication app)
+        public static async Task ApplyMigration(this WebApplication app)
         {
             using (var scope = app.Services.CreateScope())
             {
                 var _db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
-                _db.Database.EnsureDeleted();
+                await _db.Database.EnsureDeletedAsync();
 
                 if (_db.Database.GetPendingMigrations().Count() > 0)
                 {
-                    _db.Database.Migrate();
+                    await _db.Database.MigrateAsync();
                 }
             }
+        }
+
+        public static async Task SeedDatabase(this WebApplication app) 
+        { 
+            using var scope = app.Services.CreateScope();
+
+            var serviceSeed = scope.ServiceProvider.GetRequiredService<ISeedDataService>();
+
+            await serviceSeed.SeedAsync();
         }
     }
 }
