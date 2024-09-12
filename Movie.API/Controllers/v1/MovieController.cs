@@ -1,13 +1,9 @@
-﻿using Movie.API.Services.Handlers.Movies.CreateMovie;
-using Movie.API.Services.Handlers.Movies.Queries.GetMovie;
-using Movie.API.Services.Handlers.Movies.Queries.GetMovies;
-
-namespace Movie.API.Controllers.v1;
+﻿namespace Movie.API.Controllers.v1;
 
 [ApiController]
 [Route("api/v{version:apiVersion}/MovieAPI")]
 [ApiVersion("1.0")]
-//[Authorize]
+[Authorize]
 public class MovieController : Controller
 {
     private readonly ISender _sender;
@@ -24,8 +20,15 @@ public class MovieController : Controller
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<APIResponse>> GetMovies([AsParameters] GetMoviesRequest request)
+    public async Task<ActionResult<APIResponse>> GetMovies([FromQuery] int pageNumber = 1,
+        [FromQuery] int pageSize = 0)
     {
+        var request = new GetMoviesRequest
+        {
+            PageNumber = pageNumber,
+            PageSize = pageSize
+        };
+
         var query = _mapper.Map<GetMoviesQuery>(request);
         var result = await _sender.Send(query);
         var response = _mapper.Map<GetMoviesResponse>(result);

@@ -1,7 +1,4 @@
-﻿using Movie.API.Repository.Abstractions;
-using Movie.BuildingBlocks.CQRS;
-
-namespace Movie.API.Services.Handlers.Movies.Queries.GetMovie
+﻿namespace Movie.API.Services.Handlers.Movies.Queries.GetMovie
 {
     public record GetMovieQuery(int Id) : IQuery<GetMovieResult>;
 

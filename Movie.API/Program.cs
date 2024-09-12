@@ -85,6 +85,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+else
+{
+    await app.ApplyMigration();
+}
 
 app.UseHttpsRedirection();
 

@@ -17,7 +17,7 @@ ICommandHandler<GenerateRefreshTokenCommand, GenerateRefreshTokenResult>
             UserId = command.UserId,
             JwtTokenId = command.TokenId,
             ExpiresAt = DateTime.UtcNow.AddMinutes(30),
-            Refresh_Token = Guid.NewGuid + "-" + Guid.NewGuid()
+            Refresh_Token = Guid.NewGuid() + "-" + Guid.NewGuid()
         };
 
         await repository.CreateAsync(refreshToken);

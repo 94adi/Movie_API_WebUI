@@ -1,4 +1,6 @@
-﻿namespace Movie.API.Mapper;
+﻿using Movie.API.Services.Handlers.Users.Commands.Login;
+
+namespace Movie.API.Mapper;
 
 public class MapperProfile : Profile
 {
@@ -9,6 +11,7 @@ public class MapperProfile : Profile
         CreateMap<GetMoviesResult, GetMoviesResponse>();
 
         CreateMap<GetMoviesQuery, Pagination>();
+        CreateMap<GetMoviesRequest, Pagination>();
 
         CreateMap<CreateMovieRequest, CreateMovieCommand>();
         CreateMap<CreateMovieResult, CreateMovieResponse>();
@@ -19,5 +22,8 @@ public class MapperProfile : Profile
 
         CreateMap<RegisterUserRequest, RegisterCommand>();
         CreateMap<RegisterResult, RegisterUserResponse>();
+
+        CreateMap<LoginRequest, LoginCommand>();
+        CreateMap<Token, LoginResponse>().ReverseMap();
     }
 }

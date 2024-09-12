@@ -4,7 +4,7 @@ namespace Movie.API.Services.Handlers.Users.Commands.Login;
 
 public record LoginCommand(string Username, string Password) : ICommand<LoginResult>;
 
-public record LoginResult(Models.Token TokenDto);
+public record LoginResult(Models.Token Token);
 
 internal class LoginCommandHandler(UserManager<ApplicationUser> userManager,
     IUserRepository userRepository,

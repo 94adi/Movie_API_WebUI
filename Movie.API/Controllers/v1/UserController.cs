@@ -1,4 +1,6 @@
-﻿namespace Movie.API.Controllers.v1;
+﻿using Movie.API.Services.Handlers.Users.Commands.Login;
+
+namespace Movie.API.Controllers.v1;
 
 [ApiController]
 [Route("api/v{version:apiVersion}/Identity")]
@@ -30,8 +32,21 @@ public class UserController(IMapper mapper,
 
     [AllowAnonymous]
     [HttpPost("Login")]
-    public IActionResult Login()
+    public async Task<ActionResult<APIResponse>> Login([FromBody] LoginRequest request)
     {
-        return Ok();
+        var command = mapper.Map<LoginCommand>(request);
+
+        var result = await sender.Send(command);
+
+        var response = mapper.Map<LoginResponse>(result.Token);
+
+        var apiResponse = new APIResponse
+        {
+            Result = response,
+            IsSuccess = true,
+            StatusCode = System.Net.HttpStatusCode.OK
+        };
+
+        return Ok(apiResponse);
     }
 }
