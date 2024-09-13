@@ -1,19 +1,14 @@
-using Microsoft.Extensions.Options;
-using Movie.API.Mapper;
-using Movie.API.Repository;
-using Movie.API.Repository.Abstractions;
-using Movie.API.Services.Seed;
-using Movie.API.Services.Token;
-using Movie.API.Services.User;
-using Movie.API.Utils;
-using Swashbuckle.AspNetCore.SwaggerGen;
-using System.Reflection;
+using FluentValidation;
+using HealthChecks.UI.Client;
+using Movie.BuildingBlocks.Behaviors;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var connectionString = builder.Configuration.GetConnectionString("Database");
+
 builder.Services.AddDbContext<ApplicationDbContext>(opt =>
 {
-    opt.UseSqlServer(builder.Configuration.GetConnectionString("Database"));
+    opt.UseSqlServer(connectionString);
 });
 
 builder.Services.AddIdentity<ApplicationUser,IdentityRole>()
@@ -30,7 +25,11 @@ var assembly = typeof(Program).Assembly;
 builder.Services.AddMediatR(config =>
 {
     config.RegisterServicesFromAssembly(assembly);
+    config.AddOpenBehavior(typeof(ValidationBehavior<,>));
+    config.AddOpenBehavior(typeof(LoggingBehavior<,>));
 });
+
+builder.Services.AddValidatorsFromAssembly(assembly);
 
 builder.Services.AddScoped<IMovieRepository, MovieRepository>();
 builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
@@ -76,6 +75,10 @@ builder.Services.AddApiVersioning(opt =>
     opt.SubstituteApiVersionInUrl = true;
 });
 
+builder.Services.AddExceptionHandler<CustomExceptionHandler>();
+
+builder.Services.AddHealthChecks().AddSqlServer(connectionString);
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -95,5 +98,12 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseExceptionHandler(opt => { });
+
+app.UseHealthChecks("/health", new Microsoft.AspNetCore.Diagnostics.HealthChecks.HealthCheckOptions
+{
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+});
 
 app.Run();

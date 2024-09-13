@@ -1,4 +1,5 @@
-﻿using Movie.API.Services.User;
+﻿using BuildingBlocks.Exceptions;
+using Movie.API.Services.User;
 using Movie.BuildingBlocks;
 
 namespace Movie.API.Services.Handlers.Users.Commands.Register;
@@ -21,7 +22,7 @@ internal class RegisterCommandHandler(UserManager<ApplicationUser> userManager,
 
         if (!isUserUnique) 
         {
-            return new RegisterResult(null, null, null);
+            throw new BadRequestException("Username already exists");
         }
 
         ApplicationUser user = new()
@@ -34,23 +35,23 @@ internal class RegisterCommandHandler(UserManager<ApplicationUser> userManager,
 
         var result = await userManager.CreateAsync(user, command.Password);
 
-        if (result.Succeeded)
+        if (!result.Succeeded) 
         {
-            if (!roleManager.RoleExistsAsync(command.Role).GetAwaiter().GetResult())
-            {
-                await userManager.AddToRoleAsync(user, StaticDetails.userRolesDict[UserRoles.USER]);
-            }
-            else
-            {
-                await userManager.AddToRoleAsync(user, command.Role);
-            }
-
-            var newUser = await userService.GetUserByEmail(command.UserName);
-            var newUserResult = mapper.Map<RegisterResult>(newUser);
-
-            return newUserResult;
+            throw new InternalServerException("Could not register your account");
         }
 
-        return new RegisterResult(null,null,null);
+        if (!roleManager.RoleExistsAsync(command.Role).GetAwaiter().GetResult())
+        {
+            await userManager.AddToRoleAsync(user, StaticDetails.userRolesDict[UserRoles.USER]);
+        }
+        else
+        {
+            await userManager.AddToRoleAsync(user, command.Role);
+        }
+
+        var newUser = await userService.GetUserByEmail(command.UserName);
+        var newUserResult = mapper.Map<RegisterResult>(newUser);
+
+        return newUserResult;
     }
 }

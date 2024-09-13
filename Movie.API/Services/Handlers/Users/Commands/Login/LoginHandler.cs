@@ -1,4 +1,5 @@
-﻿using Movie.API.Services.Handlers.Users.Commands.Token;
+﻿using BuildingBlocks.Exceptions;
+using Movie.API.Services.Handlers.Users.Commands.Token;
 
 namespace Movie.API.Services.Handlers.Users.Commands.Login;
 
@@ -21,7 +22,7 @@ internal class LoginCommandHandler(UserManager<ApplicationUser> userManager,
 
         if (isLoginInvalid)
         {
-            return new LoginResult(null);
+            throw new BadRequestException("Invalid login credentials");
         }
 
         var jwtId = $"JTI{Guid.NewGuid()}";
