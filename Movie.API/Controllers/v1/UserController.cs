@@ -1,4 +1,5 @@
 ﻿using Movie.API.Services.Handlers.Users.Commands.Login;
+using Movie.API.Services.Handlers.Users.Commands.Token;
 
 namespace Movie.API.Controllers.v1;
 
@@ -39,6 +40,25 @@ public class UserController(IMapper mapper,
         var result = await sender.Send(command);
 
         var response = mapper.Map<LoginResponse>(result.Token);
+
+        var apiResponse = new APIResponse
+        {
+            Result = response,
+            IsSuccess = true,
+            StatusCode = System.Net.HttpStatusCode.OK
+        };
+
+        return Ok(apiResponse);
+    }
+
+    [HttpPost("RefreshToken")]
+    public async Task<ActionResult<APIResponse>> GenerateNewToken([FromBody] RefreshTokenRequest request)
+    {
+        var command = mapper.Map<RefreshAccessTokenCommand>(request);
+
+        var result = await sender.Send(command);
+
+        var response = mapper.Map<RefreshTokenResponse>(result);
 
         var apiResponse = new APIResponse
         {

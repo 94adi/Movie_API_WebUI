@@ -1,0 +1,12 @@
+﻿global using Microsoft.AspNetCore.Authentication;
+global using Microsoft.Extensions.Options;
+global using Movie.WebUI.Models;
+global using Movie.WebUI.Models.Dto;
+global using Movie.WebUI.Services.Abstractions;
+global using Newtonsoft.Json;
+global using System.Net.Http.Headers;
+global using System.Text;
+global using Microsoft.IdentityModel.JsonWebTokens;
+global using System.Security.Claims;
+global using Microsoft.AspNetCore.Authentication.Cookies;
+global using System.Net;

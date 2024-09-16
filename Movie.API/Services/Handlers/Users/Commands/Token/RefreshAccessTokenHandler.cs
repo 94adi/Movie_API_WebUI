@@ -54,7 +54,7 @@ internal class RefreshAccessTokenCommandHandler(IRefreshTokenRepository refreshT
             RefreshToken = newRefreshToken.Refresh_Token
         });
 
-        return new RefreshAccessTokenResult(null);
+        return result;
     }
 
 

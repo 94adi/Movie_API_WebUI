@@ -15,5 +15,8 @@
                 {UserRoles.USER, "User" },
                 {UserRoles.ADMIN, "Admin" }
             };
+
+        public static string AccessToken = "JWTToken";
+        public static string RefreshToken = "RefreshToken";
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Movie.API.Services.Handlers.Users.Commands.Login;
+using Movie.API.Services.Handlers.Users.Commands.Token;
 
 namespace Movie.API.Mapper;
 
@@ -25,5 +26,8 @@ public class MapperProfile : Profile
 
         CreateMap<LoginRequest, LoginCommand>();
         CreateMap<Token, LoginResponse>().ReverseMap();
+
+        CreateMap<RefreshTokenRequest, RefreshAccessTokenCommand>();
+        CreateMap<RefreshAccessTokenResult, RefreshTokenResponse>();
     }
 }
