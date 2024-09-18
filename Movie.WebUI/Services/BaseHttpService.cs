@@ -8,6 +8,8 @@ public class BaseHttpService : IBaseHttpService
     private readonly IHttpContextAccessor _contextAccessor;
     private readonly IApiMessageRequestBuilder _apiMessageRequestBuilder;
 
+    public ApiResponse ResponseModel { get; set; }
+
     public BaseHttpService(IOptions<MovieAppConfig> movieAppConfig,
         IHttpClientFactory httpClientFactory,
         ITokenProvider tokenProvider,
@@ -21,7 +23,7 @@ public class BaseHttpService : IBaseHttpService
         _apiMessageRequestBuilder = apiMessageRequestBuilder;
     }
 
-    public override async Task<T> SendAsync<T>(ApiRequest apiRequest, bool isAuthenticated = true)
+    public async Task<T> SendAsync<T>(ApiRequest apiRequest, bool isAuthenticated = true)
     {
         try
         {

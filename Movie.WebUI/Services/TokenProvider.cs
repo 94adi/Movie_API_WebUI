@@ -4,7 +4,7 @@ using Movie.WebUI.Services.Abstractions;
 
 namespace Movie.WebUI.Services;
 
-public class TolenProvider(IHttpContextAccessor contextAccessor) : ITokenProvider
+public class TokenProvider(IHttpContextAccessor contextAccessor) : ITokenProvider
 {
     public void ClearToken()
     {

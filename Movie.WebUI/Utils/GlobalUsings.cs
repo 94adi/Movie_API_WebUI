@@ -10,3 +10,4 @@ global using Microsoft.IdentityModel.JsonWebTokens;
 global using System.Security.Claims;
 global using Microsoft.AspNetCore.Authentication.Cookies;
 global using System.Net;
+global using Movie.WebUI.Services;

@@ -30,7 +30,8 @@ internal class RegisterCommandHandler(UserManager<ApplicationUser> userManager,
             UserName = command.UserName,
             Email = command.UserName,
             NormalizedEmail = command.UserName.ToUpper(),
-            Name = command.Name
+            Name = command.Name,
+            RegisteredOn = DateTime.Now
         };
 
         var result = await userManager.CreateAsync(user, command.Password);

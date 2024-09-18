@@ -20,7 +20,8 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
             {
                 UserName = "admin@admin.com",
                 Email = "admin@admin.com",
-                EmailConfirmed = true
+                EmailConfirmed = true,
+                RegisteredOn = DateTime.UtcNow
             }
 
         }, isAdmin: true);
@@ -31,9 +32,9 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
             {
                 UserName = "user@user.com",
                 Email = "user@user.com",
-                EmailConfirmed = true
+                EmailConfirmed = true,
+                RegisteredOn = DateTime.UtcNow
             }
-
         }, 
         password:"u$3rp@s$w0rD",
         isAdmin: false);
