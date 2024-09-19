@@ -7,4 +7,6 @@ internal interface ITokenService
     Task InvalidateTokens(string userId, string tokenId);
 
     Task InvalidateToken(RefreshToken refreshToken);
+
+    Task<RefreshToken> GetRefreshTokenData(string refreshToken);
 }

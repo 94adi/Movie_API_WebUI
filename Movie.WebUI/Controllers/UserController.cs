@@ -12,16 +12,38 @@ namespace Movie.WebUI.Controllers
     {
         private readonly ISender _sender;
         private readonly IMapper _mapper;
+        private readonly ITokenProvider _tokenProvider;
 
         public UserController(ISender sender,
-            IMapper mapper)
+            IMapper mapper,
+            ITokenProvider tokenProvider)
         {
             _sender = sender;
             _mapper = mapper;
+            _tokenProvider = tokenProvider;
         }
+        [HttpGet]
         public IActionResult Login()
         {
-            return View();
+            var model = new LoginRequestDto();
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login(LoginRequestDto request)
+        {
+            var command = _mapper.Map<LoginCommand>(request);
+
+            var result = await _sender.Send(command);
+
+            if (result.IsSuccess)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            ModelState.AddModelError("LoginError", result.ErrorMessage);
+            return View(request);
         }
 
         [HttpGet]
@@ -57,9 +79,24 @@ namespace Movie.WebUI.Controllers
             return View();
         }
 
-        public IActionResult LogOut()
+        public async Task<IActionResult> LogOut()
         {
-            return Ok();
+            await HttpContext.SignOutAsync();
+
+            HttpContext.Session.Clear();
+
+            var token = _tokenProvider.GetToken();
+
+            if(token != null)
+            {
+                var command = new LogoutCommand(token);
+
+                var result = await _sender.Send(command);
+
+                _tokenProvider.ClearToken();
+            }
+
+            return RedirectToAction("Index", "Home");
         }
 
         private List<SelectListItem> LoadUserRoles()

@@ -4,6 +4,6 @@
     {
         Task<T> LoginAsync<T>(LoginRequestDto loginRequest);
         Task<T> RegisterAsync<T>(RegisterationRequestDto registerRequest);
-        Task<T> LogoutAsync<T>(TokenDTO token);
+        Task<T> LogoutAsync<T>(LogoutRequestDto logoutRequest);
     }
 }

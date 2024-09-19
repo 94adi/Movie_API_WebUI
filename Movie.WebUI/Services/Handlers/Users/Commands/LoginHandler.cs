@@ -7,7 +7,7 @@ namespace Movie.WebUI.Services.Handlers.Users.Commands;
 
 public record LoginCommand(string Username, string Password) : ICommand<LoginResult>;
 
-public record LoginResult(bool IsSuccess);
+public record LoginResult(bool IsSuccess, string ErrorMessage);
 
 internal class LoginHandler(IUserService authService,
     ITokenProvider tokenProvider,
@@ -17,10 +17,11 @@ internal class LoginHandler(IUserService authService,
 {
     public async Task<LoginResult> Handle(LoginCommand command, CancellationToken cancellationToken)
     {
+        ApiResponse? apiResponse;
         try
         {
             var apiRequest = mapper.Map<LoginRequestDto>(command);
-            var apiResponse = await authService.LoginAsync<ApiResponse>(apiRequest);
+            apiResponse = await authService.LoginAsync<ApiResponse>(apiRequest);
 
             if (apiResponse != null && apiResponse.IsSuccess)
             {
@@ -46,7 +47,7 @@ internal class LoginHandler(IUserService authService,
                     claimsPrincipal);
 
                 tokenProvider.SetToken(token);
-                return new LoginResult(true);
+                return new LoginResult(true, string.Empty);
             }
         }
         catch (Exception) 
@@ -54,6 +55,6 @@ internal class LoginHandler(IUserService authService,
             throw;
         }
 
-        return new LoginResult(false);
+        return new LoginResult(false, apiResponse?.ErrorMessages.FirstOrDefault());
     }
 }

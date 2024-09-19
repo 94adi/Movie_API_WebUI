@@ -1,4 +1,5 @@
-﻿using Movie.API.Services.Handlers.Users.Commands.Login;
+﻿using Azure;
+using Movie.API.Services.Handlers.Users.Commands.Login;
 using Movie.API.Services.Handlers.Users.Commands.Token;
 
 namespace Movie.API.Controllers.v1;
@@ -68,5 +69,36 @@ public class UserController(IMapper mapper,
         };
 
         return Ok(apiResponse);
+    }
+
+    [HttpPost("Revoke")]
+    public async Task<ActionResult<APIResponse>> RevokeToken([FromBody] RevokeTokenRequest request)
+    {
+        var command = mapper.Map<RevokeTokenCommand>(request);
+
+        var result = await sender.Send(command);
+
+        APIResponse apiResponse;
+
+        if (result.IsSuccess)
+        {
+            apiResponse = new APIResponse
+            {
+                Result = result,
+                IsSuccess = true,
+                StatusCode = System.Net.HttpStatusCode.OK
+            };
+        }
+        else
+        {
+            apiResponse = new APIResponse
+            {
+                Result = result,
+                IsSuccess = false,
+                StatusCode = System.Net.HttpStatusCode.InternalServerError
+            };
+        }
+        return Ok(apiResponse);
+
     }
 }

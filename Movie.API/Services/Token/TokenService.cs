@@ -2,6 +2,13 @@
 {
     public class TokenService(IRefreshTokenRepository repository) : ITokenService
     {
+        public async Task<RefreshToken> GetRefreshTokenData(string refreshToken)
+        {
+            var result = await repository.GetAsync(rt => rt.Refresh_Token == refreshToken);
+
+            return result;
+        }
+
         public async Task InvalidateToken(RefreshToken refreshToken)
         {
             refreshToken.IsValid = false;

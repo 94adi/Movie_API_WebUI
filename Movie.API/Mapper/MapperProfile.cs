@@ -29,5 +29,7 @@ public class MapperProfile : Profile
 
         CreateMap<RefreshTokenRequest, RefreshAccessTokenCommand>();
         CreateMap<RefreshAccessTokenResult, RefreshTokenResponse>();
+
+        CreateMap<RevokeTokenRequest, RevokeTokenCommand>();
     }
 }

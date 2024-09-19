@@ -33,12 +33,12 @@ public class UserService : IUserService
         return response;
     }
 
-    public async Task<T> LogoutAsync<T>(TokenDTO token)
+    public async Task<T> LogoutAsync<T>(LogoutRequestDto logoutRequest)
     {
         var request = new ApiRequest
         {
             ApiType = ApiType.POST,
-            Data = token,
+            Data = logoutRequest.Token,
             Url = $"{_baseApiUri}{_appConfig.LogoutPath}"
         };
 

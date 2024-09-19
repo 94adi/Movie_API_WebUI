@@ -10,6 +10,7 @@ public class MapperProfile : Profile
         CreateMap<LoginCommand, LoginRequestDto>();
         CreateMap<RegisterCommand, RegisterationRequestDto>();
         CreateMap<RegisterationRequestDto, RegisterCommand>();
+        CreateMap<LoginRequestDto, LoginCommand>();
+        CreateMap<LogoutCommand, LogoutRequestDto>();
     }
-
 }
