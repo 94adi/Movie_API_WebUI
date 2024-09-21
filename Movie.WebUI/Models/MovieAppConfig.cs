@@ -9,4 +9,6 @@ public class MovieAppConfig
     public string MovieApiPath { get; set; }
     public string RefreshTokenPath { get; set; }
     public string LogoutPath { get; set; }
+    public string CreateMoviePath { get; set; }
+    public string GetAllMoviesPath { get; set; }
 }
