@@ -7,4 +7,8 @@ public interface IMovieService
 	Task<GetAllMoviesResultDto> GetAllMovies();
 
     Task<CreateMovieResultDto> CreateMovie(CreateMovieDto movieDto);
+
+    Task<GetMovieByIdResultDto> GetMovieById(int id);
+
+    Task<UpdateMovieResultDto> UpdateMovie(MovieDto movieDto);
 }

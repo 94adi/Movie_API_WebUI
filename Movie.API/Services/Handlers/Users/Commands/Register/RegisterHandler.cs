@@ -1,8 +1,4 @@
-﻿using BuildingBlocks.Exceptions;
-using Movie.API.Services.User;
-using Movie.BuildingBlocks;
-
-namespace Movie.API.Services.Handlers.Users.Commands.Register;
+﻿namespace Movie.API.Services.Handlers.Users.Commands.Register;
 
 public record RegisterCommand(string UserName,string Name,string Password,string Role) 
     : ICommand<RegisterResult>;
@@ -15,7 +11,8 @@ internal class RegisterCommandHandler(UserManager<ApplicationUser> userManager,
     IUserService userService
     ) : ICommandHandler<RegisterCommand, RegisterResult>
 {
-    public async Task<RegisterResult> Handle(RegisterCommand command, CancellationToken cancellationToken)
+    public async Task<RegisterResult> Handle(RegisterCommand command, 
+        CancellationToken cancellationToken)
     {
 
         bool isUserUnique = await userService.IsUniqueUser(command.UserName);

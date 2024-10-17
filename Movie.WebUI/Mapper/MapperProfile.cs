@@ -19,5 +19,9 @@ public class MapperProfile : Profile
         CreateMap<LogoutCommand, LogoutRequestDto>();
 
         CreateMap<CreateMovieCommand, CreateMovieDto>().ReverseMap();
+
+        CreateMap<GetMovieByIdResultDto, MovieDto>();
+
+        CreateMap<UpdateMovieDto,  MovieDto>();
     }
 }

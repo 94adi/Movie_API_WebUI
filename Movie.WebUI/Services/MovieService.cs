@@ -1,4 +1,6 @@
 ﻿
+using MediatR;
+
 namespace Movie.WebUI.Services;
 
 public class MovieService : IMovieService
@@ -77,8 +79,58 @@ public class MovieService : IMovieService
         return getAllMoviesResult;
     }
 
-    public IEnumerable<MovieDto> GetMovies(int pageNumber, int pageSize)
+	public async Task<GetMovieByIdResultDto> GetMovieById(int id)
+	{
+        var apiRequest = new ApiRequest
+        {
+            ApiType = ApiType.GET,
+            Data = { },
+            Url = $"{_baseApiUri}{_appConfig.MovieApiPath}{id}"
+		};
+
+		var response = await _httpService.SendAsync<ApiResponse>(apiRequest,
+	            isAuthenticated: true);
+
+		GetMovieByIdResultDto getMovieByIdResultDto = null;
+
+		bool isMovieAvailable = (response != null) &&
+			(response.IsSuccess == true) &&
+			(response.Result != null);
+
+		var stringResult = Convert.ToString(response.Result);
+
+
+		if (isMovieAvailable)
+		{
+			getMovieByIdResultDto = JsonConvert.
+				DeserializeObject<GetMovieByIdResultDto>(stringResult);
+		}
+
+		return getMovieByIdResultDto;
+	}
+
+	public IEnumerable<MovieDto> GetMovies(int pageNumber, int pageSize)
     {
+        //TO DO
         throw new NotImplementedException();
+    }
+
+    public async Task<UpdateMovieResultDto> UpdateMovie(MovieDto movieDto)
+    {
+        
+        var apiRequest = new ApiRequest
+        {
+            ApiType = ApiType.PUT,
+            Data = movieDto,
+            Url = $"{_baseApiUri}{_appConfig.UpdateMoviePath}{movieDto.Id}"
+        };
+
+        var response = await _httpService.SendAsync<ApiResponse>(apiRequest,
+        isAuthenticated: true);
+
+        bool isMovieUpdated = (response != null) &&
+            (response.IsSuccess == true);
+
+        return new UpdateMovieResultDto(isMovieUpdated);
     }
 }

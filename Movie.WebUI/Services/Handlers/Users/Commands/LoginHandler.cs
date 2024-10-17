@@ -1,9 +1,4 @@
-﻿using AutoMapper;
-using BuildingBlocks.Exceptions;
-using Movie.BuildingBlocks.CQRS;
-using static Movie.BuildingBlocks.CQRS.ICommandHandler;
-
-namespace Movie.WebUI.Services.Handlers.Users.Commands;
+﻿namespace Movie.WebUI.Services.Handlers.Users.Commands;
 
 public record LoginCommand(string Username, string Password) : ICommand<LoginResult>;
 
@@ -15,7 +10,8 @@ internal class LoginHandler(IUserService authService,
     IHttpContextAccessor httpContextAccessor) 
     : ICommandHandler<LoginCommand, LoginResult>
 {
-    public async Task<LoginResult> Handle(LoginCommand command, CancellationToken cancellationToken)
+    public async Task<LoginResult> Handle(LoginCommand command, 
+        CancellationToken cancellationToken)
     {
         ApiResponse? apiResponse;
         try

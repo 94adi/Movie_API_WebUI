@@ -34,8 +34,8 @@
 					<td>@item.Rating</td>
 					<td>@item.Description</td>
 					<td>
-						<a asp-controller="Movie" asp-action="UpdateMovie" asp-route-movieId="@item.Id" class="btn btn-success"><i class="bi bi-pencil-square"></i></a>
-						<a asp-controller="Movie" asp-action="DeleteMovie" asp-route-movieId="@item.Id" class="btn btn-danger"><i class="bi bi-trash-fill"></i></a>
+						<a asp-controller="Movie" asp-action="Update" asp-route-movieId="@item.Id" class="btn btn-success"><i class="bi bi-pencil-square"></i></a>
+						<a asp-controller="Movie" asp-action="Delete" asp-route-movieId="@item.Id" class="btn btn-danger"><i class="bi bi-trash-fill"></i></a>
 					</td>
 				</tr>
 			}

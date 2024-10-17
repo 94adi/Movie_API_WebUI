@@ -32,3 +32,8 @@ global using Movie.API.Services.User;
 global using Movie.API.Utils;
 global using Movie.BuildingBlocks.Exceptions.Handler;
 global using Swashbuckle.AspNetCore.SwaggerGen;
+global using Movie.API.Services.Handlers.Users.Commands.Login;
+global using Movie.API.Services.Handlers.Users.Commands.Token;
+global using BuildingBlocks.Exceptions;
+global using Movie.BuildingBlocks;
+global using Movie.API.Services.Handlers.Movies.Commands.UpdateMovie;

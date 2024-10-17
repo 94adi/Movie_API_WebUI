@@ -1,5 +1,4 @@
 ﻿using Movie.WebUI.Utils.Attributes;
-using System.ComponentModel.DataAnnotations;
 
 namespace Movie.WebUI.Models.Dto;
 

@@ -1,32 +1,28 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Movie.API.Services.Seed;
+﻿namespace Movie.API.Data;
 
-namespace Movie.API.Data
+public static class DatabaseUtilityExtensions
 {
-    public static class DatabaseUtilityExtensions
+    public static async Task ApplyMigration(this WebApplication app)
     {
-        public static async Task ApplyMigration(this WebApplication app)
+        using (var scope = app.Services.CreateScope())
         {
-            using (var scope = app.Services.CreateScope())
+            var _db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+            await _db.Database.EnsureDeletedAsync();
+
+            if (_db.Database.GetPendingMigrations().Count() > 0)
             {
-                var _db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-
-                await _db.Database.EnsureDeletedAsync();
-
-                if (_db.Database.GetPendingMigrations().Count() > 0)
-                {
-                    await _db.Database.MigrateAsync();
-                }
+                await _db.Database.MigrateAsync();
             }
         }
+    }
 
-        public static async Task SeedDatabase(this WebApplication app) 
-        { 
-            using var scope = app.Services.CreateScope();
+    public static async Task SeedDatabase(this WebApplication app) 
+    { 
+        using var scope = app.Services.CreateScope();
 
-            var serviceSeed = scope.ServiceProvider.GetRequiredService<ISeedDataService>();
+        var serviceSeed = scope.ServiceProvider.GetRequiredService<ISeedDataService>();
 
-            await serviceSeed.SeedAsync();
-        }
+        await serviceSeed.SeedAsync();
     }
 }

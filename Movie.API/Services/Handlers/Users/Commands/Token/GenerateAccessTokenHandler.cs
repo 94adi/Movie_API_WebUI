@@ -1,6 +1,7 @@
 ﻿namespace Movie.API.Services.Handlers.Users.Commands.Token;
 
-public record GenerateAccessTokenCommand(ApplicationUser User, string JWTokenId) : ICommand<GenerateAccessTokenResult>;
+public record GenerateAccessTokenCommand(ApplicationUser User, string JWTokenId) 
+    : ICommand<GenerateAccessTokenResult>;
 
 public record GenerateAccessTokenResult(string Token);
 
@@ -8,7 +9,8 @@ internal class GenerateAccessTokenCommandHandler(UserManager<ApplicationUser> us
     IOptions<AppSettings> config) :
     ICommandHandler<GenerateAccessTokenCommand, GenerateAccessTokenResult>
 {
-    public async Task<GenerateAccessTokenResult> Handle(GenerateAccessTokenCommand command, CancellationToken cancellationToken)
+    public async Task<GenerateAccessTokenResult> Handle(GenerateAccessTokenCommand command, 
+        CancellationToken cancellationToken)
     {
         var roles = await userManager.GetRolesAsync(command.User);
 

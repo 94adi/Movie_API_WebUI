@@ -20,7 +20,7 @@ internal class RefreshAccessTokenCommandHandler(IRefreshTokenRepository refreshT
 
         if (!isRefreshTokenValid) 
         {
-            return new RefreshAccessTokenResult(null);
+            throw new Exception("Refresh token is not valid");
         }
 
         var userId = currentRefreshToken.UserId;

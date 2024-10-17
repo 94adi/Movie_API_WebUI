@@ -1,8 +1,4 @@
-﻿using AutoMapper;
-using Movie.BuildingBlocks.CQRS;
-using static Movie.BuildingBlocks.CQRS.ICommandHandler;
-
-namespace Movie.WebUI.Services.Handlers.Users.Commands;
+﻿namespace Movie.WebUI.Services.Handlers.Users.Commands;
 
 public record LogoutCommand(TokenDTO Token) : ICommand<LogoutResult>;
 

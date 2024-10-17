@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace Movie.WebUI.Utils.Attributes;
+﻿namespace Movie.WebUI.Utils.Attributes;
 
 public class ValidReleaseDateAttribute : ValidationAttribute
 {

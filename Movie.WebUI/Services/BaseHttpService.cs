@@ -101,6 +101,7 @@ public class BaseHttpService : IBaseHttpService
 
         if(token != null && (!string.IsNullOrEmpty(token.AccessToken)))
         {
+
             httpClient.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue("Bearer", token.AccessToken);
         }

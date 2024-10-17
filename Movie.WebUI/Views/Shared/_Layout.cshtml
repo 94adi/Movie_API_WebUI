@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using Movie.BuildingBlocks;
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -26,6 +28,26 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
+
+                        @if (User.IsInRole(StaticDetails.userRolesDict[UserRoles.ADMIN]))
+                        {
+                            <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" 
+                            href="#" 
+                            role="button" 
+                            data-bs-toggle="dropdown" 
+                            aria-expanded="false">
+                            <span>Content Management</span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" asp-area="" asp-controller="Movie" asp-action="Index">Movies</a></li>
+                                <li>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Movie" asp-action="Create">Create Movie</a>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                            </ul>
+                            </li>
+                        }                       
                     </ul>
                     <ul class="navbar-nav">
 

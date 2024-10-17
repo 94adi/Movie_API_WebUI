@@ -3,7 +3,8 @@
 namespace Movie.API.Services.Seed;
 
 public class SeedDataService(UserManager<ApplicationUser> userManager,
-        RoleManager<IdentityRole> roleManager) : ISeedDataService
+        RoleManager<IdentityRole> roleManager,
+        IMovieRepository movieRepo) : ISeedDataService
 {
 
     public async Task SeedAsync()
@@ -38,8 +39,32 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
         }, 
         password:"u$3rp@s$w0rD",
         isAdmin: false);
+
+        await AddMovies(new List<Movie.API.Models.Movie>
+        {
+           new Movie.API.Models.Movie
+           {
+               Title = "The Shawshank Redemption",
+               Rating = 9.8f,
+               Description = "A beautiful movie about hope and friendship",
+               ReleaseDate = new DateOnly(1994,2,12),
+               CreatedDate = DateTime.Now
+           }
+        });
+
     }
 
+    private async Task AddMovies(IEnumerable<Movie.API.Models.Movie> movies)
+    {
+        if(movies != null && movies.Count() > 0)
+        {
+            foreach (var movie in movies)
+            {
+                await movieRepo.CreateAsync(movie);
+            }
+        }
+
+    }
 
     private async Task AddSeedRoles(IEnumerable<IdentityRole> roles)
     {

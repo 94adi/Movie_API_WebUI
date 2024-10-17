@@ -17,6 +17,9 @@ public class MapperProfile : Profile
         CreateMap<CreateMovieRequest, CreateMovieCommand>();
         CreateMap<CreateMovieResult, CreateMovieResponse>();
 
+        CreateMap<UpdateMovieCommand, Models.Movie>();
+        CreateMap<UpdateMovieRequest, UpdateMovieCommand>();
+
         CreateMap<GetMovieResult, GetMovieResponse>();
 
         CreateMap<ApplicationUser, RegisterResult>();

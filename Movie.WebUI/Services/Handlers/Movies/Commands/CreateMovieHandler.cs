@@ -1,26 +1,23 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using Movie.BuildingBlocks.CQRS;
+using Movie.WebUI.Models.Dto;
 using System.Windows.Input;
 using static Movie.BuildingBlocks.CQRS.ICommandHandler;
 
 namespace Movie.WebUI.Services.Handlers.Movies.Commands;
 
-public record CreateMovieCommand(string Title, 
-    float Rating, 
-    string Description, 
-    DateOnly ReleaseDate) : ICommand<CreateMovieResult>;
+public record CreateMovieCommand(CreateMovieDto Movie) : ICommand<CreateMovieResult>;
 
 public record CreateMovieResult(int Id, bool IsSuccess);
 
-public class CreateMovieCommandHandler(IMovieService movieService,
-    IMapper mapper)
+public class CreateMovieCommandHandler(IMovieService movieService)
     : ICommandHandler<CreateMovieCommand, CreateMovieResult>
 {
     public async Task<CreateMovieResult> Handle(CreateMovieCommand command, 
         CancellationToken cancellationToken)
     {
-        var movie = mapper.Map<CreateMovieDto>(command);
+        var movie = command.Movie;
 
         var response = await movieService.CreateMovie(movie);
 

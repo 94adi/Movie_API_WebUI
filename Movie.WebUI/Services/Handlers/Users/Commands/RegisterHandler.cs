@@ -1,10 +1,4 @@
-﻿using AutoMapper;
-using Movie.BuildingBlocks;
-using Movie.BuildingBlocks.CQRS;
-using static Movie.BuildingBlocks.CQRS.ICommandHandler;
-using Movie.WebUI.Services.Abstractions;
-
-namespace Movie.WebUI.Services.Handlers.Users.Commands;
+﻿namespace Movie.WebUI.Services.Handlers.Users.Commands;
 
 public class RegisterCommand : ICommand<RegisterResult>
 {

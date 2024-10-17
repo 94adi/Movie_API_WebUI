@@ -1,7 +1,4 @@
-﻿using BuildingBlocks.Exceptions;
-using Movie.API.Services.Handlers.Users.Commands.Token;
-
-namespace Movie.API.Services.Handlers.Users.Commands.Login;
+﻿namespace Movie.API.Services.Handlers.Users.Commands.Login;
 
 public record LoginCommand(string Username, string Password) : ICommand<LoginResult>;
 
@@ -14,7 +11,8 @@ internal class LoginCommandHandler(UserManager<ApplicationUser> userManager,
 {
     public async Task<LoginResult> Handle(LoginCommand command, CancellationToken cancellationToken)
     {
-        var user = await userRepository.GetAsync(u => u.UserName.ToLower() == command.Username.ToLower());
+        var user = await userRepository.GetAsync(u => 
+            u.UserName.ToLower() == command.Username.ToLower());
 
         bool isUserValid = await userManager.CheckPasswordAsync(user, command.Password);
 

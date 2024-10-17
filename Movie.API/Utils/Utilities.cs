@@ -1,18 +1,15 @@
-﻿using System.Text;
+﻿namespace Movie.API.Utils;
 
-namespace Movie.API.Utils
+public static class Utilities
 {
-    public static class Utilities
+    public static byte[] GetPrivateKey(this WebApplicationBuilder builder)
     {
-        public static byte[] GetPrivateKey(this WebApplicationBuilder builder)
-        {
-            var appSettingsSection = builder.Configuration.GetSection("AppSettings");
-            builder.Services.Configure<AppSettings>(appSettingsSection);
+        var appSettingsSection = builder.Configuration.GetSection("AppSettings");
+        builder.Services.Configure<AppSettings>(appSettingsSection);
 
-            var appSettings = appSettingsSection.Get<AppSettings>();
-            var key = Encoding.ASCII.GetBytes(appSettings.Secret);
+        var appSettings = appSettingsSection.Get<AppSettings>();
+        var key = Encoding.ASCII.GetBytes(appSettings.Secret);
 
-            return key;
-        }
+        return key;
     }
 }

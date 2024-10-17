@@ -52,6 +52,7 @@ public class MovieController : Controller
 
 
     [HttpPost]
+    [Authorize(Roles = "Admin")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -92,5 +93,69 @@ public class MovieController : Controller
         };
 
         return Ok(apiResponse);
+    }
+
+    [HttpPut("{id:int}", Name ="UpdateMovie")]
+    [Authorize(Roles = "Admin")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<ActionResult<APIResponse>> UpdateMovie(int id, 
+        [FromBody] UpdateMovieRequest request)
+    {
+        APIResponse apiResponse = null;
+        try
+        {
+            if (request == null || request.Id != id) 
+            {
+                return BadRequest();
+            }
+
+            var command = _mapper.Map<UpdateMovieCommand>(request);
+
+            var result = await _sender.Send(command);
+
+            if (result.IsSuccess)
+            {
+                apiResponse = new APIResponse
+                {
+                    Result = { },
+                    IsSuccess = true,
+                    StatusCode = System.Net.HttpStatusCode.NoContent
+                };
+
+                return Ok(apiResponse);
+            }
+            else
+            {
+                apiResponse = new APIResponse
+                {
+                    Result = { },
+                    IsSuccess = false,
+                    StatusCode = System.Net.HttpStatusCode.InternalServerError,
+                    Errors = new List<string>() { result.ErrorMessage }
+                };
+
+                return apiResponse;
+            }
+
+
+        }
+        catch(Exception ex)
+        {
+            apiResponse = new APIResponse
+            {
+                Result = { },
+                IsSuccess = false,
+                Errors = new List<string>()
+                {
+                    ex.ToString()
+                }
+            };
+        }
+
+        return apiResponse;
     }
 }

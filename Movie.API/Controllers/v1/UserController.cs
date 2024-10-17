@@ -1,8 +1,4 @@
-﻿using Azure;
-using Movie.API.Services.Handlers.Users.Commands.Login;
-using Movie.API.Services.Handlers.Users.Commands.Token;
-
-namespace Movie.API.Controllers.v1;
+﻿namespace Movie.API.Controllers.v1;
 
 [ApiController]
 [Route("api/v{version:apiVersion}/Identity")]

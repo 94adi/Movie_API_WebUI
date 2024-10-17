@@ -11,4 +11,5 @@ public class MovieAppConfig
     public string LogoutPath { get; set; }
     public string CreateMoviePath { get; set; }
     public string GetAllMoviesPath { get; set; }
+    public string UpdateMoviePath { get; set; }
 }

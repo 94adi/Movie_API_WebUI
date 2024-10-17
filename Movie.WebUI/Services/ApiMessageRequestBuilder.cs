@@ -58,6 +58,7 @@ public class ApiMessageRequestBuilder : IApiMessageRequestBuilder
         }
         else
         {
+            var testData = JsonConvert.SerializeObject(apiRequest.Data);
             message.Content = new StringContent(JsonConvert.SerializeObject(apiRequest.Data),
                 Encoding.UTF8, "application/json");
         }
