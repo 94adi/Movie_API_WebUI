@@ -1,4 +1,7 @@
-﻿namespace Movie.API.Controllers.v1;
+﻿using Movie.API.Models;
+using Movie.API.Services.Handlers.Movies.Commands.DeleteMovie;
+
+namespace Movie.API.Controllers.v1;
 
 [ApiController]
 [Route("api/v{version:apiVersion}/MovieAPI")]
@@ -155,6 +158,43 @@ public class MovieController : Controller
                 }
             };
         }
+
+        return apiResponse;
+    }
+
+    [HttpDelete("{id:int}", Name ="DeleteMovie")]
+    [Authorize(Roles = "Admin")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<APIResponse>> DeleteMovie(int id)
+    {
+        var command = new DeleteMovieCommand(id);
+
+        var result = await _sender.Send(command);
+
+        APIResponse apiResponse = null;
+
+        if (result.IsSuccess)
+        {
+            apiResponse = new APIResponse
+            {
+                Result = { },
+                IsSuccess = true,
+                StatusCode = System.Net.HttpStatusCode.NoContent
+            };
+
+            return Ok(apiResponse);
+        }
+
+        apiResponse = new APIResponse
+        {
+            Result = { },
+            IsSuccess = false,
+            StatusCode = System.Net.HttpStatusCode.InternalServerError,
+            Errors = new List<string>() { result.ErrorMessage }
+        };
 
         return apiResponse;
     }

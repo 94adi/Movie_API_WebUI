@@ -12,4 +12,5 @@ public class MovieAppConfig
     public string CreateMoviePath { get; set; }
     public string GetAllMoviesPath { get; set; }
     public string UpdateMoviePath { get; set; }
+    public string DeleteMoviePath { get; set; }
 }

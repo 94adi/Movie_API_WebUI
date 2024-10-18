@@ -1,7 +1,4 @@
-﻿
-using MediatR;
-
-namespace Movie.WebUI.Services;
+﻿namespace Movie.WebUI.Services;
 
 public class MovieService : IMovieService
 {
@@ -132,5 +129,22 @@ public class MovieService : IMovieService
             (response.IsSuccess == true);
 
         return new UpdateMovieResultDto(isMovieUpdated);
+    }
+
+    public async Task<DeleteMovieResultDto> DeleteMovie(int movieId)
+    {
+        var apiRequest = new ApiRequest
+        {
+            ApiType = ApiType.DELETE,
+            Data = movieId,
+            Url = $"{_baseApiUri}{_appConfig.DeleteMoviePath}{movieId}"
+        };
+
+        var result = await _httpService.SendAsync<ApiResponse>(apiRequest, 
+            isAuthenticated: true);
+
+        bool isSucess = (result != null) && (result.IsSuccess == true);
+
+        return new DeleteMovieResultDto(isSucess);
     }
 }

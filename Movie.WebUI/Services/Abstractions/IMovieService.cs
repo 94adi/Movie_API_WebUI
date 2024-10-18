@@ -11,4 +11,6 @@ public interface IMovieService
     Task<GetMovieByIdResultDto> GetMovieById(int id);
 
     Task<UpdateMovieResultDto> UpdateMovie(MovieDto movieDto);
+
+    Task<DeleteMovieResultDto> DeleteMovie(int movieId);
 }

@@ -1,4 +1,6 @@
-﻿namespace Movie.WebUI.Controllers;
+﻿using System.Reflection;
+
+namespace Movie.WebUI.Controllers;
 
 public class MovieController : Controller
 {
@@ -87,16 +89,45 @@ public class MovieController : Controller
     }
 
     [HttpGet]
-    [Authorize(Roles = "SuperAdmin")]
-    public IActionResult Delete(int movieId) 
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> Delete(int movieId)
     {
-        return View();
+        var query = new GetMovieByIdQuery(movieId);
+        var result = await _sender.Send(query);
+
+        if (result != null && result.Movie != null)
+        {
+            return View(result.Movie);
+        }
+
+        //TO DO: make no permission page
+        return NotFound();
     }
 
     [HttpPost]
-    [Authorize(Roles = "SuperAdmin")]
-    public IActionResult Delete(DeleteMovieDto model) 
+    [Authorize(Roles = "Admin")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Delete(MovieDto movie) 
     {
-        return View();
+        if((movie == null) || (movie?.Id < 0))
+        {
+            ModelState.AddModelError("Delete", "Could not perform operation");
+            return RedirectToAction("Index", "Movie");
+        }
+
+        var command = new DeleteMovieCommand(movie.Id);
+
+        var result = await _sender.Send(command);
+
+        if (result.IsSuccess)
+        {
+            TempData["success"] = $"The movie {movie.Title} was deleted successfully";
+            return RedirectToAction(nameof(Index));
+        }
+
+        TempData["error"] = "Error encountered";
+        return View(movie);
     }
+
 }
+
