@@ -1,11 +1,12 @@
-﻿using FluentValidation;
-using Movie.API.Repository.Abstractions;
-using static Movie.BuildingBlocks.CQRS.ICommandHandler;
+﻿using Movie.API.Services.Movie;
 
 namespace Movie.API.Services.Handlers.Movies.CreateMovie;
 
-public record CreateMovieCommand(string Title, float Rating, string Description, DateOnly ReleaseDate) : 
-    Movie.BuildingBlocks.CQRS.ICommand<CreateMovieResult>;
+public record CreateMovieCommand(string Title, 
+    float Rating, 
+    string Description,
+    IFormFile Image,
+    DateOnly ReleaseDate) : ICommand<CreateMovieResult>;
 
 public record CreateMovieResult(int Id);
 
@@ -31,12 +32,14 @@ public class CreateMovieCommandValidator : AbstractValidator<CreateMovieCommand>
 }
 
 
-internal class CreateMovieCommandHandler(IMovieRepository repository) : 
+internal class CreateMovieCommandHandler(IMovieRepository repository, 
+    IMovieService movieService) : 
     ICommandHandler<CreateMovieCommand, CreateMovieResult>
 {
-    public async Task<CreateMovieResult> Handle(CreateMovieCommand command, CancellationToken cancellationToken)
+    public async Task<CreateMovieResult> Handle(CreateMovieCommand command, 
+        CancellationToken cancellationToken)
     {
-        var movie = new Movie.API.Models.Movie
+        var movie = new Models.Movie
         {
             Title = command.Title,
             Rating = command.Rating,
@@ -46,6 +49,8 @@ internal class CreateMovieCommandHandler(IMovieRepository repository) :
         };
 
         await repository.CreateAsync(movie);
+
+        await movieService.StoreMoviePoster(movie, command.Image);
 
         return new CreateMovieResult(movie.Id);
     }

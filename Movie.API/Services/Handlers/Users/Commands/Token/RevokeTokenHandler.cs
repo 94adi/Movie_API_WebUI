@@ -1,6 +1,6 @@
 ﻿namespace Movie.API.Services.Handlers.Users.Commands.Token;
 
-public record RevokeTokenCommand(Movie.API.Models.Token Token) : ICommand<RevokeTokenResult>;
+public record RevokeTokenCommand(Models.Token Token) : ICommand<RevokeTokenResult>;
 
 public record RevokeTokenResult(bool IsSuccess);
 

@@ -40,9 +40,9 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
         password:"u$3rp@s$w0rD",
         isAdmin: false);
 
-        await AddMovies(new List<Movie.API.Models.Movie>
+        await AddMovies(new List<Models.Movie>
         {
-           new Movie.API.Models.Movie
+           new Models.Movie
            {
                Title = "The Shawshank Redemption",
                Rating = 9.8f,
@@ -54,7 +54,7 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
 
     }
 
-    private async Task AddMovies(IEnumerable<Movie.API.Models.Movie> movies)
+    private async Task AddMovies(IEnumerable<Models.Movie> movies)
     {
         if(movies != null && movies.Count() > 0)
         {

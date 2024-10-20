@@ -23,7 +23,8 @@ public class MovieService : IMovieService
         {
             ApiType = ApiType.POST,
             Data = movieDto,
-            Url = $"{_baseApiUri}{_appConfig.CreateMoviePath}"
+            Url = $"{_baseApiUri}{_appConfig.CreateMoviePath}",
+            ContentType = ContentType.MultipartFormData
         };
 
         var response = await _httpService.SendAsync<ApiResponse>(request, 

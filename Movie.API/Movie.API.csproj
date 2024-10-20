@@ -31,4 +31,8 @@
     <ProjectReference Include="..\Movie.BuildingBlocks\Movie.BuildingBlocks.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\MoviePosters\" />
+  </ItemGroup>
+
 </Project>

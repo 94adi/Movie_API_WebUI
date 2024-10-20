@@ -10,6 +10,10 @@ public class Movie
 
     public string Description { get; set; }
 
+    public string? ImageUrl { get; set; }
+
+    public string? ImageLocalPath { get; set; }
+
     public DateOnly ReleaseDate { get; set; }
 
     public DateTime CreatedDate {  get; set; }

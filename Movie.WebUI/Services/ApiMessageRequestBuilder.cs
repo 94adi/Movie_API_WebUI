@@ -36,29 +36,29 @@ public class ApiMessageRequestBuilder : IApiMessageRequestBuilder
         if (apiRequest.ContentType == ContentType.MultipartFormData)
         {
             var content = new MultipartFormDataContent();
-
-            foreach(var prop in apiRequest.Data.GetType().GetProperties())
-            {
-                var value = prop.GetValue(apiRequest.Data);
-                if(value is FormFile)
+                foreach (var prop in apiRequest.Data.GetType().GetProperties())
                 {
-                    var file = (FormFile)value;
-                    if(file != null)
+                    var value = prop.GetValue(apiRequest.Data);
+                    if (value is FormFile)
                     {
-                        content.Add(new StreamContent(file.OpenReadStream()), file.Name, file.FileName);
+                        var file = (FormFile)value;
+                        if (file != null)
+                        {
+                            content.Add(new StreamContent(file.OpenReadStream()), 
+                                file.Name, 
+                                file.FileName);
+                        }
+                    }
+                    else
+                    {
+                        string contentValue = (value == null) ? "" : value.ToString();
+                        content.Add(new StringContent(contentValue), prop.Name);
                     }
                 }
-                else
-                {
-                    string contentValue = (value == null) ? "" : value.ToString();
-                    content.Add(new StringContent(contentValue), prop.Name);
-                }
-            }
-            message.Content = content;
+                message.Content = content;            
         }
         else
         {
-            var testData = JsonConvert.SerializeObject(apiRequest.Data);
             message.Content = new StringContent(JsonConvert.SerializeObject(apiRequest.Data),
                 Encoding.UTF8, "application/json");
         }

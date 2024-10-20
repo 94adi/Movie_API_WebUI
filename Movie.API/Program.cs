@@ -1,10 +1,12 @@
-using FluentValidation;
-using HealthChecks.UI.Client;
+using Movie.API.Services.Movie;
 using Movie.BuildingBlocks.Behaviors;
 
 var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration.GetConnectionString("Database");
+
+builder.Services.Configure<StorageSettings>(
+    builder.Configuration.GetSection("StorageSettings"));
 
 builder.Services.AddDbContext<ApplicationDbContext>(opt =>
 {
@@ -38,6 +40,7 @@ builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ISeedDataService, SeedDataService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IMovieService, MovieService>();
 
 builder.Services.AddSwaggerGen();
 
@@ -92,6 +95,8 @@ else
 {
     await app.ApplyMigration();
 }
+
+app.UseStaticFiles();
 
 app.UseHttpsRedirection();
 

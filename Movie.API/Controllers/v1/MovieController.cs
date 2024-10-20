@@ -59,7 +59,7 @@ public class MovieController : Controller
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<APIResponse>> CreateMovie([FromBody] CreateMovieRequest request)
+    public async Task<ActionResult<APIResponse>> CreateMovie([FromForm] CreateMovieRequest request)
     {
         var command = _mapper.Map<CreateMovieCommand>(request);
 

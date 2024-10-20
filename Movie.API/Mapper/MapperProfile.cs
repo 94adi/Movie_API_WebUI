@@ -34,5 +34,7 @@ public class MapperProfile : Profile
         CreateMap<RefreshAccessTokenResult, RefreshTokenResponse>();
 
         CreateMap<RevokeTokenRequest, RevokeTokenCommand>();
+
+        CreateMap<CreateMovieRequest, CreateMovieCommand>();
     }
 }

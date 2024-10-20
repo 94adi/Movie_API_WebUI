@@ -15,6 +15,10 @@ public class CreateMovieDto
     [MaxLength(1000)]
     public string Description { get; set; }
 
+    public string? ImageUrl { get; set; }
+
+    public IFormFile? Image { get; set; }
+
     [ValidReleaseDate]
     public DateOnly ReleaseDate { get; set; }
 }

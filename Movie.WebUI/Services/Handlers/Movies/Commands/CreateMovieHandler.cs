@@ -1,11 +1,4 @@
-﻿using AutoMapper;
-using FluentValidation;
-using Movie.BuildingBlocks.CQRS;
-using Movie.WebUI.Models.Dto;
-using System.Windows.Input;
-using static Movie.BuildingBlocks.CQRS.ICommandHandler;
-
-namespace Movie.WebUI.Services.Handlers.Movies.Commands;
+﻿namespace Movie.WebUI.Services.Handlers.Movies.Commands;
 
 public record CreateMovieCommand(CreateMovieDto Movie) : ICommand<CreateMovieResult>;
 
