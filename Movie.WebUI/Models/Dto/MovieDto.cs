@@ -1,4 +1,6 @@
-﻿namespace Movie.WebUI.Models.Dto
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Movie.WebUI.Models.Dto
 {
     public class MovieDto
     {
@@ -9,6 +11,13 @@
         public float Rating { get; set; }
 
         public string Description { get; set; }
+
+        public string? ImageUrl { get; set; }
+
+        public string? ImageLocalPath { get; set; }
+
+        [NotMapped]
+        public IFormFile? Image { get; set; }
 
         public DateOnly ReleaseDate { get; set; }
 

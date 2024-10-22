@@ -22,6 +22,6 @@ public class MapperProfile : Profile
 
         CreateMap<GetMovieByIdResultDto, MovieDto>();
 
-        CreateMap<UpdateMovieDto,  MovieDto>();
+        CreateMap<UpdateMovieDto, MovieDto>().ReverseMap();
     }
 }

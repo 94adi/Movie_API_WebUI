@@ -39,3 +39,4 @@ global using Movie.BuildingBlocks;
 global using Movie.API.Services.Handlers.Movies.Commands.UpdateMovie;
 global using FluentValidation;
 global using HealthChecks.UI.Client;
+global using Movie.API.Services.Movie;

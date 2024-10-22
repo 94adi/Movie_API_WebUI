@@ -52,6 +52,8 @@ internal class CreateMovieCommandHandler(IMovieRepository repository,
 
         await movieService.StoreMoviePoster(movie, command.Image);
 
+        await repository.UpdateAsync(movie);
+
         return new CreateMovieResult(movie.Id);
     }
 }

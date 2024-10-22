@@ -14,6 +14,7 @@ public class MovieService : IMovieService
         _httpContextAccessor = httpContextAccessor;
         _movieRepository = movieRepository;
     }
+
     public async Task StoreMoviePoster(Models.Movie movie, IFormFile poster)
     {
         if(poster != null)
@@ -44,8 +45,21 @@ public class MovieService : IMovieService
 
             movie.ImageLocalPath = imageLocationPath;
             movie.ImageUrl = imageUrl ??= "https://placehold.co/600x400";
-
-            await _movieRepository.UpdateAsync(movie);
         }
+        else
+        {
+            var movieFromDb = await _movieRepository.GetByIdAsync(movie.Id);
+            if(!String.IsNullOrEmpty(movieFromDb.ImageLocalPath) &&
+                (!String.IsNullOrEmpty(movieFromDb.ImageUrl)))
+            {
+                movie.ImageLocalPath = movieFromDb.ImageLocalPath;
+                movie.ImageUrl = movieFromDb.ImageUrl;
+            }
+            else
+            {
+                movie.ImageUrl = "https://placehold.co/600x400";
+            }
+        }
+
     }
 }

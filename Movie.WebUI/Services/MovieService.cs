@@ -120,7 +120,8 @@ public class MovieService : IMovieService
         {
             ApiType = ApiType.PUT,
             Data = movieDto,
-            Url = $"{_baseApiUri}{_appConfig.UpdateMoviePath}{movieDto.Id}"
+            Url = $"{_baseApiUri}{_appConfig.UpdateMoviePath}{movieDto.Id}",
+            ContentType = ContentType.MultipartFormData
         };
 
         var response = await _httpService.SendAsync<ApiResponse>(apiRequest,

@@ -60,7 +60,8 @@ public class MovieController : Controller
 
         if(result != null && result.Movie != null)
         {
-			return View(result.Movie);
+            var updateMovieDto = _mapper.Map<UpdateMovieDto>(result.Movie);
+			return View(updateMovieDto);
 		}
 
         return RedirectToAction("Index", "Movie");
@@ -70,7 +71,7 @@ public class MovieController : Controller
     [HttpPost]
     [Authorize(Roles = "Admin")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Update([FromForm] MovieDto model)
+    public async Task<IActionResult> Update([FromForm] UpdateMovieDto model)
     {
         if (ModelState.IsValid)
         {

@@ -1,4 +1,4 @@
-﻿@model Movie.WebUI.Models.Dto.MovieDto
+﻿@model Movie.WebUI.Models.Dto.UpdateMovieDto
 
 <form method="post" asp-action="Update" asp-controller="Movie" enctype="multipart/form-data">
     <br />
@@ -37,6 +37,17 @@
                         <span asp-validation-for="Description" class="text-danger"></span>
                     </div>
 
+                    <div class="col-2">
+                        <label asp-for="ImageUrl" class="control-label pt-2" style="font-size:20px;"></label>
+                    </div>
+
+                    <div class="col-10 pb-3">
+                        <input asp-for="Image" class="form-control" />
+                        <input asp-for="ImageUrl" hidden class="form-control" />
+                        <input asp-for="ImageLocalPath" hidden class="form-control" />
+                        <span asp-validation-for="Image" class="text-danger"></span>
+                    </div>
+
 
                     <div class="col-2">
                         <label asp-for="ReleaseDate" class="control-label pt-2" style="font-size:20px;"></label>
@@ -54,6 +65,9 @@
                         <input type="submit" value="Update" class="btn btn-success form-control" />
                     </div>
                 </div>
+            </div>
+            <div class="col-2">
+                <img class="w-100" asp-append-version="true" src="@Model.ImageUrl" alt="Movie Poster"/>
             </div>
         </div>
     </div>

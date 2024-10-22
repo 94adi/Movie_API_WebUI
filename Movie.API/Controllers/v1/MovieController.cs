@@ -106,7 +106,7 @@ public class MovieController : Controller
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<APIResponse>> UpdateMovie(int id, 
-        [FromBody] UpdateMovieRequest request)
+        [FromForm] UpdateMovieRequest request)
     {
         APIResponse apiResponse = null;
         try
