@@ -1,5 +1,6 @@
-﻿namespace Movie.WebUI.Controllers;
+﻿namespace Movie.WebUI.Areas.Identity.Controllers;
 
+[Area("Identity")]
 public class UserController : Controller
 {
     private readonly ISender _sender;
@@ -31,7 +32,7 @@ public class UserController : Controller
 
         if (result.IsSuccess)
         {
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Home", new {area = "Customer" });
         }
 
         ModelState.AddModelError("LoginError", result.ErrorMessage);
@@ -42,7 +43,7 @@ public class UserController : Controller
     public IActionResult Register()
     {
         ViewBag.RoleList = LoadUserRoles();
-        
+
         return View();
     }
 
@@ -56,15 +57,15 @@ public class UserController : Controller
 
         if (result.IsSuccess)
         {
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Home", new { area = "Customer" });
         }
 
-        if(result.ErrorMessages.Count() > 0)
+        if (result.ErrorMessages.Count() > 0)
         {
-            foreach(var error in result.ErrorMessages)
+            foreach (var error in result.ErrorMessages)
             {
-                ModelState.AddModelError(String.Empty, error);
-            }  
+                ModelState.AddModelError(string.Empty, error);
+            }
         }
 
         ViewBag.RoleList = LoadUserRoles();
@@ -79,7 +80,7 @@ public class UserController : Controller
 
         var token = _tokenProvider.GetToken();
 
-        if(token != null)
+        if (token != null)
         {
             var command = new LogoutCommand(token);
 
@@ -88,7 +89,7 @@ public class UserController : Controller
             _tokenProvider.ClearToken();
         }
 
-        return RedirectToAction("Index", "Home");
+        return RedirectToAction("Index", "Home", new { area = "Customer" });
     }
 
     private List<SelectListItem> LoadUserRoles()

@@ -1,7 +1,6 @@
-﻿using System.Reflection;
+﻿namespace Movie.WebUI.Areas.Admin.Controllers;
 
-namespace Movie.WebUI.Controllers;
-
+[Area("Admin")]
 public class MovieController : Controller
 {
     private readonly IMapper _mapper;
