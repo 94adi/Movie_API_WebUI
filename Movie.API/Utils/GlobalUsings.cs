@@ -40,3 +40,6 @@ global using Movie.API.Services.Handlers.Movies.Commands.UpdateMovie;
 global using FluentValidation;
 global using HealthChecks.UI.Client;
 global using Movie.API.Services.Movie;
+global using Movie.API.Models.Enums;
+global using Movie.API.Services.Review;
+global using Movie.BuildingBlocks.Behaviors;

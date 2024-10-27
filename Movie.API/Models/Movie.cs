@@ -14,6 +14,8 @@ public class Movie
 
     public string? ImageLocalPath { get; set; }
 
+    public ICollection<Review> Reviews { get; set; }
+
     public DateOnly ReleaseDate { get; set; }
 
     public DateTime CreatedDate {  get; set; }

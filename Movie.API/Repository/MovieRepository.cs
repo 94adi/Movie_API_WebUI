@@ -1,6 +1,4 @@
-﻿using Movie.API.Repository.Abstractions;
-
-namespace Movie.API.Repository;
+﻿namespace Movie.API.Repository;
 
 public class MovieRepository : Repository<Movie.API.Models.Movie>, IMovieRepository
 {

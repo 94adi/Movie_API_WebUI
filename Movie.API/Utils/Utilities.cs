@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Movie.API.Utils;
+﻿namespace Movie.API.Utils;
 
 public static class Utilities
 {

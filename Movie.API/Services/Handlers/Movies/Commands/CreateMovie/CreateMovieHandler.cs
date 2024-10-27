@@ -23,7 +23,7 @@ public class CreateMovieCommandValidator : AbstractValidator<CreateMovieCommand>
 
         RuleFor(m => m.Description)
             .MaximumLength(1000)
-            .WithMessage("Description must be less than 1000 characters");
+            .WithMessage("Description must not exceed 1000 characters");
 
         RuleFor(m => m.ReleaseDate).NotEmpty()
             .LessThanOrEqualTo(DateOnly.FromDateTime(DateTime.Now))

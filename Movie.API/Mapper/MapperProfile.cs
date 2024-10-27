@@ -1,4 +1,5 @@
-﻿using Movie.API.Services.Handlers.Users.Commands.Login;
+﻿using Movie.API.Services.Handlers.Reviews.Commands.CreateReview;
+using Movie.API.Services.Handlers.Users.Commands.Login;
 using Movie.API.Services.Handlers.Users.Commands.Token;
 
 namespace Movie.API.Mapper;
@@ -36,5 +37,10 @@ public class MapperProfile : Profile
         CreateMap<RevokeTokenRequest, RevokeTokenCommand>();
 
         CreateMap<CreateMovieRequest, CreateMovieCommand>();
+
+        CreateMap<CreateReviewCommand, Models.Review>();
+
+        CreateMap<CreateReviewRequest, CreateReviewCommand>();
+        CreateMap<CreateReviewResult,  CreateReviewResponse>();
     }
 }

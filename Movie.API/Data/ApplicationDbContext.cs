@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Movie.API.Data.ModelBuilders;
 
 namespace Movie.API.Data;
 
@@ -10,39 +11,24 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
         
     }
 
-    public DbSet<Movie.API.Models.Movie> Movies { get; set; }
+    public DbSet<Models.Movie> Movies { get; set; }
 
     public DbSet<ApplicationUser> ApplicationUsers { get; set; }
 
     public DbSet<RefreshToken> RefreshTokens { get; set; }
 
+    public DbSet<Review> Reviews { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.Entity<Models.Movie>()
-            .HasKey(m => m.Id);
+        MovieModelBuilder.BuildModel(modelBuilder);
 
-        modelBuilder.Entity<RefreshToken>()
-            .HasKey(p => p.Id);
+        RefreshTokenBuilder.BuildModel(modelBuilder);
 
-        modelBuilder.Entity<Models.Movie>()
-            .Property(m => m.ReleaseDate)
-            .HasConversion(
-                p => p.ToDateTime(TimeOnly.MinValue),
-                p => DateOnly.FromDateTime(p)
-            );
+        ReviewModelBuilder.BuildModel(modelBuilder);
 
-        modelBuilder.Entity<Models.Movie>()
-            .Property(m => m.CreatedDate)
-            .HasColumnType("datetime2");
 
-        modelBuilder.Entity<Models.Movie>()
-            .Property(m => m.LatestUpdateDate)
-            .HasColumnType("datetime2");
-
-        modelBuilder.Entity<Models.Movie>()
-            .Property(m => m.Rating)
-            .HasColumnType("decimal(3,1)");
     }
 }

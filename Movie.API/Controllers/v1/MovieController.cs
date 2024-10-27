@@ -1,10 +1,9 @@
-﻿using Movie.API.Models;
-using Movie.API.Services.Handlers.Movies.Commands.DeleteMovie;
+﻿using Movie.API.Services.Handlers.Movies.Commands.DeleteMovie;
 
 namespace Movie.API.Controllers.v1;
 
 [ApiController]
-[Route("api/v{version:apiVersion}/MovieAPI")]
+[Route("api/v{version:apiVersion}/[controller]")]
 [ApiVersion("1.0")]
 [Authorize]
 public class MovieController : Controller
@@ -21,9 +20,9 @@ public class MovieController : Controller
 
     [AllowAnonymous]
     [HttpGet]
-    [ProducesResponseType(StatusCodes.Status403Forbidden)]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<APIResponse>> GetMovies([FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 0)
     {
