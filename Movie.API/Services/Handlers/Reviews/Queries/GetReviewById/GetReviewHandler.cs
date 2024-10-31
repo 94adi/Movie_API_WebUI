@@ -2,10 +2,11 @@
 
 public record GetReviewQuery(int id) : IQuery<GetReviewResult>;
 
-public record GetReviewResult(Models.Review Review);
+public record GetReviewResult(Models.Dto.ReviewDto Review);
 
 
-internal class GetReviewQueryHandler(IReviewService reviewService)
+internal class GetReviewQueryHandler(IReviewService reviewService,
+    IMapper mapper)
     : IQueryHandler<GetReviewQuery, GetReviewResult>
 {
     public async Task<GetReviewResult> Handle(GetReviewQuery query,
@@ -13,6 +14,8 @@ internal class GetReviewQueryHandler(IReviewService reviewService)
     {
         var result = await reviewService.GetReviewById(query.id);
 
-        return new GetReviewResult(result);
+        var resultDto = mapper.Map<Models.Dto.ReviewDto>(result);
+
+        return new GetReviewResult(resultDto);
     }
 }

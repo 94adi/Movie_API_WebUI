@@ -2,5 +2,5 @@
 
 public record GetMoviesResponse
 {
-    public IEnumerable<Models.Movie> Movies { get; set; } = new List<Models.Movie>();
+    public IEnumerable<Models.Dto.MovieDto> MovieDtos { get; set; } = new List<Models.Dto.MovieDto>();
 }

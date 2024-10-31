@@ -5,9 +5,10 @@ public record GetReviewsByUserQuery(string UserId,
     int PageNumber = 1,
     int PageSize = 0) : IQuery<GetReviewsByUserResult>;
 
-public record GetReviewsByUserResult(IList<Models.Review> Reviews);
+public record GetReviewsByUserResult(IList<Models.Dto.ReviewDto> Reviews);
 
-internal class GetReviewsByUserQueryHandler(IReviewService reviewService)
+internal class GetReviewsByUserQueryHandler(IReviewService reviewService,
+    IMapper mapper)
     : IQueryHandler<GetReviewsByUserQuery, GetReviewsByUserResult>
 {
     public async Task<GetReviewsByUserResult> Handle(GetReviewsByUserQuery query, 
@@ -17,6 +18,8 @@ internal class GetReviewsByUserQueryHandler(IReviewService reviewService)
             query.PageNumber, 
             query.PageSize);
 
-        return new GetReviewsByUserResult(reviews);
+        var reviewsDto = mapper.Map<IList<Models.Dto.ReviewDto>>(reviews);
+
+        return new GetReviewsByUserResult(reviewsDto);
     }
 }

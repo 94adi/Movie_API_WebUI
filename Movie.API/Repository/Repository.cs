@@ -1,5 +1,4 @@
-﻿using Movie.API.Repository.Abstractions;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 
 namespace Movie.API.Repository
 {

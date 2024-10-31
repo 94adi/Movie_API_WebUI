@@ -5,5 +5,7 @@
         Task<Movie.API.Models.Movie> UpdateAsync(Movie.API.Models.Movie movie);
 
         Task<Movie.API.Models.Movie> GetByIdAsync(int id);
+
+        Task<IList<Models.Movie>> GetMoviesWithGenres(int pageNumber = 1, int pageSize = 0);
     }
 }

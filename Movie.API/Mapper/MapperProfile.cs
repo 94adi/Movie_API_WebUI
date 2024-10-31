@@ -1,6 +1,6 @@
-﻿using Movie.API.Services.Handlers.Reviews.Commands.CreateReview;
-using Movie.API.Services.Handlers.Users.Commands.Login;
-using Movie.API.Services.Handlers.Users.Commands.Token;
+﻿using Movie.API.Services.Handlers.Genres.Commands.CreateGenre;
+using Movie.API.Services.Handlers.Genres.Commands.UpdateGenre;
+using Movie.API.Services.Handlers.Genres.Queries.GetGenres;
 
 namespace Movie.API.Mapper;
 
@@ -42,5 +42,16 @@ public class MapperProfile : Profile
 
         CreateMap<CreateReviewRequest, CreateReviewCommand>();
         CreateMap<CreateReviewResult,  CreateReviewResponse>();
+
+        CreateMap<Models.Review, Models.Dto.ReviewDto>().ReverseMap();
+
+        CreateMap<UpdateGenreCommand,  Models.Genre>();
+
+        CreateMap<CreateGenreResult, CreateGenreResponse>();
+        CreateMap<GetGenresResult, GetGenresResponse>();
+        CreateMap<GetGenresQuery, Pagination>();
+
+        CreateMap<Models.Movie, Models.Dto.MovieDto>()
+            .ForMember(dest => dest.Genres, opt => opt.Ignore());
     }
 }

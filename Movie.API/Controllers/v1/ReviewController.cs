@@ -1,9 +1,4 @@
-﻿using Movie.API.Services.Handlers.Reviews.Commands.CreateReview;
-using Movie.API.Services.Handlers.Reviews.Queries.GetReviewById;
-using Movie.API.Services.Handlers.Reviews.Queries.GetReviewsByMovie;
-using Movie.API.Services.Handlers.Reviews.Queries.GetReviewsByUserId;
-
-namespace Movie.API.Controllers.v1;
+﻿namespace Movie.API.Controllers.v1;
 
 [ApiController]
 [Route("api/v{version:apiVersion}/[controller]")]
@@ -111,7 +106,6 @@ public class ReviewController : Controller
             StatusCode = System.Net.HttpStatusCode.Created
         };
 
-        //TO DO: Create get review by id endpoint
         return CreatedAtRoute("GetReview", new { id = response.Id }, apiResponse);
     }
 }

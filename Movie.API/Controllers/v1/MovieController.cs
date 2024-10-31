@@ -36,6 +36,7 @@ public class MovieController : Controller
         var result = await _sender.Send(query);
         var response = _mapper.Map<GetMoviesResponse>(result);
 
+
         var apiResponse = new APIResponse
         {
             Result = response,

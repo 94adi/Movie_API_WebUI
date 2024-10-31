@@ -1,10 +1,10 @@
-﻿using Movie.BuildingBlocks;
-
-namespace Movie.API.Services.Seed;
+﻿namespace Movie.API.Services.Seed;
 
 public class SeedDataService(UserManager<ApplicationUser> userManager,
         RoleManager<IdentityRole> roleManager,
-        IMovieRepository movieRepo) : ISeedDataService
+        IMovieRepository movieRepo,
+        IGenreRepository genreRepo,
+        IMovieGenreRepository movieGenreRepo) : ISeedDataService
 {
 
     public async Task SeedAsync()
@@ -40,16 +40,74 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
         password:"u$3rp@s$w0rD",
         isAdmin: false);
 
+        var genreHorror = new Genre
+        {
+            Name = "Horror"
+        };
+
+        var genreThriller = new Genre
+        {
+            Name = "Thriller"
+        };
+
+        var genreDrama = new Genre
+        {
+            Name = "Drama"
+        };
+
+        var genrePsychologicalHorror = new Genre
+        {
+            Name = "Psychological Horror"
+        };
+
+        await AddGenres(new List<Genre>
+        {
+        genreHorror,
+        genreThriller,
+        genreDrama,
+        genrePsychologicalHorror
+        });
+
+        var movieShawShankRedemption = new Models.Movie
+        {
+            Title = "The Shawshank Redemption",
+            Rating = 9.8f,
+            Description = "A beautiful movie about hope and friendship",
+            ReleaseDate = new DateOnly(1994, 2, 12),
+            CreatedDate = DateTime.Now
+        };
+
+        var movieTheShining = new Models.Movie
+        {
+            Title = "The Shining",
+            Rating = 8.4f,
+            Description = "A modern horror masterpiece",
+            ReleaseDate = new DateOnly(1980, 5, 8),
+            CreatedDate = DateTime.Now
+        };
+
         await AddMovies(new List<Models.Movie>
         {
-           new Models.Movie
-           {
-               Title = "The Shawshank Redemption",
-               Rating = 9.8f,
-               Description = "A beautiful movie about hope and friendship",
-               ReleaseDate = new DateOnly(1994,2,12),
-               CreatedDate = DateTime.Now
-           }
+            movieShawShankRedemption,
+            movieTheShining
+        });
+
+        await AddMovieGenres(new List<Models.MovieGenre>
+        {
+            new Models.MovieGenre {
+                GenreId = genreThriller.Id,
+                MovieId = movieShawShankRedemption.Id
+            },
+            new Models.MovieGenre { 
+                GenreId = genreDrama.Id,
+                MovieId = movieShawShankRedemption.Id
+            },
+
+            new Models.MovieGenre {
+                GenreId = genrePsychologicalHorror.Id,
+                MovieId = movieTheShining.Id
+            },
+
         });
 
     }
@@ -63,7 +121,28 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
                 await movieRepo.CreateAsync(movie);
             }
         }
+    }
 
+    private async Task AddMovieGenres(IEnumerable<Models.MovieGenre> movieGenres)
+    {
+        if (movieGenres != null && movieGenres.Count() > 0)
+        {
+            foreach (var movieGenre in movieGenres)
+            {
+                await movieGenreRepo.CreateAsync(movieGenre);
+            }
+        }
+    }
+
+    private async Task AddGenres(IEnumerable<Models.Genre> genres)
+    {
+        if (genres != null && genres.Count() > 0)
+        {
+            foreach (var genre in genres)
+            {
+                await genreRepo.CreateAsync(genre);
+            }
+        }
     }
 
     private async Task AddSeedRoles(IEnumerable<IdentityRole> roles)

@@ -8,7 +8,7 @@ services:
         - SA_PASSWORD=s3creTPassW0rD4332948
     restart: always
     ports:
-        - "1433:1433"
+        - "1593:1593"
 
   movie.api:
     environment:

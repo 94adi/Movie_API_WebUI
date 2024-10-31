@@ -14,7 +14,7 @@
 
             if (movie is null)
             {
-                throw new Exception("Item was not found");
+                throw new NotFoundException("Item was not found");
             }
 
             return new GetMovieResult(movie);

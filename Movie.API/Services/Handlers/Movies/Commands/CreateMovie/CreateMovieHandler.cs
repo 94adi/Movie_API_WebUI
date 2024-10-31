@@ -1,11 +1,10 @@
-﻿using Movie.API.Services.Movie;
-
-namespace Movie.API.Services.Handlers.Movies.CreateMovie;
+﻿namespace Movie.API.Services.Handlers.Movies.CreateMovie;
 
 public record CreateMovieCommand(string Title, 
     float Rating, 
     string Description,
     IFormFile Image,
+    int[] Genres,
     DateOnly ReleaseDate) : ICommand<CreateMovieResult>;
 
 public record CreateMovieResult(int Id);
@@ -33,7 +32,8 @@ public class CreateMovieCommandValidator : AbstractValidator<CreateMovieCommand>
 
 
 internal class CreateMovieCommandHandler(IMovieRepository repository, 
-    IMovieService movieService) : 
+    IMovieService movieService,
+    ISender sender) : 
     ICommandHandler<CreateMovieCommand, CreateMovieResult>
 {
     public async Task<CreateMovieResult> Handle(CreateMovieCommand command, 
@@ -47,6 +47,15 @@ internal class CreateMovieCommandHandler(IMovieRepository repository,
             ReleaseDate = command.ReleaseDate,
             CreatedDate = DateTime.Now
         };
+
+        foreach(var genreId in command.Genres)
+        {
+            movie.MovieGenres.Add(new MovieGenre
+            {
+                GenreId = genreId,
+                Movie = movie
+            });
+        }
 
         await repository.CreateAsync(movie);
 

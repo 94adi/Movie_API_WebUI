@@ -38,7 +38,7 @@ internal class CreateReviewHandler(IReviewService reviewService,
     public async Task<CreateReviewResult> Handle(CreateReviewCommand command,
         CancellationToken cancellationToken)
     {
-        //verify if it works!!!
+
         var review = mapper.Map<Models.Review>(command);
 
         await reviewService.AddReview(review);

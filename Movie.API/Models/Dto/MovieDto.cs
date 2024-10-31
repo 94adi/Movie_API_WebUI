@@ -1,6 +1,8 @@
-﻿namespace Movie.API.Models;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
-public class Movie
+namespace Movie.API.Models.Dto;
+
+public class MovieDto
 {
     public int Id { get; set; }
 
@@ -10,17 +12,17 @@ public class Movie
 
     public string Description { get; set; }
 
-    public List<MovieGenre> MovieGenres { get; set; } = new();
+    public List<GenreDto> Genres { get; set; } = new();
 
     public string? ImageUrl { get; set; }
 
     public string? ImageLocalPath { get; set; }
 
-    public ICollection<Review> Reviews { get; set; } = new List<Review>();
+    public ICollection<int> Reviews { get; set; } = new List<int>();
 
     public DateOnly ReleaseDate { get; set; }
 
-    public DateTime CreatedDate {  get; set; }
+    public DateTime CreatedDate { get; set; }
 
     public DateTime LatestUpdateDate { get; set; }
 }
