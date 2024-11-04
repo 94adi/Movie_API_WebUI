@@ -1,6 +1,7 @@
 ﻿namespace Movie.WebUI.Areas.Admin.Controllers;
 
 [Area("Admin")]
+[Authorize(Roles = "Admin")]
 public class MovieController : Controller
 {
     private readonly IMapper _mapper;
@@ -24,14 +25,12 @@ public class MovieController : Controller
     }
 
     [HttpGet]
-    [Authorize(Roles = "Admin")]
     public IActionResult Create()
     {
         return View();
     }
 
     [HttpPost]
-    [Authorize(Roles = "Admin")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create([FromForm] CreateMovieDto model)
     {
@@ -51,7 +50,6 @@ public class MovieController : Controller
     }
 
     [HttpGet]
-    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Update(int movieId)
     {
 		var query = new GetMovieByIdQuery(movieId);
@@ -68,7 +66,6 @@ public class MovieController : Controller
     }
 
     [HttpPost]
-    [Authorize(Roles = "Admin")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Update([FromForm] UpdateMovieDto model)
     {
