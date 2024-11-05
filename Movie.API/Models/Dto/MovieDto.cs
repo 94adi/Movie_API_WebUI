@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace Movie.API.Models.Dto;
+﻿namespace Movie.API.Models.Dto;
 
 public class MovieDto
 {

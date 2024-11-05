@@ -1,14 +1,16 @@
-﻿<div id="movieIndexContainer" class="container">
+﻿@model Movie.WebUI.Models.Dto.MovieDto
+
+<div id="movieIndexContainer" class="container">
     <div class="row">
         <div id="left-pane" class="col-lg-6 col-12">
             <div class="row">
                 <div id="movieTitle">
-                    <h1 id="movieTitleText">The Shawshanks redemption</h1>
+                    <h1 id="movieTitleText">@Model.Title</h1>
                 </div>
             </div>
             <div class="row">
                 <div id="movieYear">
-                    <h1 id="movieTitleText">(1994)</h1>
+                    <h1 id="movieTitleText">(@Model.ReleaseDate.Year)</h1>
                 </div>
             </div>
             <div class="row">
@@ -19,26 +21,46 @@
                     <span id="genreText">Sport</span>
                 </div>
             </div>
+            <div id="movieRatingSection" class="row justify-content-between">
+                <div class="col-md-3 col-4">
+                    <div id="movieRating">
+                        <i class="fas fa-star"></i>
+                        <span>7.54/10</span>
+                    </div>
+                </div>
+                <div class="col-md-7 col-8">
+                    <div id="userRatingInput">
+                        <label>Add your rating: </label>
+                        <input id="ratingInput" type="number" />
+                    </div>
+                </div>
+            </div>
             <div class="row">
-                <div class="movieRating">
-
+                <div id="reviewsLink" class="col">
+                    <a href="#" class="btn btn-outline-dark">See all reviews (20)</a>
                 </div>
             </div>
             <div class="row">
                 <div class="movieTrailer">
-
+                    <div class="container">
+                        <div class="ratio ratio-16x9">
+                            <iframe src="https://www.youtube.com/embed/6hB3S9bIaco" title="YouTube video" allowfullscreen></iframe>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
         <div id="right-pane" class="col-lg-6 col-12">
             <div class="row">
-                <div id="moviePoster" class="col-md-5 col-12">
+                <div id="moviePoster" class="col-11">
                     <div class="ratio ratio-1x1">
                         <img id="moviePosterImg" class="img-fluid object-fit-cover"
                              src="https://humanehollywood.org/app/uploads/2020/06/5KCVkau1HEl7ZzfPsKAPM0sMiKc-scaled.jpg" />
-                    </div>               
+                    </div>
                 </div>
-                <div id="movieDescription" class="col-md-5 col-12">
+            </div>
+            <div class="row">
+                <div id="movieDescription" class="col-11">
                     <p id="movieDescriptionText">
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris viverra dictum nisi a malesuada. Cras ipsum erat, venenatis ut augue vel, suscipit viverra mauris. Nulla fermentum facilisis tincidunt. Curabitur mollis, quam at efficitur tempor, neque magna placerat tortor, quis aliquet arcu ligula vel nisi. Sed luctus nisl a sapien bibendum, non sagittis purus vulputate. Donec tempus libero non turpis pellentesque pulvinar. Proin quis ligula a quam pulvinar consectetur at in nunc. Fusce fringilla augue sit amet tristique laoreet. Praesent id fermentum enim, id consequat neque. Nulla vel mauris feugiat, imperdiet ex in, ornare tortor. Nulla eu ligula a ex varius malesuada fringilla et tellus. Quisque id nibh arcu.
 
