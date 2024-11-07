@@ -15,6 +15,17 @@ public class MovieService : IMovieService
         _movieRepository = movieRepository;
     }
 
+    public async Task<Models.Movie> GetByIdAsync(int id, bool includeGenres = true)
+    {
+        if (includeGenres)
+        {
+            return await _movieRepository.GetByIdWithGenreAsync(id);
+        }
+
+        return await _movieRepository.GetByIdAsync(id);
+
+    }
+
     public async Task StoreMoviePoster(Models.Movie movie, IFormFile poster)
     {
         if(poster != null)

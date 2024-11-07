@@ -1,4 +1,6 @@
-﻿using Movie.API.Services.Handlers.Genres.Commands.CreateGenre;
+﻿using Movie.API.Models.Dto;
+using Movie.API.Models;
+using Movie.API.Services.Handlers.Genres.Commands.CreateGenre;
 using Movie.API.Services.Handlers.Genres.Commands.UpdateGenre;
 using Movie.API.Services.Handlers.Genres.Queries.GetGenres;
 
@@ -51,7 +53,14 @@ public class MapperProfile : Profile
         CreateMap<GetGenresResult, GetGenresResponse>();
         CreateMap<GetGenresQuery, Pagination>();
 
+        CreateMap<Genre, GenreDto>();
+
         CreateMap<Models.Movie, Models.Dto.MovieDto>()
-            .ForMember(dest => dest.Genres, opt => opt.Ignore());
+            .ForMember(dest => dest.Genres, opt => opt.MapFrom(src =>
+            src.MovieGenres.Select(mg => new GenreDto
+            {
+                Id = mg.Genre.Id,
+                Name = mg.Genre.Name
+            }).ToList()));
     }
 }

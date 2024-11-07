@@ -38,4 +38,19 @@ public class MovieRepository : Repository<Movie.API.Models.Movie>, IMovieReposit
 
         return movie;
     }
+
+    public async Task<Models.Movie> GetByIdWithGenreAsync(int id)
+    {
+        var set = _context.Set<Models.Movie>();
+        var query = (IQueryable<Models.Movie>)set;
+        query = query.AsNoTracking();
+
+        query = query.Where(m => m.Id == id);
+
+        query = query.Include(m => m.MovieGenres)
+            .ThenInclude(mg => mg.Genre);
+
+        return await query.FirstOrDefaultAsync();
+        
+    }
 }

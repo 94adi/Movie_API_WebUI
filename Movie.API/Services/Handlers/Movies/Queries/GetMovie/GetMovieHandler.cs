@@ -2,22 +2,25 @@
 {
     public record GetMovieQuery(int Id) : IQuery<GetMovieResult>;
 
-    public record GetMovieResult(Models.Movie movie);
+    public record GetMovieResult(Models.Dto.MovieDto MovieDto);
 
 
-    internal class GetMovieHandler(IMovieRepository repository)
+    internal class GetMovieHandler(IMovieService movieService,
+        IMapper mapper)
         : IQueryHandler<GetMovieQuery, GetMovieResult>
     {
         public async Task<GetMovieResult> Handle(GetMovieQuery query, CancellationToken cancellationToken)
         {
-            var movie = await repository.GetByIdAsync(query.Id);
+            var result = await movieService.GetByIdAsync(query.Id, true);
 
-            if (movie is null)
+            if (result is null)
             {
                 throw new NotFoundException("Item was not found");
             }
 
-            return new GetMovieResult(movie);
+            var movieDto = mapper.Map<Models.Dto.MovieDto>(result);
+
+            return new GetMovieResult(movieDto);
         }
     }
 }
