@@ -18,6 +18,6 @@ public class GetMovieByIdQueryHandler(IMovieService movieService,
 
 		//var movieDto = mapper.Map<MovieDto>(getMovieByResultDto);
 
-        return new GetMovieByIdResult(getMovieByResultDto.Movie);
+        return new GetMovieByIdResult(getMovieByResultDto.MovieDto);
 	}
 }

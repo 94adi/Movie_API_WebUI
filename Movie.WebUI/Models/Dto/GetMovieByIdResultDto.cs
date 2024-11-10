@@ -2,6 +2,6 @@
 {
 	public class GetMovieByIdResultDto
 	{
-        public MovieDto Movie { get; set; }
+        public MovieDto MovieDto { get; set; }
     }
 }

@@ -5,7 +5,7 @@ namespace Movie.WebUI.Services.Handlers.Movies.Queries;
 
 public record GetAllMoviesQuery() : IQuery<GetAllMoviesResult>;
 
-public record GetAllMoviesResult(IEnumerable<MovieDto> Movies);
+public record GetAllMoviesResult(IEnumerable<MovieDto> MovieDtos);
 
 
 public class GetAllMoviesQueryHandler(IMovieService movieService)
@@ -16,6 +16,6 @@ public class GetAllMoviesQueryHandler(IMovieService movieService)
     {
         var result = await movieService.GetAllMovies();
 
-        return new GetAllMoviesResult(result.Movies);
+        return new GetAllMoviesResult(result.MovieDtos);
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace Movie.WebUI.Areas.Admin.Controllers;
+﻿using Movie.WebUI.Models.ViewModel;
+
+namespace Movie.WebUI.Areas.Admin.Controllers;
 
 [Area("Admin")]
 [Authorize(Roles = "Admin")]
@@ -21,22 +23,38 @@ public class MovieController : Controller
 
         var result = await _sender.Send(new GetAllMoviesQuery());
 
-        return View(result.Movies);
+        return View(result.MovieDtos);
     }
 
     [HttpGet]
     public IActionResult Create()
     {
-        return View();
+        var createMovieVM = new CreateMovieVM();
+
+        createMovieVM.GenreOptions = new List<SelectListItem>
+        {
+            new SelectListItem
+            {
+                Text = "Adi",
+                Value = "1"
+            },
+            new SelectListItem
+            {
+                Text = "Cotuna",
+                Value = "2"
+            }
+        };
+
+        return View(createMovieVM);
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([FromForm] CreateMovieDto model)
+    public async Task<IActionResult> Create([FromForm] CreateMovieVM model)
     {
         if (ModelState.IsValid)
         {
-            var command = new CreateMovieCommand(model);
+            var command = new CreateMovieCommand(model.MovieDto);
 
             var result = await _sender.Send(command);
 

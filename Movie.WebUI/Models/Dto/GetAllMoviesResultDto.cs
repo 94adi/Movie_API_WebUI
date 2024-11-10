@@ -2,6 +2,6 @@
 {
 	public class GetAllMoviesResultDto
 	{
-		public List<MovieDto> Movies {  get; set; }
+		public List<MovieDto> MovieDtos {  get; set; }
 	}
 }
