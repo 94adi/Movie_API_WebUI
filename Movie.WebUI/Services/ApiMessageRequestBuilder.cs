@@ -1,4 +1,7 @@
 ﻿
+using System.Collections;
+using System.Collections.Generic;
+
 namespace Movie.WebUI.Services;
 
 public class ApiMessageRequestBuilder : IApiMessageRequestBuilder
@@ -49,6 +52,11 @@ public class ApiMessageRequestBuilder : IApiMessageRequestBuilder
                                 file.FileName);
                         }
                     }
+                    if(value is IEnumerable<string> stringList)
+                    {
+                        var jsonContent = JsonConvert.SerializeObject(stringList);
+                        content.Add(new StringContent(jsonContent), prop.Name);
+                }
                     else
                     {
                         string contentValue = (value == null) ? "" : value.ToString();
@@ -62,5 +70,18 @@ public class ApiMessageRequestBuilder : IApiMessageRequestBuilder
             message.Content = new StringContent(JsonConvert.SerializeObject(apiRequest.Data),
                 Encoding.UTF8, "application/json");
         }
+    }
+
+    private bool IsGenericEnumerable(object obj)
+    {
+        if (obj == null)
+        {
+            return false;
+        }
+
+        var type = obj.GetType();
+        return typeof(IEnumerable).IsAssignableFrom(type) &&
+               type.IsGenericType &&
+               type.GetGenericTypeDefinition() == typeof(IEnumerable<>);             
     }
 }

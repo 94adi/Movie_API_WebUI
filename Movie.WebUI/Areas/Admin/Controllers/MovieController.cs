@@ -1,4 +1,5 @@
 ﻿using Movie.WebUI.Models.ViewModel;
+using Movie.WebUI.Services.Handlers.Genres.Queries;
 
 namespace Movie.WebUI.Areas.Admin.Controllers;
 
@@ -27,23 +28,17 @@ public class MovieController : Controller
     }
 
     [HttpGet]
-    public IActionResult Create()
+    public async Task<IActionResult> Create()
     {
         var createMovieVM = new CreateMovieVM();
 
-        createMovieVM.GenreOptions = new List<SelectListItem>
+        var genreQueryResult = await _sender.Send(new GetAllGenresQuery());
+
+        createMovieVM.GenreOptions = genreQueryResult.GenreDtos.Select(g => new SelectListItem
         {
-            new SelectListItem
-            {
-                Text = "Adi",
-                Value = "1"
-            },
-            new SelectListItem
-            {
-                Text = "Cotuna",
-                Value = "2"
-            }
-        };
+            Value = g.Id.ToString(),
+            Text = g.Name,
+        }).ToList();
 
         return View(createMovieVM);
     }

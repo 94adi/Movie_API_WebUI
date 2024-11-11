@@ -15,6 +15,8 @@ public class CreateMovieDto
     [MaxLength(1000)]
     public string Description { get; set; }
 
+    public IEnumerable<string> SelectedGenres { get; set; }
+
     public string? ImageUrl { get; set; }
 
     public IFormFile? Image { get; set; }

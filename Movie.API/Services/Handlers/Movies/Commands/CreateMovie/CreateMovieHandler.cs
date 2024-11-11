@@ -4,7 +4,6 @@ public record CreateMovieCommand(string Title,
     float Rating, 
     string Description,
     IFormFile Image,
-    int[] Genres,
     DateOnly ReleaseDate) : ICommand<CreateMovieResult>;
 
 public record CreateMovieResult(int Id);
@@ -47,15 +46,6 @@ internal class CreateMovieCommandHandler(IMovieRepository repository,
             ReleaseDate = command.ReleaseDate,
             CreatedDate = DateTime.Now
         };
-
-        foreach(var genreId in command.Genres)
-        {
-            movie.MovieGenres.Add(new MovieGenre
-            {
-                GenreId = genreId,
-                Movie = movie
-            });
-        }
 
         await repository.CreateAsync(movie);
 

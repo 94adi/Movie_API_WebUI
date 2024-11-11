@@ -1,4 +1,5 @@
-﻿using Movie.API.Services.Handlers.Movies.Commands.DeleteMovie;
+﻿using Movie.API.Services.Handlers.Movies.Commands.AddGenresToMovie;
+using Movie.API.Services.Handlers.Movies.Commands.DeleteMovie;
 
 namespace Movie.API.Controllers.v1;
 
@@ -61,19 +62,28 @@ public class MovieController : Controller
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<APIResponse>> CreateMovie([FromForm] CreateMovieRequest request)
     {
-        var command = _mapper.Map<CreateMovieCommand>(request);
+        var createMovieCommand = _mapper.Map<CreateMovieCommand>(request);
 
-        var result = await _sender.Send(command);
+        var createdMovieResult = await _sender.Send(createMovieCommand);
 
-        var response = _mapper.Map<CreateMovieResponse>(result);
+        var createdMovieResponse = _mapper.Map<CreateMovieResponse>(createdMovieResult);
+
+        var genreList = JsonSerializer.Deserialize<IEnumerable<string>>(request.SelectedGenres);
+
+        var genreIds = genreList.Select(g => int.Parse(g)).ToList();
+
+        var addGenresToMovieCommand = new AddGenresToMovieCommand(genreIds, 
+            createdMovieResponse.Id);
+
+        await _sender.Send(addGenresToMovieCommand);
 
         var apiResponse = new APIResponse
         {
-            Result = response,
+            Result = createdMovieResponse,
             StatusCode = System.Net.HttpStatusCode.Created
         };
 
-        return CreatedAtRoute("GetMovie", new { id = response.Id }, apiResponse);
+        return CreatedAtRoute("GetMovie", new { id = createdMovieResponse.Id }, apiResponse);
     }
 
     [HttpGet("{id:int}", Name = "GetMovie")]

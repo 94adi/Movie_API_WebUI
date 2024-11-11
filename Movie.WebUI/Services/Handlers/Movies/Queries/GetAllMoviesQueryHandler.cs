@@ -1,7 +1,4 @@
-﻿using MediatR;
-using Movie.BuildingBlocks.CQRS;
-
-namespace Movie.WebUI.Services.Handlers.Movies.Queries;
+﻿namespace Movie.WebUI.Services.Handlers.Movies.Queries;
 
 public record GetAllMoviesQuery() : IQuery<GetAllMoviesResult>;
 

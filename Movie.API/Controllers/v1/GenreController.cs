@@ -37,6 +37,7 @@ public class GenreController : Controller
         return CreatedAtRoute("GetGenre", new { id = response.Id }, apiResponse);
     }
 
+    [AllowAnonymous]
     [HttpGet("{id:int}", Name = "GetGenre")]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -57,6 +58,7 @@ public class GenreController : Controller
         return Ok(apiResponse);
     }
 
+    [AllowAnonymous]
     [HttpGet(Name = "GetGenres")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
