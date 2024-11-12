@@ -16,7 +16,7 @@
 
         public IFormFile? Image { get; set; }
 
-        public int[] Genres { get; set; }
+        public string SelectedGenres { get; set; }
 
         public DateOnly ReleaseDate { get; set; }
 

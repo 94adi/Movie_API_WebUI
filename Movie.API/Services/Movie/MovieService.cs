@@ -5,17 +5,20 @@ public class MovieService : IMovieService
     private readonly StorageSettings _storageSettings;
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly IMovieRepository _movieRepository;
+    private readonly IMovieGenreRepository _movieGenreRepository;
 
     public MovieService(IOptions<StorageSettings> storageOptions,
         IHttpContextAccessor httpContextAccessor,
-        IMovieRepository movieRepository)
+        IMovieRepository movieRepository,
+        IMovieGenreRepository movieGenreRepository)
     {
         _storageSettings = storageOptions.Value;
         _httpContextAccessor = httpContextAccessor;
         _movieRepository = movieRepository;
+        _movieGenreRepository = movieGenreRepository;
     }
 
-    public async Task<Models.Movie> GetByIdAsync(int id, bool includeGenres = true)
+    public async Task<Models.Movie> GetByIdAsync(int id, bool includeGenres = false)
     {
         if (includeGenres)
         {
@@ -72,5 +75,33 @@ public class MovieService : IMovieService
             }
         }
 
+    }
+
+    public async Task RemoveMovieGenres(int movieId)
+    {
+        var movieGenresToDelete = await _movieGenreRepository
+                .GetAllAsync(mg => mg.MovieId == movieId);
+
+        if (movieGenresToDelete != null && movieGenresToDelete.Count > 0)
+        {
+            foreach (var movieGenre in movieGenresToDelete)
+            {
+                await _movieGenreRepository.RemoveAsync(movieGenre);
+            }
+        }
+    }
+
+    public async Task AddMovieGenres(int movieId, IEnumerable<int> genreIds)
+    {
+        foreach (var genreId in genreIds)
+        {
+            var movieGenre = new Models.MovieGenre
+            {
+                GenreId = genreId,
+                MovieId = movieId
+            };
+
+            await _movieGenreRepository.CreateAsync(movieGenre);
+        }
     }
 }

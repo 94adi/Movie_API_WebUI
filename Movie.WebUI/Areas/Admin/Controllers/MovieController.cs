@@ -71,26 +71,44 @@ public class MovieController : Controller
         if(result != null && result.Movie != null)
         {
             var updateMovieDto = _mapper.Map<UpdateMovieDto>(result.Movie);
-			return View(updateMovieDto);
+            var updateMovieVM = new UpdateMovieVM();
+
+            updateMovieVM.MovieDto = updateMovieDto;
+
+            var allGenresQuery = new GetAllGenresQuery();
+
+            var resultGenres = await _sender.Send(allGenresQuery);
+
+            var slelectedOptionIds = updateMovieDto?.Genres?.Select(g => g.Id);
+
+            bool hasSelectedGenres = ((slelectedOptionIds != null) && (slelectedOptionIds.Count() > 0));
+
+            updateMovieVM.GenreOptions = resultGenres.GenreDtos.Select(g => new SelectListItem
+            {
+                Value = g.Id.ToString(),
+                Text = g.Name,
+                Selected = hasSelectedGenres ? slelectedOptionIds.Contains(g.Id) : false
+            }).ToList();
+
+            return View(updateMovieVM);
 		}
 
         return RedirectToAction("Index", "Movie");
-
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Update([FromForm] UpdateMovieDto model)
+    public async Task<IActionResult> Update([FromForm] UpdateMovieVM model)
     {
         if (ModelState.IsValid)
         {
-            var command = new UpdateMovieCommand(model);
+            var command = new UpdateMovieCommand(model.MovieDto);
 
             var result = await _sender.Send(command);
 
             if (result.IsSuccess)
             {
-                TempData["success"] = $"The movie {model.Title} was updated successfully";
+                TempData["success"] = $"The movie {model.MovieDto.Title} was updated successfully";
                 return RedirectToAction(nameof(Index));
             }
         }
@@ -138,6 +156,4 @@ public class MovieController : Controller
         TempData["error"] = "Error encountered";
         return View(movie);
     }
-
 }
-

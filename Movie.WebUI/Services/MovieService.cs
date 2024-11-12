@@ -113,7 +113,7 @@ public class MovieService : IMovieService
         throw new NotImplementedException();
     }
 
-    public async Task<UpdateMovieResultDto> UpdateMovie(MovieDto movieDto)
+    public async Task<UpdateMovieResultDto> UpdateMovie(UpdateMovieDto movieDto)
     {
         
         var apiRequest = new ApiRequest

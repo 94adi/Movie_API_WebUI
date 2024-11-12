@@ -3,6 +3,7 @@ using Movie.API.Models;
 using Movie.API.Services.Handlers.Genres.Commands.CreateGenre;
 using Movie.API.Services.Handlers.Genres.Commands.UpdateGenre;
 using Movie.API.Services.Handlers.Genres.Queries.GetGenres;
+using Movie.API.Services.Handlers.Genres.Queries.GetGenresByMovieId;
 
 namespace Movie.API.Mapper;
 
@@ -62,5 +63,7 @@ public class MapperProfile : Profile
                 Id = mg.Genre.Id,
                 Name = mg.Genre.Name
             }).ToList()));
+
+        CreateMap<GetGenresByMovieIdResult, GetMovieGenresResponse>();
     }
 }

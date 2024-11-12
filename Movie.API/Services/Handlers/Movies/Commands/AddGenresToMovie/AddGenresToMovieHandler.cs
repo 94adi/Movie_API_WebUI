@@ -1,11 +1,11 @@
 ﻿namespace Movie.API.Services.Handlers.Movies.Commands.AddGenresToMovie;
 
-public record AddGenresToMovieCommand(List<int> GenreIds, int MovieId) 
+public record AddGenresToMovieCommand(List<int> GenreIds, int MovieId, bool IsUpdate = false) 
     : ICommand<AddGenresToMovieResult>;
 
 public record AddGenresToMovieResult(bool IsSucces);
 
-internal class AddGenresToMovieCommandHandler(IMovieGenreRepository movieGenreRepository)
+internal class AddGenresToMovieCommandHandler(IMovieService movieService)
     : ICommandHandler<AddGenresToMovieCommand, AddGenresToMovieResult>
 {
     public async Task<AddGenresToMovieResult> Handle(AddGenresToMovieCommand command, 
@@ -14,16 +14,13 @@ internal class AddGenresToMovieCommandHandler(IMovieGenreRepository movieGenreRe
         List<Models.MovieGenre> movieGenres = new();
         try
         {
-            foreach (var genreId in command.GenreIds)
+            if (command.IsUpdate)
             {
-                var movieGenre = new Models.MovieGenre
-                {
-                    GenreId = genreId,
-                    MovieId = command.MovieId
-                };
-
-                await movieGenreRepository.CreateAsync(movieGenre);
+                await movieService.RemoveMovieGenres(command.MovieId);
             }
+
+            await movieService.AddMovieGenres(command.MovieId, command.GenreIds);
+
         }
         catch (Exception ex) 
         {

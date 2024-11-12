@@ -11,9 +11,7 @@ public class UpdateMovieCommandHandler(IMovieService movieService,
     public async Task<UpdateMovieResult> Handle(UpdateMovieCommand command, 
         CancellationToken cancellationToken)
     {
-        var movie = mapper.Map<MovieDto>(command.Movie);
-
-        var result = await movieService.UpdateMovie(movie);
+        var result = await movieService.UpdateMovie(command.Movie);
 
         return new UpdateMovieResult(result.IsSuccess);
 

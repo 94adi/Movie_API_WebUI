@@ -10,6 +10,10 @@ public class UpdateMovieDto
 
     public string Description { get; set; }
 
+    public List<GenreDto>? Genres { get; set; }
+
+    public IEnumerable<string> SelectedGenres { get; set; }
+
     public string? ImageUrl { get; set; }
 
     public string? ImageLocalPath { get; set; }

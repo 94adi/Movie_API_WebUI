@@ -12,6 +12,8 @@ namespace Movie.WebUI.Models.Dto
 
         public string Description { get; set; }
 
+        public List<GenreDto>? Genres { get; set; }
+
         public string? ImageUrl { get; set; }
 
         public string? ImageLocalPath { get; set; }

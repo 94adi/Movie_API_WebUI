@@ -7,7 +7,6 @@ int Id,
 string Title,
 float Rating,
 string Description,
-int[] Genres,
 IFormFile Image,
 DateOnly ReleaseDate) : ICommand<UpdateMovieResult>;
 
@@ -43,8 +42,6 @@ internal class UpdateMovieCommandHandler(IMovieRepository repository,
     {
         try
         {
-            var genresQuery = await sender.Send(new GetGenresByIdsQuery(command.Genres));
-
             var movie = new Models.Movie
             {
                 Id = command.Id,
@@ -54,14 +51,6 @@ internal class UpdateMovieCommandHandler(IMovieRepository repository,
                 ReleaseDate = command.ReleaseDate
             };
 
-            foreach (var genreId in command.Genres)
-            {
-                movie.MovieGenres.Add(new MovieGenre
-                {
-                    GenreId = genreId,
-                    Movie = movie
-                });
-            }
 
             await movieService.StoreMoviePoster(movie, command.Image);
 

@@ -1,4 +1,6 @@
-﻿using Movie.API.Services.Handlers.Movies.Commands.AddGenresToMovie;
+﻿using Movie.API.Models.Responses;
+using Movie.API.Services.Handlers.Genres.Queries.GetGenresByMovieId;
+using Movie.API.Services.Handlers.Movies.Commands.AddGenresToMovie;
 using Movie.API.Services.Handlers.Movies.Commands.DeleteMovie;
 
 namespace Movie.API.Controllers.v1;
@@ -68,14 +70,7 @@ public class MovieController : Controller
 
         var createdMovieResponse = _mapper.Map<CreateMovieResponse>(createdMovieResult);
 
-        var genreList = JsonSerializer.Deserialize<IEnumerable<string>>(request.SelectedGenres);
-
-        var genreIds = genreList.Select(g => int.Parse(g)).ToList();
-
-        var addGenresToMovieCommand = new AddGenresToMovieCommand(genreIds, 
-            createdMovieResponse.Id);
-
-        await _sender.Send(addGenresToMovieCommand);
+        await AddGenresToMovie(createdMovieResponse.Id, request.SelectedGenres, false);
 
         var apiResponse = new APIResponse
         {
@@ -98,6 +93,29 @@ public class MovieController : Controller
         var result = await _sender.Send(query);
 
         var response = _mapper.Map<GetMovieResponse>(result);
+
+        var apiResponse = new APIResponse
+        {
+            Result = response,
+            StatusCode = System.Net.HttpStatusCode.OK
+        };
+
+        return Ok(apiResponse);
+    }
+
+    [AllowAnonymous]
+    [HttpGet("/api/v{version:apiVersion}/[controller]/{id}/Genre")]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<ActionResult<APIResponse>> GetMovieGenres(int id)
+    {
+        var query = new GetGenresByMovieIdQuery(id);
+
+        var result = await _sender.Send(query);
+
+        var response = _mapper.Map<GetMovieGenresResponse>(result);
 
         var apiResponse = new APIResponse
         {
@@ -132,6 +150,9 @@ public class MovieController : Controller
 
             if (result.IsSuccess)
             {
+
+                await AddGenresToMovie(id, request.SelectedGenres, true);
+
                 apiResponse = new APIResponse
                 {
                     Result = { },
@@ -207,5 +228,17 @@ public class MovieController : Controller
         };
 
         return apiResponse;
+    }
+
+    private async Task AddGenresToMovie(int movieId, string genres, bool isUpdate = false)
+    {
+        var genreList = JsonSerializer.Deserialize<IEnumerable<string>>(genres);
+
+        var genreIds = genreList.Select(g => int.Parse(g)).ToList();
+
+        var addGenresToMovieCommand = new AddGenresToMovieCommand(genreIds,
+            movieId, isUpdate);
+
+        await _sender.Send(addGenresToMovieCommand);
     }
 }
