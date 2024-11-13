@@ -1,5 +1,4 @@
-﻿
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 
 namespace Movie.WebUI.Services;
@@ -44,19 +43,21 @@ public class ApiMessageRequestBuilder : IApiMessageRequestBuilder
                     var value = prop.GetValue(apiRequest.Data);
                     if (value is FormFile)
                     {
-                        var file = (FormFile)value;
-                        if (file != null)
-                        {
-                            content.Add(new StreamContent(file.OpenReadStream()), 
-                                file.Name, 
-                                file.FileName);
-                        }
+                        var formFile = (FormFile)value;
+                        using var memoryStream = new MemoryStream();
+                        formFile.CopyTo(memoryStream);
+                        memoryStream.Position = 0;
+
+                        var fileContent = new ByteArrayContent(memoryStream.ToArray());
+                        fileContent.Headers.ContentType = new MediaTypeHeaderValue(formFile.ContentType);
+
+                        content.Add(fileContent, prop.Name, formFile.FileName); 
                     }
-                    if(value is IEnumerable<string> stringList)
+                    else if(value is IEnumerable<string> stringList)
                     {
                         var jsonContent = JsonConvert.SerializeObject(stringList);
                         content.Add(new StringContent(jsonContent), prop.Name);
-                }
+                    }
                     else
                     {
                         string contentValue = (value == null) ? "" : value.ToString();
@@ -70,18 +71,5 @@ public class ApiMessageRequestBuilder : IApiMessageRequestBuilder
             message.Content = new StringContent(JsonConvert.SerializeObject(apiRequest.Data),
                 Encoding.UTF8, "application/json");
         }
-    }
-
-    private bool IsGenericEnumerable(object obj)
-    {
-        if (obj == null)
-        {
-            return false;
-        }
-
-        var type = obj.GetType();
-        return typeof(IEnumerable).IsAssignableFrom(type) &&
-               type.IsGenericType &&
-               type.GetGenericTypeDefinition() == typeof(IEnumerable<>);             
     }
 }

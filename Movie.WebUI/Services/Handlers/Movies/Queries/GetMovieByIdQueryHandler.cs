@@ -7,16 +7,13 @@ public record GetMovieByIdQuery(int Id) : IQuery<GetMovieByIdResult>;
 
 public record GetMovieByIdResult(MovieDto Movie);
 
-public class GetMovieByIdQueryHandler(IMovieService movieService,
-	IMapper mapper)
+public class GetMovieByIdQueryHandler(IMovieService movieService)
 	: IQueryHandler<GetMovieByIdQuery, GetMovieByIdResult>
 {
 	public async Task<GetMovieByIdResult> Handle(GetMovieByIdQuery query, 
 		CancellationToken cancellationToken)
 	{
 		var getMovieByResultDto = await movieService.GetMovieById(query.Id);
-
-		//var movieDto = mapper.Map<MovieDto>(getMovieByResultDto);
 
         return new GetMovieByIdResult(getMovieByResultDto.MovieDto);
 	}

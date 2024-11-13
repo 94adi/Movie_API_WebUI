@@ -4,8 +4,7 @@ public record UpdateMovieCommand(UpdateMovieDto Movie) : ICommand<UpdateMovieRes
 
 public record UpdateMovieResult(bool IsSuccess);
 
-public class UpdateMovieCommandHandler(IMovieService movieService,
-    IMapper mapper)
+public class UpdateMovieCommandHandler(IMovieService movieService)
     : ICommandHandler<UpdateMovieCommand, UpdateMovieResult>
 {
     public async Task<UpdateMovieResult> Handle(UpdateMovieCommand command, 

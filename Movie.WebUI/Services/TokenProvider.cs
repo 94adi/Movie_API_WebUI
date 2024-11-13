@@ -44,7 +44,7 @@ public class TokenProvider(IHttpContextAccessor contextAccessor) : ITokenProvide
 
             return result;
         }
-        catch (Exception ex) 
+        catch (Exception) 
         {
             return null;
         }
