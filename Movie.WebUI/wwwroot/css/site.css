@@ -2,13 +2,14 @@ html {
   font-size: 14px;
 }
 
-body{
+body {
     margin: 0;
     padding: 0;
+    background-color: #05313d;
 }
 
 @media (min-width: 768px) {
-  html {
+    html {
     font-size: 16px;
   }
 }
@@ -126,4 +127,26 @@ h1#movieTitleText {
 
 #ratingInput{
     width: 20%;
+}
+
+footer {
+    background-color: #212529;
+}
+
+.footer-text{
+    color: white;
+}
+.footer-text > a{
+    color: white;
+    text-decoration: none;
+}
+
+#newsletter-subscribe-text {
+    color: white;
+    font-size: 17px;
+    font-weight: bold;
+}
+
+.carousel-main-container{
+    margin-bottom: 10%;
 }

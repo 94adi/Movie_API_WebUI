@@ -362,3 +362,4 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /Movie.API/wwwroot/MoviePosters
+/Movie.WebUI/wwwroot/lib
