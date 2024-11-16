@@ -18,6 +18,8 @@ namespace Movie.WebUI.Models.Dto
 
         public string? ImageLocalPath { get; set; }
 
+        public string TrailerUrl { get; set; }
+
         [NotMapped]
         public IFormFile? Image { get; set; }
 

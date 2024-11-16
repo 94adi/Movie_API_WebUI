@@ -35,7 +35,8 @@ public class ApiMessageRequestBuilder : IApiMessageRequestBuilder
 
     private void AddContentToMessage(ApiRequest apiRequest, HttpRequestMessage message)
     {
-        if (apiRequest.ContentType == ContentType.MultipartFormData)
+        if (apiRequest.ContentType == ContentType.MultipartFormData &&
+            apiRequest.Data != null)
         {
             var content = new MultipartFormDataContent();
                 foreach (var prop in apiRequest.Data.GetType().GetProperties())

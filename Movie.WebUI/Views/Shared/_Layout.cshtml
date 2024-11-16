@@ -88,15 +88,15 @@
             </div>
         </nav>
     </header>
-    <div class="container">
+    <div class="container main-content-container">
         <main role="main" class="main-section pb-3">
             @RenderBody()
         </main>
     </div>
 
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
+    <footer class="footer-container border-top footer text-muted">
+        <div class="container subscription-form-container">
             <form asp-controller="Newsletter" asp-action="Subscribe">
                 <div class="row align-items-center">
                     <div class="col-lg-3 col-12 mb-2">
@@ -112,14 +112,13 @@
             </form>
         </div>
 
-        <div class="container footer-text text-left mt-3">
+        <div class="container container-privacy footer-text text-left mt-3">
             &copy; 2024 - AMDB - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
 
-
     <script src="~/lib/jquery/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/js/bootstrap.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)

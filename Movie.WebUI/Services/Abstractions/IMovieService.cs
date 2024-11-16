@@ -2,7 +2,7 @@
 
 public interface IMovieService
 {
-    IEnumerable<MovieDto> GetMovies(int pageNumber, int pageSize);
+    Task<GetMoviesPagingResultDto> GetMovies(int pageNumber = 1, int pageSize = 0);
 
 	Task<GetAllMoviesResultDto> GetAllMovies();
 
