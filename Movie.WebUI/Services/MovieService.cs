@@ -91,14 +91,14 @@ public class MovieService : IMovieService
 
 		GetMovieByIdResultDto getMovieByIdResultDto = null;
 
-		bool isMovieAvailable = (response != null) &&
+		bool isResponseValid = (response != null) &&
 			(response.IsSuccess == true) &&
 			(response.Result != null);
 
 		var stringResult = Convert.ToString(response.Result);
 
 
-		if (isMovieAvailable)
+		if (isResponseValid)
 		{
 			getMovieByIdResultDto = JsonConvert.
 				DeserializeObject<GetMovieByIdResultDto>(stringResult);
@@ -107,10 +107,33 @@ public class MovieService : IMovieService
 		return getMovieByIdResultDto;
 	}
 
-	public IEnumerable<MovieDto> GetMovies(int pageNumber, int pageSize)
+	public async Task<GetMoviesPagingResultDto> GetMovies(int pageNumber = 1, int pageSize = 0)
     {
-        //TO DO
-        throw new NotImplementedException();
+        var apiRequest = new ApiRequest
+        {
+            ApiType = ApiType.GET,
+            Data = { },
+            Url = $"{_baseApiUri}{_appConfig.GetAllMoviesPath}?pageNumber={pageNumber}&pageSize={pageSize}",
+            ContentType = ContentType.MultipartFormData
+        };
+
+        var response = await _httpService.SendAsync<ApiResponse>(apiRequest,
+        isAuthenticated: true);
+
+        bool isResponseValid = (response != null) &&
+                            (response.IsSuccess == true) &&
+                            (response.Result != null);
+
+        var stringResult = Convert.ToString(response.Result);
+
+        GetMoviesPagingResultDto resultDto = new GetMoviesPagingResultDto(new List<MovieDto> { });
+
+        if (isResponseValid)
+        {
+            resultDto = JsonConvert.DeserializeObject<GetMoviesPagingResultDto>(stringResult);
+        }
+
+        return resultDto;
     }
 
     public async Task<UpdateMovieResultDto> UpdateMovie(UpdateMovieDto movieDto)

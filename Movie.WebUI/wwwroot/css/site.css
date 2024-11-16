@@ -27,7 +27,7 @@ body {
   margin-bottom: 60px;
 }
 
-#movieIndexContainer{
+#movieIndexContainer {
     border: 1px solid black;
     width: 100%;
     margin-top: 2%;
@@ -149,4 +149,19 @@ footer {
 
 .carousel-main-container{
     margin-bottom: 10%;
+}
+
+#moviesIndexSection{
+    margin-bottom: 10%;
+}
+
+.card-item-container{
+    margin-bottom: 15%;
+    margin-top:5%;
+}
+
+@media (max-width: 800px) {
+    .card-item-container {
+        margin-bottom: 25%;
+    }
 }

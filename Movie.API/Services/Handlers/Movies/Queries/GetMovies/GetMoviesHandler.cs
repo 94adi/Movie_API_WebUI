@@ -5,6 +5,7 @@ public record GetMoviesQuery(int PageNumber = 1, int PageSize = 0) : IQuery<GetM
 public record GetMoviesResult
 {
     public IEnumerable<Models.Dto.MovieDto> MovieDtos { get; set; } = new List<Models.Dto.MovieDto>();
+    public int TotalPages { get; set; }
 }
 
 internal class GetMoviesQueryHandler(IMovieRepository movieRepository,

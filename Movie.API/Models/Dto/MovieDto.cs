@@ -16,6 +16,8 @@ public class MovieDto
 
     public string? ImageLocalPath { get; set; }
 
+    public string? TrailerUrl { get; set; }
+
     public ICollection<int> Reviews { get; set; } = new List<int>();
 
     public DateOnly ReleaseDate { get; set; }

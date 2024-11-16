@@ -18,6 +18,8 @@ public class Movie
 
     public ICollection<Review> Reviews { get; set; } = new List<Review>();
 
+    public string TrailerUrl { get; set; }
+
     public DateOnly ReleaseDate { get; set; }
 
     public DateTime CreatedDate {  get; set; }
