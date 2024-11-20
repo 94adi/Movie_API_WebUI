@@ -13,4 +13,6 @@ public interface IMovieService
     Task<UpdateMovieResultDto> UpdateMovie(UpdateMovieDto movieDto);
 
     Task<DeleteMovieResultDto> DeleteMovie(int movieId);
+
+    Task<UpdateMovieCarouselResultDto> UpdateMovieCarousel(UpdateMovieCarouselDto request);
 }
