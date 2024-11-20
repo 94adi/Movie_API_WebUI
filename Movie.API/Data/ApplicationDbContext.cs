@@ -23,6 +23,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 
     public DbSet<MovieGenre> MovieGenres { get; set; }
 
+    public DbSet<MovieCarousel> MovieCarousels { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -41,5 +43,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
         GenreModelBuilder.BuildModel(modelBuilder);
 
         MovieGenreModelBuilder.BuildModel(modelBuilder);
+
+        MovieCarouselModelBuilder.BuildModel(modelBuilder);
     }
 }

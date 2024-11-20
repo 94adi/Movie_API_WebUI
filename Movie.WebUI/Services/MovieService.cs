@@ -172,4 +172,21 @@ public class MovieService : IMovieService
 
         return new DeleteMovieResultDto(isSucess);
     }
+
+    public async Task<UpdateMovieCarouselResultDto> UpdateMovieCarousel(UpdateMovieCarouselDto request)
+    {
+        var apiRequest = new ApiRequest
+        {
+            ApiType = ApiType.POST,
+            Data = request,
+            Url = $"{_baseApiUri}{_appConfig.UpdateMovieCarousel}",
+            ContentType = ContentType.MultipartFormData
+        };
+
+        var result = await _httpService.SendAsync<ApiResponse>(apiRequest, isAuthenticated: true);
+
+        bool isSucess = (result != null) && (result.IsSuccess == true);
+
+        return new UpdateMovieCarouselResultDto(isSucess);
+    }
 }

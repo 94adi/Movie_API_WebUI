@@ -1,7 +1,9 @@
-﻿using Movie.API.Models.Responses;
+﻿using Azure.Core;
+using Movie.API.Models.Responses;
 using Movie.API.Services.Handlers.Genres.Queries.GetGenresByMovieId;
 using Movie.API.Services.Handlers.Movies.Commands.AddGenresToMovie;
 using Movie.API.Services.Handlers.Movies.Commands.DeleteMovie;
+using Movie.API.Services.Handlers.Movies.Commands.UpdateMovieCarousel;
 
 namespace Movie.API.Controllers.v1;
 
@@ -230,9 +232,56 @@ public class MovieController : Controller
         return apiResponse;
     }
 
+    [HttpPost("/api/v{version:apiVersion}/[controller]/Carousel")]
+    [Authorize(Roles = "Admin")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<ActionResult<APIResponse>> AddToCarousel([FromForm] UpdateMovieCarouselRequest request)
+    {
+        var movieIds = System.Text.Json.JsonSerializer.Deserialize<IEnumerable<string>>(request.MovieIds);       
+
+        if (movieIds == null || (movieIds.Count() > 3 || movieIds.Count() == 0))
+        {
+            return BadRequest("You can add at most 3 movies to the carousel");
+        }
+
+        APIResponse apiResponse = null;
+
+        var command = new UpdateMovieCarouselCommand(movieIds);
+
+        var result = await _sender.Send(command);
+
+        if (result.IsSuccess)
+        {
+
+            apiResponse = new APIResponse
+            {
+                Result = { },
+                IsSuccess = true,
+                StatusCode = System.Net.HttpStatusCode.NoContent
+            };
+
+            return Ok(apiResponse);
+        }
+
+        apiResponse = new APIResponse
+        {
+            Result = { },
+            IsSuccess = false,
+            StatusCode = System.Net.HttpStatusCode.InternalServerError,
+            Errors = new List<string>() { }
+        };
+
+        return apiResponse;
+
+    }
+
     private async Task AddGenresToMovie(int movieId, string genres, bool isUpdate = false)
     {
-        var genreList = JsonSerializer.Deserialize<IEnumerable<string>>(genres);
+        var genreList = System.Text.Json.JsonSerializer.Deserialize<IEnumerable<string>>(genres);
 
         var genreIds = genreList.Select(g => int.Parse(g)).ToList();
 

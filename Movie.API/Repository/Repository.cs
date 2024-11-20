@@ -19,6 +19,12 @@ namespace Movie.API.Repository
             await _context.SaveChangesAsync();
         }
 
+        public async Task CreateAsync(IEnumerable<T> entities)
+        {
+            await _dbSet.AddRangeAsync(entities);
+            await _context.SaveChangesAsync();
+        }
+
         public async Task<List<T>> GetAllAsync(Expression<Func<T, bool>> filter = null, 
             string includeProperties = null, 
             int pageSize = 0, 
@@ -85,6 +91,12 @@ namespace Movie.API.Repository
         public async Task RemoveAsync(T entity)
         {
             _dbSet.Remove(entity);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task RemoveAsync(IEnumerable<T> entities)
+        {
+            _dbSet.RemoveRange(entities);
             await _context.SaveChangesAsync();
         }
     }

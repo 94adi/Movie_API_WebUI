@@ -40,7 +40,7 @@
                         @if (User.IsInRole(StaticDetails.userRolesDict[UserRoles.ADMIN]))
                         {
                             <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" 
+                            <a class="nav-link text-white dropdown-toggle" 
                             href="#" 
                             role="button" 
                             data-bs-toggle="dropdown" 
@@ -52,7 +52,9 @@
                                 <li>
                                     <a class="dropdown-item" asp-area="Admin" asp-controller="Movie" asp-action="Create">Create Movie</a>
                                 </li>
-                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                        <a class="dropdown-item" asp-area="Admin" asp-controller="Movie" asp-action="CarouselMovies">Select Carousel Movies</a>
+                                </li>   
                             </ul>
                             </li>
                         }

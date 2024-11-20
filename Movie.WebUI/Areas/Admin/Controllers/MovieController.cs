@@ -156,4 +156,49 @@ public class MovieController : Controller
         TempData["error"] = "Error encountered";
         return View(movie);
     }
+
+    [HttpGet]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> CarouselMovies()
+    {
+        var viewModel = new CarouselItemVM();
+
+        var result = await _sender.Send(new GetAllMoviesQuery());
+
+        var movies = result.MovieDtos;
+
+        viewModel.MovieOptions = movies.Select(m => new SelectListItem
+        {
+            Text = m.Title,
+            Value = Convert.ToString(m.Id)
+        }).ToList();
+
+        return View(viewModel);
+    }
+
+    [HttpPost]
+    [Authorize(Roles = "Admin")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> CarouselMovies([FromForm] CarouselItemVM carouselItemVM)
+    {
+        if (ModelState.IsValid)
+        {
+            var command = new UpdateMovieCarouselCommand(carouselItemVM.SelectedMovieOptions);
+            var result = await _sender.Send(command);
+            return RedirectToAction(nameof(Index));
+        }
+
+        var allMoviesQueryResult = await _sender.Send(new GetAllMoviesQuery());
+
+        var moviesResult = allMoviesQueryResult.MovieDtos;
+
+        carouselItemVM.MovieOptions = moviesResult.Select(m => new SelectListItem
+        {
+            Text = m.Title,
+            Value = Convert.ToString(m.Id)
+        }).ToList();
+
+        return View(carouselItemVM);
+    }
+
 }

@@ -14,6 +14,7 @@ public class MovieAppConfig
     public string UpdateMoviePath { get; set; }
     public string DeleteMoviePath { get; set; }
     public string GetAllGenres {  get; set; }
+    public string UpdateMovieCarousel {  get; set; }
     public string PageSize { get; set; }
     public string NumberOfColumns {  get; set; }
 }

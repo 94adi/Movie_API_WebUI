@@ -13,6 +13,5 @@ public class UpdateMovieCommandHandler(IMovieService movieService)
         var result = await movieService.UpdateMovie(command.Movie);
 
         return new UpdateMovieResult(result.IsSuccess);
-
     }
 }
