@@ -15,6 +15,10 @@ namespace Movie.API.Repository.Abstractions
 
         Task CreateAsync(T entity);
 
+        Task CreateAsync(IEnumerable<T> entities);
+
         Task RemoveAsync(T entity);
+
+        Task RemoveAsync(IEnumerable<T> entities);
     }
 }

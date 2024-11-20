@@ -42,6 +42,7 @@ builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
 builder.Services.AddScoped<IReviewService,  ReviewService>();
 builder.Services.AddScoped<IGenreRepository, GenreRepository>();
 builder.Services.AddScoped<IMovieGenreRepository, MovieGenreRepository>();
+builder.Services.AddScoped<IMovieCarouselRepository, MovieCarouselRepository>();
 
 builder.Services.AddSwaggerGen();
 
