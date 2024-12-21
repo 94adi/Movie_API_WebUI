@@ -87,6 +87,8 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
             Title = "The Shining",
             Rating = 8.4f,
             Description = "A modern horror masterpiece",
+            ImageUrl = $"{url}//SeedPosters/the_shining.jpg",
+            ImageLocalPath = "wwwroot\\SeedPosters\\the_shining.jpg",
             ReleaseDate = new DateOnly(1980, 5, 8),
             CreatedDate = DateTime.Now
         };
@@ -121,9 +123,9 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
             {
                 MovieId = 1
             },
-            //new Models.MovieCarousel { 
-            //    MovieId = 2
-            //}
+            new Models.MovieCarousel {
+                MovieId = 2
+            }
         });
 
     }

@@ -70,7 +70,7 @@ public class HomeController : Controller
         }
 
         var moviesCarousel = await _sender.Send(new GetMoviesCarouselQuery());
-        indexMovieVM.CarouselHighlightMoviesVM.CarouselMovies = moviesCarousel.MovieCarousels;
+        indexMovieVM.CarouselHighlightMoviesVM.CarouselMovies = (IList<MovieDto>)moviesCarousel.MovieCarousels;
 
         return View(indexMovieVM);
     }
