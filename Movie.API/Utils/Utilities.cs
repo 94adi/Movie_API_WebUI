@@ -20,4 +20,22 @@ public static class Utilities
         return new string(Enumerable.Repeat(chars, length)
             .Select(s => s[random.Next(s.Length)]).ToArray());
     }
+
+    public static string GetAppUrl()
+    {
+        var urlsEnv = Environment.GetEnvironmentVariable("ASPNETCORE_URLS");
+        string url = "";
+
+        if (urlsEnv.Contains(";"))
+        {
+            var split = urlsEnv.Split(';');
+            url = split[0];
+        }
+        else
+        {
+            url = urlsEnv;
+        }
+
+        return url;
+    }
 }

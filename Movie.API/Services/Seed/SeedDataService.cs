@@ -10,6 +10,8 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
 
     public async Task SeedAsync()
     {
+        var url = Utilities.GetAppUrl();
+
         await AddSeedRoles(new List<IdentityRole>
         {
             new IdentityRole(StaticDetails.userRolesDict[UserRoles.USER]),
@@ -74,6 +76,8 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
             Title = "The Shawshank Redemption",
             Rating = 9.8f,
             Description = "A beautiful movie about hope and friendship",
+            ImageUrl = $"{url}//SeedPosters/shawshank.jpg",
+            ImageLocalPath = "wwwroot\\SeedPosters\\shawshank.jpg",
             ReleaseDate = new DateOnly(1994, 2, 12),
             CreatedDate = DateTime.Now
         };
