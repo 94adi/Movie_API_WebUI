@@ -173,6 +173,34 @@ public class MovieService : IMovieService
         return new DeleteMovieResultDto(isSucess);
     }
 
+    public async Task<GetAllMoviesCarouselResultDto> GetAllMoviesCarousel()
+    {
+        var apiRequest = new ApiRequest
+        {
+            ApiType = ApiType.GET,
+            Data = { },
+            Url = $"{_baseApiUri}{_appConfig.GetAllMoviesCarousel}",
+            ContentType = ContentType.Json
+        };
+
+        var response = await _httpService.SendAsync<ApiResponse>(apiRequest, isAuthenticated: false);
+
+        bool isResponseValid = (response != null) &&
+                    (response.IsSuccess == true) &&
+                    (response.Result != null);
+
+        var stringResult = Convert.ToString(response.Result);
+
+        var resultDto = new GetAllMoviesCarouselResultDto();
+
+        if (isResponseValid)
+        {
+            resultDto = JsonConvert.DeserializeObject<GetAllMoviesCarouselResultDto>(stringResult);
+        }
+
+        return resultDto;
+    }
+
     public async Task<UpdateMovieCarouselResultDto> UpdateMovieCarousel(UpdateMovieCarouselDto request)
     {
         var apiRequest = new ApiRequest

@@ -56,10 +56,10 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.UseSession();
 
-app.MapControllerRoute(
-    name: "root",
-    pattern: "",
-    defaults: new { area = "Customer", controller = "Home", action = "Index" });
+//app.MapControllerRoute(
+//    name: "root",
+//    pattern: "",
+//    defaults: new { area = "Customer", controller = "Home", action = "Index" });
 
 app.MapControllerRoute(
     name: "areas",
@@ -67,6 +67,6 @@ app.MapControllerRoute(
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Movie}/{action=Index}/{id?}");
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
