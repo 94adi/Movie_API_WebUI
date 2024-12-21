@@ -2,7 +2,7 @@
 
 public class CarouselHighlightMoviesVM
 {
-    public IEnumerable<MovieDto> CarouselMovies { get; set; } 
+    public IList<MovieDto> CarouselMovies { get; set; } 
 
     public CarouselHighlightMoviesVM()
     {
