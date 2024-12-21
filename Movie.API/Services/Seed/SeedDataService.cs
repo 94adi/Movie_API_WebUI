@@ -4,7 +4,8 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
         RoleManager<IdentityRole> roleManager,
         IMovieRepository movieRepo,
         IGenreRepository genreRepo,
-        IMovieGenreRepository movieGenreRepo) : ISeedDataService
+        IMovieGenreRepository movieGenreRepo,
+        IMovieCarouselRepository movieCarouselRepo) : ISeedDataService
 {
 
     public async Task SeedAsync()
@@ -36,8 +37,8 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
                 EmailConfirmed = true,
                 RegisteredOn = DateTime.UtcNow
             }
-        }, 
-        password:"u$3rp@s$w0rD",
+        },
+        password: "u$3rp@s$w0rD",
         isAdmin: false);
 
         var genreHorror = new Genre
@@ -98,7 +99,7 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
                 GenreId = genreThriller.Id,
                 MovieId = movieShawShankRedemption.Id
             },
-            new Models.MovieGenre { 
+            new Models.MovieGenre {
                 GenreId = genreDrama.Id,
                 MovieId = movieShawShankRedemption.Id
             },
@@ -110,6 +111,28 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
 
         });
 
+        await AddMovieCarousel(new List<Models.MovieCarousel>
+        {
+            new Models.MovieCarousel
+            {
+                MovieId = 1
+            },
+            //new Models.MovieCarousel { 
+            //    MovieId = 2
+            //}
+        });
+
+    }
+
+    private async Task AddMovieCarousel(IEnumerable<Models.MovieCarousel> movieCarousels)
+    {
+        if(movieCarousels != null && movieCarousels.Count() > 0)
+        {
+            foreach (var movieCarousel in movieCarousels) 
+            { 
+                await movieCarouselRepo.CreateAsync(movieCarousel);
+            }
+        }
     }
 
     private async Task AddMovies(IEnumerable<Models.Movie> movies)

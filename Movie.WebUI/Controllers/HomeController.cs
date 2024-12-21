@@ -2,8 +2,6 @@
 
 namespace Movie.WebUI.Controllers;
 
-
-
 public class HomeController : Controller
 {
 
@@ -71,8 +69,8 @@ public class HomeController : Controller
             }
         }
 
-
-        //TO DO: Create handler for carousel items query
+        var moviesCarousel = await _sender.Send(new GetMoviesCarouselQuery());
+        indexMovieVM.CarouselHighlightMoviesVM.CarouselMovies = moviesCarousel.MovieCarousels;
 
         return View(indexMovieVM);
     }
