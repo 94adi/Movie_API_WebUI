@@ -16,6 +16,7 @@ public class ReviewController : Controller
         _mapper = mapper;
     }
 
+    [AllowAnonymous]
     [HttpGet("/api/v{version:apiVersion}/Movie/{movieId}/Review")]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -43,6 +44,7 @@ public class ReviewController : Controller
         return Ok(apiResponse);
     }
 
+    [AllowAnonymous]
     [HttpGet("/api/v{version:apiVersion}/User/{userId}/Review")]
     public async Task<ActionResult<APIResponse>> GetReviewsByUser(string userId,
         [FromQuery]int pageNumber = 1,
@@ -67,6 +69,7 @@ public class ReviewController : Controller
         return Ok(apiResponse);
     }
 
+    [AllowAnonymous]
     [HttpGet("{id:int}", Name = "GetReview")]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -88,7 +91,6 @@ public class ReviewController : Controller
     }
 
     [HttpPost]
-    [Authorize(Roles = "Admin")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]

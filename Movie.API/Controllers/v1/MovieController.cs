@@ -4,6 +4,7 @@ using Movie.API.Services.Handlers.Genres.Queries.GetGenresByMovieId;
 using Movie.API.Services.Handlers.Movies.Commands.AddGenresToMovie;
 using Movie.API.Services.Handlers.Movies.Commands.DeleteMovie;
 using Movie.API.Services.Handlers.Movies.Commands.UpdateMovieCarousel;
+using Movie.API.Services.Handlers.Movies.Queries.GetMoviesCarousel;
 
 namespace Movie.API.Controllers.v1;
 
@@ -83,6 +84,7 @@ public class MovieController : Controller
         return CreatedAtRoute("GetMovie", new { id = createdMovieResponse.Id }, apiResponse);
     }
 
+    [AllowAnonymous]
     [HttpGet("{id:int}", Name = "GetMovie")]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -230,6 +232,25 @@ public class MovieController : Controller
         };
 
         return apiResponse;
+    }
+
+    [HttpGet("/api/v{version:apiVersion}/[controller]/Carousel")]
+    [AllowAnonymous]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<APIResponse>> GetMovieCarousels()
+    {
+        var movieCarosels = await _sender.Send(new GetMoviesCarouselQuery());
+
+        var apiResponse = new APIResponse
+        {
+            Result = movieCarosels,
+            IsSuccess = true,
+            StatusCode = System.Net.HttpStatusCode.OK
+        };
+
+        return Ok(apiResponse);
     }
 
     [HttpPost("/api/v{version:apiVersion}/[controller]/Carousel")]
