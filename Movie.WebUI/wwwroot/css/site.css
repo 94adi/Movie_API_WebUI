@@ -3,8 +3,8 @@ html {
 }
 
 body {
-    margin: 0;
-    padding: 0;
+/*    margin: 0;
+    padding: 0;*/
     background-color: #05313d;
 }
 
@@ -67,12 +67,14 @@ body {
 }
 
 #movieDescription {
-    margin: 4% 1% 2% 1%;
+    margin: 4% 1% 2% 5%;
+    padding-bottom: 10%;
 }
 
 #movieDescriptionText {
     font-family: "Oswald","Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
     font-size: 1.1em;
+    color: whitesmoke;
 }
 
 #movieTitle{
@@ -131,6 +133,11 @@ h1#movieTitleText {
 
 footer {
     background-color: #212529;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    /*height: 10%; */
+    line-height: 0px;
 }
 
 .footer-text{
@@ -160,10 +167,27 @@ footer {
     margin-top:5%;
 }
 
+.newsletter-form-input {
+    margin-bottom: 2%;
+}
+
 @media (max-width: 800px) {
     .card-item-container {
         margin-bottom: 25%;
     }
+}
+
+@media (max-width: 991px){
+    footer{
+        line-height: 25px !important;
+    }
+
+    #newsletter-title{
+        margin-top: 3%;
+    }
+    #newsletter-email-input{
+/*        margin-bottom: 6%;
+*/    }
 }
 
 .carousel-item img {
