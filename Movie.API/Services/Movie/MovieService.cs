@@ -39,16 +39,22 @@ public class MovieService : IMovieService
 
             string filePath = _storageSettings.ImageStoragePath + fileName;
 
-            var directoryLocation = Path.Combine(Directory.GetCurrentDirectory(), filePath);
+            var imageLocation = Path.Combine(Directory.GetCurrentDirectory(), filePath);
 
-            FileInfo file = new FileInfo(directoryLocation);
+            var folderLocation = Path.Combine(Directory.GetCurrentDirectory(), _storageSettings.ImageStoragePath);
+
+            if (!Directory.Exists(folderLocation))
+            {
+                Directory.CreateDirectory(folderLocation);
+            }
+
+            FileInfo file = new FileInfo(imageLocation);
 
             if (file.Exists)
             {
                 file.Delete();
             }
-
-            using (var fileStream = new FileStream(directoryLocation, FileMode.Create))
+            using (var fileStream = new FileStream(imageLocation, FileMode.Create))
             {
                 poster.CopyTo(fileStream);
             }
