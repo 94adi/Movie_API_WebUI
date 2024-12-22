@@ -18,5 +18,6 @@
 
         public static string AccessToken = "JWTToken";
         public static string RefreshToken = "RefreshToken";
+        public static string UserId = "UserId";
     }
 }

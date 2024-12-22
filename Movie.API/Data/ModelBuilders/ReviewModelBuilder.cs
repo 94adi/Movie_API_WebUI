@@ -12,10 +12,6 @@ public static class ReviewModelBuilder
             .HasColumnType("datetime2");
 
         modelBuilder.Entity<Models.Review>()
-            .Property(r => r.Rating)
-            .HasColumnType("decimal(3,1)");
-
-        modelBuilder.Entity<Models.Review>()
             .HasOne(r => r.User)
             .WithMany(u => u.Reviews)
             .HasForeignKey(r => r.UserId);

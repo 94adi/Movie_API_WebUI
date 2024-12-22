@@ -78,7 +78,10 @@
 
                                 </ul>
                                 <div class="card-body">
-                                    <a href="#" class="card-link">Details Page</a>
+                                    <a asp-controller="Movie" 
+                                    asp-action="Details" 
+                                    asp-route-id="@currentMovieModel.Id" 
+                                    asp class="card-link">Details Page</a>
                                     <a href="#" class="card-link">Add Review</a>
                                 </div>
                             </div>
