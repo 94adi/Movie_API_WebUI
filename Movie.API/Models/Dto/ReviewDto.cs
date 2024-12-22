@@ -8,7 +8,7 @@
 
         public string? Content { get; set; }
 
-        public float Rating { get; set; }
+        public int Rating { get; set; }
 
         public int? NoAgree { get; set; }
 

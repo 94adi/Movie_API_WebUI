@@ -42,7 +42,11 @@ internal class LoginHandler(IUserService authService,
                 await httpContextAccessor.HttpContext?.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
                     claimsPrincipal);
 
+                var userId = jwt.Claims.FirstOrDefault(c => c.Type == "sub").Value;
+
                 tokenProvider.SetToken(token);
+                tokenProvider.SetUserId(userId);
+
                 return new LoginResult(true, string.Empty);
             }
         }

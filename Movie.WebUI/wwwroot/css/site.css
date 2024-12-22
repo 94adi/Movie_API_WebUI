@@ -3,8 +3,6 @@ html {
 }
 
 body {
-/*    margin: 0;
-    padding: 0;*/
     background-color: #05313d;
 }
 
@@ -44,26 +42,17 @@ body {
 }
 
 #left-pane {
-    /*width: 100%;*/
     background-color: white;
-    /*margin-right: 1%;
-    */
     margin-bottom: 5%;
 }
 
 #right-pane {
-    /*width: 100%;*/
 
-    /*margin-left: 1%*/
 }
 
 #moviePoster{
     margin: 4%;
     
-}
-
-#moviePosterImg {
-    border: 5px black solid;
 }
 
 #movieDescription {
@@ -194,4 +183,8 @@ footer {
     height: 90vh;
     object-fit: cover;
     width: 100%;
+}
+
+.white-label{
+    color: white;
 }

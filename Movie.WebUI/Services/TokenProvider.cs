@@ -1,29 +1,36 @@
-﻿using Movie.BuildingBlocks;
-using Movie.WebUI.Models.Dto;
-using Movie.WebUI.Services.Abstractions;
+﻿using Microsoft.AspNetCore.Http;
 
 namespace Movie.WebUI.Services;
 
-public class TokenProvider(IHttpContextAccessor contextAccessor) : ITokenProvider
+public class TokenProvider : ITokenProvider
 {
+    private readonly CookieOptions _cookieOptions;
+    private readonly IHttpContextAccessor _contextAccessor;
+
+    public TokenProvider(IHttpContextAccessor contextAccessor)
+    {
+        _cookieOptions = new CookieOptions { Expires = DateTime.Now.AddDays(1) };
+        _contextAccessor = contextAccessor;
+    }
+
     public void ClearToken()
     {
-        contextAccessor.HttpContext?.Response?.Cookies.Delete(StaticDetails.AccessToken);
-        contextAccessor.HttpContext?.Response?.Cookies.Delete(StaticDetails.RefreshToken);
+        _contextAccessor.HttpContext?.Response?.Cookies.Delete(StaticDetails.AccessToken);
+        _contextAccessor.HttpContext?.Response?.Cookies.Delete(StaticDetails.RefreshToken);
     }
 
     public TokenDTO? GetToken()
     {
         try
         {
-            bool hasAccessToken = contextAccessor
+            bool hasAccessToken = _contextAccessor
                             .HttpContext
                             .Request
                             .Cookies
                             .TryGetValue(StaticDetails.AccessToken,
                             out string accessToken);
 
-            bool hasRefreshToken = contextAccessor
+            bool hasRefreshToken = _contextAccessor
                     .HttpContext
                     .Request
                     .Cookies
@@ -50,18 +57,35 @@ public class TokenProvider(IHttpContextAccessor contextAccessor) : ITokenProvide
         }
     }
 
+    public string GetUserId()
+    {
+        var result = _contextAccessor.HttpContext
+                        .Request
+                        .Cookies
+                        .TryGetValue(StaticDetails.UserId,
+                        out string userId);
+
+        return userId;
+    }
+
     public void SetToken(TokenDTO token)
     {
-        var cookieOptions = new CookieOptions { Expires = DateTime.Now.AddDays(1) };
-
-        contextAccessor.HttpContext?
+        _contextAccessor.HttpContext?
             .Response
             .Cookies
-            .Append(StaticDetails.AccessToken, token.AccessToken, cookieOptions);
+            .Append(StaticDetails.AccessToken, token.AccessToken, _cookieOptions);
 
-        contextAccessor.HttpContext?
+        _contextAccessor.HttpContext?
             .Response
             .Cookies
-            .Append(StaticDetails.RefreshToken, token.RefreshToken, cookieOptions);
+            .Append(StaticDetails.RefreshToken, token.RefreshToken, _cookieOptions);
+    }
+
+    public void SetUserId(string userId)
+    {
+        _contextAccessor.HttpContext?
+        .Response
+        .Cookies
+        .Append(StaticDetails.UserId, userId, _cookieOptions);
     }
 }

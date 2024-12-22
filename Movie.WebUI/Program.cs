@@ -56,11 +56,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.UseSession();
 
-//app.MapControllerRoute(
-//    name: "root",
-//    pattern: "",
-//    defaults: new { area = "Customer", controller = "Home", action = "Index" });
-
 app.MapControllerRoute(
     name: "areas",
     pattern: "{area:exists}/{controller=Movie}/{action=Index}/{id?}");
