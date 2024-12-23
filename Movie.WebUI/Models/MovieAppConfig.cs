@@ -18,4 +18,6 @@ public class MovieAppConfig
     public string GetAllMoviesCarousel { get; set; }
     public string PageSize { get; set; }
     public string NumberOfColumns {  get; set; }
+    public string AddMovieReviewPath { get; set; }
+    public string GetMovieReviewsPath { get; set; }
 }

@@ -1,11 +1,15 @@
-﻿namespace Movie.API.Services.Seed;
+﻿using Movie.API.Models;
+
+namespace Movie.API.Services.Seed;
 
 public class SeedDataService(UserManager<ApplicationUser> userManager,
         RoleManager<IdentityRole> roleManager,
         IMovieRepository movieRepo,
         IGenreRepository genreRepo,
         IMovieGenreRepository movieGenreRepo,
-        IMovieCarouselRepository movieCarouselRepo) : ISeedDataService
+        IMovieCarouselRepository movieCarouselRepo,
+        IReviewRepository reviewRepository
+        ) : ISeedDataService
 {
 
     public async Task SeedAsync()
@@ -128,6 +132,104 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
             }
         });
 
+        
+        await AddMovieReview(new List<Models.Review>
+        {
+            
+            new Models.Review
+            {
+                Title = "Great movie",
+                Content = "I really enjoyed this movie",
+                Rating = 7,
+                MovieId = 1,
+            },
+            new Models.Review
+            {
+                Title = "Masterpiece",
+                Content = "Absolutely stunning visuals and a captivating story. A must-watch!",
+                Rating = 9,
+                MovieId = 1,
+            },
+            new Models.Review
+            {
+                Title = "Not bad",
+                Content = "Enjoyed it overall, but felt the pacing was a little slow.",
+                Rating = 6,
+                MovieId = 1,
+            },
+            new Models.Review
+            {
+                Title = "Overhyped",
+                Content = "I found it a bit predictable and not as thrilling as expected.",
+                Rating = 5,
+                MovieId = 1,
+            },
+            new Models.Review
+            {
+                Title = "Emotional rollercoaster",
+                Content = "The story really hit me emotionally. Brilliant performances.",
+                Rating = 8,
+                MovieId = 1,
+            },
+            new Models.Review
+            {
+                Title = "Good but long",
+                Content = "Great character development, but it could have been shorter.",
+                Rating = 7,
+                MovieId = 1,
+            },
+            new Models.Review
+            {
+                Title = "Cinematic gem",
+                Content = "Visually mesmerizing and well-directed. I was hooked throughout.",
+                Rating = 9,
+                MovieId = 1,
+            },
+            new Models.Review
+            {
+                Title = "Fun and entertaining",
+                Content = "A lighthearted movie that's great for a weekend watch.",
+                Rating = 7,
+                MovieId = 1,
+            },
+            new Models.Review
+            {
+                Title = "Could be better",
+                Content = "Had potential but lacked depth in the storyline.",
+                Rating = 5,
+                MovieId = 1,
+            },
+            new Models.Review
+            {
+                Title = "Thrilling",
+                Content = "Kept me on the edge of my seat! Loved every minute.",
+                Rating = 8,
+                MovieId = 1,
+            },
+            new Models.Review
+            {
+                Title = "Forgettable",
+                Content = "I watched it, but it didn't leave a lasting impression.",
+                Rating = 6,
+                MovieId = 1,
+            }
+            });
+
+    }
+
+    private async Task AddMovieReview(IEnumerable<Models.Review> movieReviews)
+    {
+        var userId = userManager.FindByEmailAsync("user@user.com").GetAwaiter().GetResult().Id;
+
+        if (movieReviews != null && movieReviews.Count() > 0)
+        {
+            foreach (var movieReview in movieReviews)
+            {
+                movieReview.UserId = userId;
+                movieReview.CreatedAt = DateTime.Now;
+            }
+            await reviewRepository.CreateAsync(movieReviews);
+        }
     }
 
     private async Task AddMovieCarousel(IEnumerable<Models.MovieCarousel> movieCarousels)

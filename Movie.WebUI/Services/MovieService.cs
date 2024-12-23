@@ -3,16 +3,13 @@
 public class MovieService : IMovieService
 {
     private readonly IBaseHttpService _httpService;
-    private readonly IHttpClientFactory _httpClientFactory;
     private readonly MovieAppConfig _appConfig;
     private string _baseApiUri;
 
-    public MovieService(IBaseHttpService httpService, 
-        IHttpClientFactory httpClientFactory, 
+    public MovieService(IBaseHttpService httpService,
         IOptions<MovieAppConfig> appConfig)
     {
         _httpService = httpService;
-        _httpClientFactory = httpClientFactory;
         _appConfig = appConfig.Value;
         _baseApiUri = $"{_appConfig.MovieApiBase}{_appConfig.MovieApiVersion}";
     }

@@ -1,6 +1,6 @@
-﻿namespace Movie.API.Models;
+﻿namespace Movie.WebUI.Models.Dto;
 
-public class Review
+public class ReviewDto
 {
     public int Id { get; set; }
 
@@ -16,11 +16,7 @@ public class Review
 
     public int MovieId { get; set; }
 
-    public Movie Movie { get; set; }
-
     public string UserId { get; set; }
-
-    public ApplicationUser User { get; set; }
 
     public DateTime CreatedAt { get; set; }
 }
