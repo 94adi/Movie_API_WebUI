@@ -1,7 +1,6 @@
-﻿namespace Movie.WebUI.Models.Dto
+﻿namespace Movie.WebUI.Models.Dto;
+
+public class GetAllMoviesResultDto
 {
-	public class GetAllMoviesResultDto
-	{
-		public List<MovieDto> MovieDtos {  get; set; }
-	}
+	public List<MovieDto> MovieDtos {  get; set; }
 }

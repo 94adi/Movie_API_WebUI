@@ -4,7 +4,7 @@ public record GetReviewsByMovieQuery(int MovieId,
     int PageNumber = 1, 
     int PageSize = 0) : IQuery<GetReviewsByMovieResult>;
 
-public record GetReviewsByMovieResult(IList<Models.Dto.ReviewDto> Reviews);
+public record GetReviewsByMovieResult(IList<Models.Dto.ReviewDto> ReviewDtos);
 
 internal class GetReviewsByMovieQueryHandler(IReviewService reviewService,
     IMapper mapper)

@@ -1,9 +1,12 @@
 ﻿using Movie.WebUI.Models.ViewModel;
+using Movie.WebUI.Services.Handlers.Reviews.Commands;
+using Movie.WebUI.Services.Handlers.Reviews.Queries;
 
 namespace Movie.WebUI.Controllers;
 
 public class MovieController(ISender sender,
-    ITokenProvider tokenProvider) : Controller
+    ITokenProvider tokenProvider,
+    IReviewService reviewService) : Controller
 {
     [HttpGet]
     public IActionResult Index()
@@ -46,12 +49,43 @@ public class MovieController(ISender sender,
     {
         if (ModelState.IsValid)
         {
-            return RedirectToAction("Details", "Movie", new { id = reviewDto.MovieId });
+            var command = new AddReviewCommand(reviewDto);
+
+            var result = await sender.Send(command);
+
+            if (result.IsSuccess)
+            {
+                return RedirectToAction("Details", "Movie", new { id = reviewDto.MovieId });
+            }
+            else
+            {
+                ModelState.AddModelError("Review", "Could not add review");
+            }
         }
 
         CreateReviewVM createReviewVM = new CreateReviewVM();
         createReviewVM.ReviewDto = reviewDto;
 
         return View(createReviewVM);
+    }
+
+    [AllowAnonymous]
+    [HttpGet]
+    public async Task<IActionResult> Reviews(int movieId)
+    {
+        var query = new GetReviewsByMovieQuery(movieId);
+
+        var result = await sender.Send(query);
+
+        var reviews = result.ReviewDtos;
+        return View(reviews);
+    }
+
+    [AllowAnonymous]
+    [HttpGet]
+    public async Task<IActionResult> Review(int reviewId)
+    {
+        
+        return View();
     }
 }
