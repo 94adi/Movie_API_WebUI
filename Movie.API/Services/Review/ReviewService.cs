@@ -65,4 +65,9 @@ public class ReviewService(IReviewRepository reviewRepo) : IReviewService
         }
 
     }
+
+    public async Task<int> GetReviewsCountByMovieId(int movieId)
+    {
+        return await reviewRepo.GetReviewsCountByMovieId(movieId);
+    }
 }

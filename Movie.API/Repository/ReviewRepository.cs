@@ -40,6 +40,15 @@ public class ReviewRepository : Repository<Models.Review>, IReviewRepository
         return result;
     }
 
+    public async Task<int> GetReviewsCountByMovieId(int movieId)
+    {
+        Expression<Func<Review, bool>> filter = (review => review.MovieId == movieId);
+
+        var result = await GetAllAsync(filter: filter);
+
+        return result.Count();
+    }
+
     public async Task UpdateAsync(Review review)
     {
         _context.Attach(review);
