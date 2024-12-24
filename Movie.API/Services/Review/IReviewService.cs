@@ -10,6 +10,8 @@ public interface IReviewService
 
     Task<IList<Models.Review>> GetReviewsByUserId(string userId, int pageSie = 0, int pageNumber = 1);
 
+    Task<int> GetReviewsCountByMovieId(int movieId);
+
     Task AddReview(Models.Review review);
 
     Task RateReview(string userId, int reviewId, ReviewRating reviewRating);

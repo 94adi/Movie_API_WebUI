@@ -44,13 +44,13 @@ namespace Movie.API.Repository
 
                 foreach (var property in properties) 
                 {
-                    query.Include(property);
+                    query = query.Include(property);
                 }              
             }
 
             if(pageSize > 0)
             {
-                query.Skip(pageSize * (pageNumber - 1)).Take(pageSize);
+                query = query.Skip(pageSize * (pageNumber - 1)).Take(pageSize);
             }
 
 

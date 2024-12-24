@@ -20,4 +20,5 @@ public class MovieAppConfig
     public string NumberOfColumns {  get; set; }
     public string AddMovieReviewPath { get; set; }
     public string GetMovieReviewsPath { get; set; }
+    public string GetMovieReviewsCountPath { get; set; }
 }

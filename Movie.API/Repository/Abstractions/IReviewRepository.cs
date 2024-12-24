@@ -9,4 +9,6 @@ public interface IReviewRepository : IRepository<Models.Review>
     Task<IList<Models.Review>> GetReviewsByUserId(string userId, int pageSize = 0, int pageNumber = 1);
 
     Task UpdateAsync(Models.Review review);
+
+    Task<int> GetReviewsCountByMovieId(int movieId);
 }

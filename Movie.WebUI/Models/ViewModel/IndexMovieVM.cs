@@ -1,13 +1,7 @@
 ﻿namespace Movie.WebUI.Models.ViewModel
 {
-    public class IndexMovieVM
+    public class IndexMovieVM : PagedBaseVM<Models.Dto.MovieDto>
     {
-        public int PageNumber { get;set; }
-
-        public int TotalPages { get; set; }
-
-        public PagedResultVM<Models.Dto.MovieDto> Result { get; set; }
-
         public CarouselHighlightMoviesVM CarouselHighlightMoviesVM { get; set; }
 
         public int NumberOfColumns { get; set; }

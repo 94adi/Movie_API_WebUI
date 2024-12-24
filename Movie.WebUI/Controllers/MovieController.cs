@@ -1,4 +1,5 @@
-﻿using Movie.WebUI.Models.ViewModel;
+﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+using Movie.WebUI.Models.ViewModel;
 using Movie.WebUI.Services.Handlers.Reviews.Commands;
 using Movie.WebUI.Services.Handlers.Reviews.Queries;
 
@@ -71,14 +72,38 @@ public class MovieController(ISender sender,
 
     [AllowAnonymous]
     [HttpGet]
-    public async Task<IActionResult> Reviews(int movieId)
+    public async Task<IActionResult> Reviews(int movieId, int page = 1)
     {
-        var query = new GetReviewsByMovieQuery(movieId);
+        var movieReviewsVM = new MovieReviewsVM();
+
+        movieReviewsVM.MovieId = movieId;
+
+        movieReviewsVM.PageNumber = page;
+
+        //TO DO: move to config (separate from index movies)
+        int pageSize = 5;
+
+        var totalReviewsCountQuery = new GetReviewsByMovieCountQuery(movieId);
+
+        var query = new GetReviewsByMovieQuery(movieId, page, pageSize);
 
         var result = await sender.Send(query);
 
-        var reviews = result.ReviewDtos;
-        return View(reviews);
+        var totalReviewsCount = await sender.Send(totalReviewsCountQuery);
+
+        var pagedResult = new PagedResultVM<ReviewDto>
+        {
+            Items = result.ReviewDtos.ToList(),
+            PageNumber = page,
+            PageSize = pageSize,
+            TotalCount = totalReviewsCount.ReviewsCount
+        };
+
+        movieReviewsVM.Result = pagedResult;
+
+        movieReviewsVM.PopulateFields();
+
+        return View(movieReviewsVM);
     }
 
     [AllowAnonymous]

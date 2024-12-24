@@ -1,6 +1,4 @@
-﻿using Movie.WebUI.Services.Handlers.Movies.Queries;
-
-namespace Movie.WebUI.Services;
+﻿namespace Movie.WebUI.Services;
 
 public class ReviewService : IReviewService
 {
@@ -43,7 +41,9 @@ public class ReviewService : IReviewService
         return new CreateReviewResultDto { Id = int.MinValue };
     }
 
-    public async Task<GetAllMovieReviewsResultDto> GetMovieReviews(int movieId)
+    public async Task<GetAllMovieReviewsResultDto> GetMovieReviews(int movieId, 
+                                                                    int pageNumber,
+                                                                    int pageSize)
     {
         var url = _movieAppConfig.GetMovieReviewsPath
                     .Replace(oldValue: "{movieId}", newValue: Convert.ToString(movieId));
@@ -52,7 +52,7 @@ public class ReviewService : IReviewService
         {
             ApiType = ApiType.GET,
             Data = { },
-            Url = $"{_baseApiUri}{url}"
+            Url = $"{_baseApiUri}{url}?pageNumber={pageNumber}&pageSize={pageSize}"
         };
 
         var response = await _httpService.SendAsync<ApiResponse>(request, isAuthenticated: false);
@@ -72,6 +72,35 @@ public class ReviewService : IReviewService
         }
 
         return getAllMovieReviewsResult;
+    }
+
+    public async Task<GetMovieReviewsCountResultDto> GetMovieReviewsCount(int movieId)
+    {
+        var url = _movieAppConfig.GetMovieReviewsCountPath.Replace(oldValue: "{movieId}", 
+            newValue: Convert.ToString(movieId));
+
+        var request = new ApiRequest
+        {
+            ApiType = ApiType.GET,
+            Data = { },
+            Url = $"{_baseApiUri}{url}"
+        };
+
+        var response = await _httpService.SendAsync<ApiResponse>(request, isAuthenticated: false);
+
+        bool isResponseAvailable = (response != null) &&
+            (response.IsSuccess == true) &&
+            (response.Result != null);
+
+        var stringResult = Convert.ToString(response.Result);
+
+        if (isResponseAvailable)
+        {
+            var result = JsonConvert.DeserializeObject<GetMovieReviewsCountResultDto>(stringResult);
+            return result;
+        }
+
+        throw new Exception("Could not get result");
     }
 
     public async Task GetReviewById(int reviewId)

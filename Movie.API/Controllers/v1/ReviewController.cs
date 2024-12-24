@@ -1,4 +1,6 @@
-﻿namespace Movie.API.Controllers.v1;
+﻿using Movie.API.Services.Handlers.Reviews.Queries.GetReviewsCountByMovie;
+
+namespace Movie.API.Controllers.v1;
 
 [ApiController]
 [Route("api/v{version:apiVersion}/[controller]")]
@@ -18,8 +20,7 @@ public class ReviewController : Controller
 
     [AllowAnonymous]
     [HttpGet("/api/v{version:apiVersion}/Movie/{movieId}/Review")]
-    [ProducesResponseType(StatusCodes.Status403Forbidden)]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<APIResponse>> GetReviewsByMovie(int movieId, 
         [FromQuery]int pageNumber = 1,
@@ -42,6 +43,25 @@ public class ReviewController : Controller
             Response.Headers.Append("X-Pagination", JsonSerializer.Serialize(pagination));
         }
         return Ok(apiResponse);
+    }
+
+    [AllowAnonymous]
+    [HttpGet("/api/v{version:apiVersion}/Movie/{movieId}/Review/Count")]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<ActionResult<APIResponse>> GetNumberOfReviewsByMovie(int movieId)
+    {
+        var query = new GetReviewsCountByMovieQuery(movieId);
+
+        var result = await _sender.Send(query);
+
+        var apiResponse = new APIResponse
+        {
+            Result = result,
+            StatusCode = System.Net.HttpStatusCode.OK
+        };
+
+        return apiResponse;
     }
 
     [AllowAnonymous]

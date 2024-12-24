@@ -45,14 +45,7 @@ public class HomeController : Controller
             TotalCount = result.MovieDtos.Count(),
         };
 
-        if (indexMovieVM.Result.TotalCount <= pageSize)
-        {
-            indexMovieVM.TotalPages = 1;
-        }
-        else
-        {
-            indexMovieVM.TotalPages = (indexMovieVM.Result.TotalCount / pageSize) + 1;
-        }
+        indexMovieVM.PopulateFields();
 
         if (indexMovieVM.NumberOfColumns > indexMovieVM.Result.TotalCount)
         {
