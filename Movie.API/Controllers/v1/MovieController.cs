@@ -5,6 +5,7 @@ using Movie.API.Services.Handlers.Movies.Commands.AddGenresToMovie;
 using Movie.API.Services.Handlers.Movies.Commands.DeleteMovie;
 using Movie.API.Services.Handlers.Movies.Commands.UpdateMovieCarousel;
 using Movie.API.Services.Handlers.Movies.Queries.GetMoviesCarousel;
+using Movie.API.Services.Handlers.Movies.Queries.GetMoviesCount;
 
 namespace Movie.API.Controllers.v1;
 
@@ -298,6 +299,25 @@ public class MovieController : Controller
 
         return apiResponse;
 
+    }
+
+    [HttpGet("/api/v{version:apiVersion}/[controller]/Count")]
+    [AllowAnonymous]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<APIResponse>> GetMoviesCount()
+    {
+        var moviesCount = await _sender.Send(new GetMoviesCountQuery());
+
+        var apiResponse = new APIResponse
+        {
+            Result = moviesCount,
+            IsSuccess = true,
+            StatusCode = System.Net.HttpStatusCode.OK
+        };
+
+        return Ok(apiResponse);
     }
 
     private async Task AddGenresToMovie(int movieId, string genres, bool isUpdate = false)

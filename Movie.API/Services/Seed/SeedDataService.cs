@@ -1,6 +1,4 @@
-﻿using Movie.API.Models;
-
-namespace Movie.API.Services.Seed;
+﻿namespace Movie.API.Services.Seed;
 
 public class SeedDataService(UserManager<ApplicationUser> userManager,
         RoleManager<IdentityRole> roleManager,
@@ -67,12 +65,25 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
             Name = "Psychological Horror"
         };
 
+        var genreComedy = new Genre
+        {
+            Name = "Comedy"
+        };
+
+        var genreSciFi = new Genre
+        {
+            Name = "SciFi"
+        };
+
+
         await AddGenres(new List<Genre>
         {
         genreHorror,
         genreThriller,
         genreDrama,
-        genrePsychologicalHorror
+        genrePsychologicalHorror,
+        genreComedy,
+        genreSciFi
         });
 
         var movieShawShankRedemption = new Models.Movie
@@ -97,10 +108,130 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
             CreatedDate = DateTime.Now
         };
 
+        var movieInception = new Models.Movie
+        {
+            Title = "Inception",
+            Rating = 8.8f,
+            Description = "A mind-bending thriller",
+            ImageUrl = $"{url}//SeedPosters/default.jpg",
+            ImageLocalPath = "wwwroot\\SeedPosters\\default.jpg",
+            ReleaseDate = new DateOnly(2010, 7, 16),
+            CreatedDate = DateTime.Now
+        };
+
+        var moviePulpFiction = new Models.Movie
+        {
+            Title = "Pulp Fiction",
+            Rating = 8.9f,
+            Description = "A cult classic crime film",
+            ImageUrl = $"{url}//SeedPosters/default.jpg",
+            ImageLocalPath = "wwwroot\\SeedPosters\\default.jpg",
+            ReleaseDate = new DateOnly(1994, 10, 14),
+            CreatedDate = DateTime.Now
+        };
+
+        var movieTheGodfather = new Models.Movie
+        {
+            Title = "The Godfather",
+            Rating = 9.2f,
+            Description = "An iconic mafia drama",
+            ImageUrl = $"{url}//SeedPosters/default.jpg",
+            ImageLocalPath = "wwwroot\\SeedPosters\\default.jpg",
+            ReleaseDate = new DateOnly(1972, 3, 24),
+            CreatedDate = DateTime.Now
+        };
+
+        var movieInterstellar = new Models.Movie
+        {
+            Title = "Interstellar",
+            Rating = 8.6f,
+            Description = "A sci-fi epic exploring space and time",
+            ImageUrl = $"{url}//SeedPosters/default.jpg",
+            ImageLocalPath = "wwwroot\\SeedPosters\\default.jpg",
+            ReleaseDate = new DateOnly(2014, 11, 7),
+            CreatedDate = DateTime.Now
+        };
+
+        var movieFightClub = new Models.Movie
+        {
+            Title = "Fight Club",
+            Rating = 8.8f,
+            Description = "A psychological drama with a twist",
+            ImageUrl = $"{url}//SeedPosters/default.jpg",
+            ImageLocalPath = "wwwroot\\SeedPosters\\default.jpg",
+            ReleaseDate = new DateOnly(1999, 10, 15),
+            CreatedDate = DateTime.Now
+        };
+
+        var movieTheDarkKnight = new Models.Movie
+        {
+            Title = "The Dark Knight",
+            Rating = 9.0f,
+            Description = "A gritty superhero epic",
+            ImageUrl = $"{url}//SeedPosters/default.jpg",
+            ImageLocalPath = "wwwroot\\SeedPosters\\default.jpg",
+            ReleaseDate = new DateOnly(2008, 7, 18),
+            CreatedDate = DateTime.Now
+        };
+
+        var movieForrestGump = new Models.Movie
+        {
+            Title = "Forrest Gump",
+            Rating = 8.8f,
+            Description = "A heartwarming journey through history",
+            ImageUrl = $"{url}//SeedPosters/default.jpg",
+            ImageLocalPath = "wwwroot\\SeedPosters\\default.jpg",
+            ReleaseDate = new DateOnly(1994, 7, 6),
+            CreatedDate = DateTime.Now
+        };
+
+        var movieTheMatrix = new Models.Movie
+        {
+            Title = "The Matrix",
+            Rating = 8.7f,
+            Description = "A revolutionary sci-fi action film",
+            ImageUrl = $"{url}//SeedPosters/default.jpg",
+            ImageLocalPath = "wwwroot\\SeedPosters\\default.jpg",
+            ReleaseDate = new DateOnly(1999, 3, 31),
+            CreatedDate = DateTime.Now
+        };
+
+        var movieGoodfellas = new Models.Movie
+        {
+            Title = "Goodfellas",
+            Rating = 8.7f,
+            Description = "A gripping mob drama",
+            ImageUrl = $"{url}//SeedPosters/default.jpg",
+            ImageLocalPath = "wwwroot\\SeedPosters\\default.jpg",
+            ReleaseDate = new DateOnly(1990, 9, 19),
+            CreatedDate = DateTime.Now
+        };
+
+        var movieSchindlersList = new Models.Movie
+        {
+            Title = "Schindler's List",
+            Rating = 9.0f,
+            Description = "A powerful Holocaust drama",
+            ImageUrl = $"{url}//SeedPosters/default.jpg",
+            ImageLocalPath = "wwwroot\\SeedPosters\\default.jpg",
+            ReleaseDate = new DateOnly(1993, 12, 15),
+            CreatedDate = DateTime.Now
+        };
+
         await AddMovies(new List<Models.Movie>
         {
             movieShawShankRedemption,
-            movieTheShining
+            movieTheShining,
+            movieInception,
+            moviePulpFiction,
+            movieTheGodfather,
+            movieInterstellar,
+            movieFightClub,
+            movieTheDarkKnight,
+            movieForrestGump,
+            movieTheMatrix,
+            movieGoodfellas,
+            movieSchindlersList
         });
 
         await AddMovieGenres(new List<Models.MovieGenre>
@@ -118,6 +249,20 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
                 GenreId = genrePsychologicalHorror.Id,
                 MovieId = movieTheShining.Id
             },
+
+            new Models.MovieGenre { 
+                GenreId = genreThriller.Id, 
+                MovieId = movieInception.Id },
+
+            new Models.MovieGenre { GenreId = genreDrama.Id, MovieId = moviePulpFiction.Id },
+            new Models.MovieGenre { GenreId = genreDrama.Id, MovieId = movieTheGodfather.Id },
+            new Models.MovieGenre { GenreId = genreSciFi.Id, MovieId = movieInterstellar.Id },
+            new Models.MovieGenre { GenreId = genreDrama.Id, MovieId = movieFightClub.Id },
+            new Models.MovieGenre { GenreId = genreThriller.Id, MovieId = movieTheDarkKnight.Id },
+            new Models.MovieGenre { GenreId = genreDrama.Id, MovieId = movieForrestGump.Id },
+            new Models.MovieGenre { GenreId = genreSciFi.Id, MovieId = movieTheMatrix.Id },
+            new Models.MovieGenre { GenreId = genreDrama.Id, MovieId = movieGoodfellas.Id },
+            new Models.MovieGenre { GenreId = genreDrama.Id, MovieId = movieSchindlersList.Id }
 
         });
 

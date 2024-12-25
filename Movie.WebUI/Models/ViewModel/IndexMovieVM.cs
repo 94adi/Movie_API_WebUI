@@ -4,9 +4,9 @@
     {
         public CarouselHighlightMoviesVM CarouselHighlightMoviesVM { get; set; }
 
-        public int NumberOfColumns { get; set; }
+        //public int NumberOfColumns { get; set; }
 
-        public int NumberOfRows { get; set; }
+        //public int NumberOfRows { get; set; }
 
         public IndexMovieVM()
         {

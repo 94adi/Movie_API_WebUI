@@ -16,7 +16,7 @@
             }
             else
             {
-                TotalPages = (Result.TotalCount / Result.PageSize) + 1;
+                TotalPages = (int)Math.Ceiling((double)Result.TotalCount / Result.PageSize);
             }
         }
     }

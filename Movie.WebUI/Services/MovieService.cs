@@ -214,4 +214,30 @@ public class MovieService : IMovieService
 
         return new UpdateMovieCarouselResultDto(isSucess);
     }
+
+    public async Task<GetMoviesCountResultDto> GetMoviesCount()
+    {
+        var request = new ApiRequest
+        {
+            ApiType = ApiType.GET,
+            Data = { },
+            Url = $"{_baseApiUri}{_appConfig.GetMoviesCountPath}"
+        };
+
+        var response = await _httpService.SendAsync<ApiResponse>(request, isAuthenticated: false);
+
+        bool isResponseAvailable = (response != null) &&
+            (response.IsSuccess == true) &&
+            (response.Result != null);
+
+        var stringResult = Convert.ToString(response.Result);
+
+        if (isResponseAvailable)
+        {
+            var result = JsonConvert.DeserializeObject<GetMoviesCountResultDto>(stringResult);
+            return result;
+        }
+
+        throw new Exception("Could not get result");
+    }
 }

@@ -13,12 +13,12 @@ public class MovieRepository : Repository<Movie.API.Models.Movie>, IMovieReposit
 
     public async Task<IList<Models.Movie>> GetMoviesWithGenres(int pageNumber = 1, int pageSize = 0)
     {
-        var moviesWithGenres = _context.Movies.Include(m => m.MovieGenres)
-            .ThenInclude(mg => mg.Genre);
+        IQueryable<Models.Movie> moviesWithGenres = _context.Movies.Include(m => m.MovieGenres)
+                                                                    .ThenInclude(mg => mg.Genre);
 
         if (pageSize > 0)
         {
-            moviesWithGenres.Skip(pageSize * (pageNumber - 1)).Take(pageSize);
+            moviesWithGenres = moviesWithGenres.Skip(pageSize * (pageNumber - 1)).Take(pageSize);
         }
 
         return moviesWithGenres.ToList();

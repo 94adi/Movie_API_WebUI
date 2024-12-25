@@ -9,4 +9,6 @@ public interface IMovieService
     Task RemoveMovieGenres(int movieId);
 
     Task AddMovieGenres(int movieId, IEnumerable<int> genreIds);
+
+    Task<int> GetMoviesCount();
 }

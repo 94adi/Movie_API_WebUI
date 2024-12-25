@@ -17,4 +17,6 @@ public interface IMovieService
     Task<UpdateMovieCarouselResultDto> UpdateMovieCarousel(UpdateMovieCarouselDto request);
 
     Task<GetAllMoviesCarouselResultDto> GetAllMoviesCarousel();
+
+    Task<GetMoviesCountResultDto> GetMoviesCount();
 }

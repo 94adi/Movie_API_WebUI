@@ -110,4 +110,10 @@ public class MovieService : IMovieService
             await _movieGenreRepository.CreateAsync(movieGenre);
         }
     }
+
+    public async Task<int> GetMoviesCount()
+    {
+        var movies = await _movieRepository.GetAllAsync();
+        return movies.Count();
+    }
 }

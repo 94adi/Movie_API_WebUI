@@ -1,6 +1,4 @@
-﻿using Movie.WebUI.Models.ViewModel;
-
-namespace Movie.WebUI.Controllers;
+﻿namespace Movie.WebUI.Controllers;
 
 public class HomeController : Controller
 {
@@ -21,46 +19,25 @@ public class HomeController : Controller
         indexMovieVM.PageNumber = page;
 
         int pageSize;
-        int noOfColumns;
 
         if(!Int32.TryParse(_config.PageSize, out pageSize))
         {
-            pageSize = 9;
-        }
-
-        if(!Int32.TryParse(_config.NumberOfColumns, out noOfColumns))
-        {
-            noOfColumns = 3;
+            pageSize = 6;
         }
 
         var result = await _sender.Send(new GetMoviesByPagingQuery(page, pageSize));
 
-        indexMovieVM.NumberOfColumns = noOfColumns;
+        var totalMoviesCount = await _sender.Send(new GetMoviesCountQuery());
 
         indexMovieVM.Result = new PagedResultVM<MovieDto>
         {
             Items = result.MovieDtos.ToList(),
             PageNumber = page,
             PageSize = pageSize,
-            TotalCount = result.MovieDtos.Count(),
+            TotalCount = totalMoviesCount.MoviesCount,
         };
 
         indexMovieVM.PopulateFields();
-
-        if (indexMovieVM.NumberOfColumns > indexMovieVM.Result.TotalCount)
-        {
-            indexMovieVM.NumberOfColumns = indexMovieVM.Result.TotalCount;
-            indexMovieVM.NumberOfRows = 1;
-        }
-        else
-        {
-            indexMovieVM.NumberOfRows = indexMovieVM.Result.TotalCount / indexMovieVM.NumberOfColumns;
-
-            if (indexMovieVM.Result.TotalCount % indexMovieVM.NumberOfColumns > 0)
-            {
-                indexMovieVM.NumberOfRows++;
-            }
-        }
 
         var moviesCarousel = await _sender.Send(new GetMoviesCarouselQuery());
         indexMovieVM.CarouselHighlightMoviesVM.CarouselMovies = (IList<MovieDto>)moviesCarousel.MovieCarousels;
