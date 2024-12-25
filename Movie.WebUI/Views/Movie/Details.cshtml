@@ -1,23 +1,23 @@
-﻿@model Movie.WebUI.Models.Dto.MovieDto
+﻿@model Movie.WebUI.Models.ViewModel.DetailsVM
 
 <div id="movieIndexContainer" class="container">
     <div class="row">
         <div id="left-pane" class="col-lg-6 col-12">
             <div class="row">
                 <div id="movieTitle">
-                    <h1 id="movieTitleText">@Model.Title</h1>
+                    <h1 id="movieTitleText">@Model.Movie.Title</h1>
                 </div>
             </div>
             <div class="row">
                 <div id="movieYear">
-                    <h1 id="movieTitleText">(@Model.ReleaseDate.Year)</h1>
+                    <h1 id="movieTitleText">(@Model.Movie.ReleaseDate.Year)</h1>
                 </div>
             </div>
             <div class="row">
                 <div id="movieGenres">
-                    @if(Model.Genres != null && Model.Genres.Count() > 0)
+                    @if (Model.Movie.Genres != null && Model.Movie.Genres.Count() > 0)
                     {
-                        @foreach(var genre in Model.Genres)
+                        @foreach (var genre in Model.Movie.Genres)
                         {
                             <span id="genreText">@genre.Name</span>
                         }
@@ -28,7 +28,7 @@
                 <div class="col-md-3 col-4">
                     <div id="movieRating">
                         <i class="fas fa-star"></i>
-                        <span>@Model.Rating</span>
+                        <span>@Model.Movie.Rating</span>
                     </div>
                 </div>
                 <div class="col-md-7 col-8">
@@ -40,8 +40,10 @@
             </div>
             <div class="row">
                 <div id="reviewsLink" class="col">
-                    <!--TO DO:Get review count-->
-                    <a href="#" class="btn btn-outline-dark">See all reviews (20)</a>
+                    <a asp-controller="Movie" 
+                    asp-action="Reviews"
+                       asp-route-movieId="@Model.Movie.Id"
+                       class="btn btn-outline-dark">See all reviews <span>(@Model.ReviewsCount)</span></a>
                 </div>
             </div>
             <div class="row">
@@ -66,17 +68,22 @@
                 <div id="moviePoster" class="col-11">
                     <div class="ratio ratio-1x1">
                         <img class="img-fluid object-fit-contain"
-                             src="@Model.ImageUrl" />
+                             src="@Model.Movie.ImageUrl" />
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div id="movieDescription" class="col-11">
                     <p id="movieDescriptionText">
-                        @Model.Description
+                        @Model.Movie.Description
                     </p>
                 </div>
             </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6 mb-5">
+            <a asp-action="Index" asp-controller="Home" class="btn-primary btn form-control ">Back to Index</a>
         </div>
     </div>
 </div>
