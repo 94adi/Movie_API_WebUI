@@ -24,3 +24,6 @@ global using Movie.WebUI.Mapper;
 global using System.ComponentModel.DataAnnotations;
 global using Movie.BuildingBlocks.CQRS;
 global using static Movie.BuildingBlocks.CQRS.ICommandHandler;
+global using Movie.WebUI.Models.ViewModel;
+global using Movie.WebUI.Services.Handlers.Reviews.Commands;
+global using Movie.WebUI.Services.Handlers.Reviews.Queries;

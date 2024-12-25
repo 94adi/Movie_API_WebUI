@@ -1,9 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.RazorPages;
-using Movie.WebUI.Models.ViewModel;
-using Movie.WebUI.Services.Handlers.Reviews.Commands;
-using Movie.WebUI.Services.Handlers.Reviews.Queries;
-
-namespace Movie.WebUI.Controllers;
+﻿namespace Movie.WebUI.Controllers;
 
 public class MovieController(ISender sender,
     ITokenProvider tokenProvider,
@@ -17,16 +12,24 @@ public class MovieController(ISender sender,
 
     public async Task<IActionResult> Details(int id)
     {
+        var viewModel = new DetailsVM();
         var query = new GetMovieByIdQuery(id);
+
+        var totalReviewsCountQuery = new GetReviewsByMovieCountQuery(id);
 
         var result = await sender.Send(query);
 
-        if(result == null)
+        var totalReviewsCountResult = await sender.Send(totalReviewsCountQuery);
+
+        viewModel.Movie = result.Movie;
+        viewModel.ReviewsCount = totalReviewsCountResult.ReviewsCount;
+
+        if (result == null)
         {
             return NotFound();
         }
 
-        return View(result.Movie);
+        return View(viewModel);
     }
 
     [Authorize]
