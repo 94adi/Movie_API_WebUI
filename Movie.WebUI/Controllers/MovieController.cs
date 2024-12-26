@@ -1,4 +1,6 @@
-﻿namespace Movie.WebUI.Controllers;
+﻿using Movie.WebUI.Utils;
+
+namespace Movie.WebUI.Controllers;
 
 public class MovieController(ISender sender,
     ITokenProvider tokenProvider,
@@ -23,6 +25,8 @@ public class MovieController(ISender sender,
 
         viewModel.Movie = result.Movie;
         viewModel.ReviewsCount = totalReviewsCountResult.ReviewsCount;
+
+        viewModel.Movie.TrailerUrl = YouTubeHelper.ConvertToEmbedUrl(viewModel.Movie.TrailerUrl);
 
         if (result == null)
         {

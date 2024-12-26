@@ -32,7 +32,7 @@ public class UserController : Controller
 
         if (result.IsSuccess)
         {
-            return RedirectToAction("Index", "Home", new {area = "Customer" });
+            return RedirectToAction("Index", "Home", new { area = "" });
         }
 
         ModelState.AddModelError("LoginError", result.ErrorMessage);
@@ -57,7 +57,7 @@ public class UserController : Controller
 
         if (result.IsSuccess)
         {
-            return RedirectToAction("Index", "Home", new { area = "Customer" });
+            return RedirectToAction("Index", "Home", new { area = "" });
         }
 
         if (result.ErrorMessages.Count() > 0)
@@ -89,7 +89,7 @@ public class UserController : Controller
             _tokenProvider.ClearToken();
         }
 
-        return RedirectToAction("Index", "Home", new { area = "Customer" });
+        return RedirectToAction("Index", "Home", new { area = "" });
     }
 
     private List<SelectListItem> LoadUserRoles()

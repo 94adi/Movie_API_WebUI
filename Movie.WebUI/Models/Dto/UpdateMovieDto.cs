@@ -20,6 +20,8 @@ public class UpdateMovieDto
 
     public IFormFile? Image { get; set; }
 
+    public string TrailerUrl { get; set; }
+
     public DateOnly ReleaseDate { get; set; }
 
     public DateTime CreatedDate { get; set; }

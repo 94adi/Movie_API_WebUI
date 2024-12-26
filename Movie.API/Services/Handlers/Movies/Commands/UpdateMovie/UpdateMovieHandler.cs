@@ -1,12 +1,11 @@
-﻿using Movie.API.Services.Handlers.Genres.Queries.GetGenresByIds;
-
-namespace Movie.API.Services.Handlers.Movies.Commands.UpdateMovie;
+﻿namespace Movie.API.Services.Handlers.Movies.Commands.UpdateMovie;
 
 public record UpdateMovieCommand(
 int Id,
 string Title,
 float Rating,
 string Description,
+string TrailerUrl,
 IFormFile Image,
 DateOnly ReleaseDate) : ICommand<UpdateMovieResult>;
 
@@ -48,6 +47,7 @@ internal class UpdateMovieCommandHandler(IMovieRepository repository,
                 Title = command.Title,
                 Rating = command.Rating,
                 Description = command.Description,
+                TrailerUrl = command.TrailerUrl,
                 ReleaseDate = command.ReleaseDate
             };
 

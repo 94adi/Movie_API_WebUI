@@ -4,7 +4,8 @@ public record CreateMovieCommand(string Title,
     float Rating, 
     string Description,
     IFormFile Image,
-    DateOnly ReleaseDate) : ICommand<CreateMovieResult>;
+    string TrailerUrl,
+DateOnly ReleaseDate) : ICommand<CreateMovieResult>;
 
 public record CreateMovieResult(int Id);
 
@@ -43,6 +44,7 @@ internal class CreateMovieCommandHandler(IMovieRepository repository,
             Title = command.Title,
             Rating = command.Rating,
             Description = command.Description,
+            TrailerUrl = command.TrailerUrl,
             ReleaseDate = command.ReleaseDate,
             CreatedDate = DateTime.Now
         };

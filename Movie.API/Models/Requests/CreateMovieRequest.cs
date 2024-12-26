@@ -6,4 +6,5 @@ public record CreateMovieRequest(string Title,
     string ImageUrl,
     string SelectedGenres,
     IFormFile? Image,
+    string TrailerUrl,
     DateOnly ReleaseDate);

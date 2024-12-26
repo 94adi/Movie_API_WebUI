@@ -16,6 +16,8 @@
 
         public IFormFile? Image { get; set; }
 
+        public string TrailerUrl { get; set; }
+
         public string SelectedGenres { get; set; }
 
         public DateOnly ReleaseDate { get; set; }
