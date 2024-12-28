@@ -1,4 +1,7 @@
-﻿using Movie.API.Services.Handlers.Reviews.Queries.GetReviewsCountByMovie;
+﻿using Azure;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Movie.API.Services.Handlers.Ratings.Commands.AddUpdateRating;
+using Movie.API.Services.Handlers.Reviews.Queries.GetReviewsCountByMovie;
 
 namespace Movie.API.Controllers.v1;
 
@@ -129,5 +132,51 @@ public class ReviewController : Controller
         };
 
         return CreatedAtRoute("GetReview", new { id = response.Id }, apiResponse);
+    }
+
+    [HttpPost("/api/v{version:apiVersion}/Movie/{movieId}/Rating/{rating}")]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<ActionResult<APIResponse>> AddRatingToMovie(int movieId, int rating)
+    {
+
+        var claim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+        var userId = claim?.Value;
+
+        if (string.IsNullOrEmpty(userId))
+        {
+            return Ok(new APIResponse
+            {
+                Result = new object { },
+                StatusCode = System.Net.HttpStatusCode.InternalServerError
+            });
+        }
+
+        var ratingObj = new Rating
+        {
+            RatingValue = rating,
+            MovieId = movieId,
+            UserId = userId
+        };
+
+        var result = await _sender.Send(new AddUpdateRatingCommand(ratingObj));
+
+        if (result.IsSuccess)
+        {
+
+            return Ok(new APIResponse
+            {
+                Result = result,
+                StatusCode = System.Net.HttpStatusCode.Created
+            });
+        }
+
+        return Ok(new APIResponse
+        {
+            Result = result,
+            StatusCode = System.Net.HttpStatusCode.InternalServerError
+        });
+
     }
 }

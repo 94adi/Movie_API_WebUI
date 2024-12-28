@@ -6,6 +6,11 @@ public static class YouTubeHelper
 {
     public static string ConvertToEmbedUrl(string url)
     {
+        if (string.IsNullOrEmpty(url)) 
+        {
+            return "";
+        }
+
         Uri uri = new Uri(url);
 
         var query = HttpUtility.ParseQueryString(uri.Query);

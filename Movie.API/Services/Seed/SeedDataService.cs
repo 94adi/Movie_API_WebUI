@@ -89,7 +89,7 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
         var movieShawShankRedemption = new Models.Movie
         {
             Title = "The Shawshank Redemption",
-            Rating = 9.8f,
+            Rating = 9.8m,
             Description = "A beautiful movie about hope and friendship",
             ImageUrl = $"{url}//SeedPosters/shawshank.jpg",
             ImageLocalPath = "wwwroot\\SeedPosters\\shawshank.jpg",
@@ -100,7 +100,7 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
         var movieTheShining = new Models.Movie
         {
             Title = "The Shining",
-            Rating = 8.4f,
+            Rating = 8.4m,
             Description = "A modern horror masterpiece",
             ImageUrl = $"{url}//SeedPosters/the_shining.jpg",
             ImageLocalPath = "wwwroot\\SeedPosters\\the_shining.jpg",
@@ -111,7 +111,7 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
         var movieInception = new Models.Movie
         {
             Title = "Inception",
-            Rating = 8.8f,
+            Rating = 8.8m,
             Description = "A mind-bending thriller",
             ImageUrl = $"{url}//SeedPosters/default.jpg",
             ImageLocalPath = "wwwroot\\SeedPosters\\default.jpg",
@@ -122,7 +122,7 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
         var moviePulpFiction = new Models.Movie
         {
             Title = "Pulp Fiction",
-            Rating = 8.9f,
+            Rating = 8.9m,
             Description = "A cult classic crime film",
             ImageUrl = $"{url}//SeedPosters/default.jpg",
             ImageLocalPath = "wwwroot\\SeedPosters\\default.jpg",
@@ -133,7 +133,7 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
         var movieTheGodfather = new Models.Movie
         {
             Title = "The Godfather",
-            Rating = 9.2f,
+            Rating = 9.2m,
             Description = "An iconic mafia drama",
             ImageUrl = $"{url}//SeedPosters/default.jpg",
             ImageLocalPath = "wwwroot\\SeedPosters\\default.jpg",
@@ -144,7 +144,7 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
         var movieInterstellar = new Models.Movie
         {
             Title = "Interstellar",
-            Rating = 8.6f,
+            Rating = 8.6m,
             Description = "A sci-fi epic exploring space and time",
             ImageUrl = $"{url}//SeedPosters/default.jpg",
             ImageLocalPath = "wwwroot\\SeedPosters\\default.jpg",
@@ -155,7 +155,7 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
         var movieFightClub = new Models.Movie
         {
             Title = "Fight Club",
-            Rating = 8.8f,
+            Rating = 8.8m,
             Description = "A psychological drama with a twist",
             ImageUrl = $"{url}//SeedPosters/default.jpg",
             ImageLocalPath = "wwwroot\\SeedPosters\\default.jpg",
@@ -166,7 +166,7 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
         var movieTheDarkKnight = new Models.Movie
         {
             Title = "The Dark Knight",
-            Rating = 9.0f,
+            Rating = 9.0m,
             Description = "A gritty superhero epic",
             ImageUrl = $"{url}//SeedPosters/default.jpg",
             ImageLocalPath = "wwwroot\\SeedPosters\\default.jpg",
@@ -177,7 +177,7 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
         var movieForrestGump = new Models.Movie
         {
             Title = "Forrest Gump",
-            Rating = 8.8f,
+            Rating = 8.8m,
             Description = "A heartwarming journey through history",
             ImageUrl = $"{url}//SeedPosters/default.jpg",
             ImageLocalPath = "wwwroot\\SeedPosters\\default.jpg",
@@ -188,7 +188,7 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
         var movieTheMatrix = new Models.Movie
         {
             Title = "The Matrix",
-            Rating = 8.7f,
+            Rating = 8.7m,
             Description = "A revolutionary sci-fi action film",
             ImageUrl = $"{url}//SeedPosters/default.jpg",
             ImageLocalPath = "wwwroot\\SeedPosters\\default.jpg",
@@ -199,7 +199,7 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
         var movieGoodfellas = new Models.Movie
         {
             Title = "Goodfellas",
-            Rating = 8.7f,
+            Rating = 8.7m,
             Description = "A gripping mob drama",
             ImageUrl = $"{url}//SeedPosters/default.jpg",
             ImageLocalPath = "wwwroot\\SeedPosters\\default.jpg",
@@ -210,7 +210,7 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
         var movieSchindlersList = new Models.Movie
         {
             Title = "Schindler's List",
-            Rating = 9.0f,
+            Rating = 9.0m,
             Description = "A powerful Holocaust drama",
             ImageUrl = $"{url}//SeedPosters/default.jpg",
             ImageLocalPath = "wwwroot\\SeedPosters\\default.jpg",
@@ -285,77 +285,77 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
             {
                 Title = "Great movie",
                 Content = "I really enjoyed this movie",
-                Rating = 7,
+                //Rating = new Models.Rating{ RatingValue = 7 },
                 MovieId = 1,
             },
             new Models.Review
             {
                 Title = "Masterpiece",
                 Content = "Absolutely stunning visuals and a captivating story. A must-watch!",
-                Rating = 9,
+                //Rating = new Models.Rating{ RatingValue = 9 },
                 MovieId = 1,
             },
             new Models.Review
             {
                 Title = "Not bad",
                 Content = "Enjoyed it overall, but felt the pacing was a little slow.",
-                Rating = 6,
+                //Rating = new Models.Rating{ RatingValue = 6 },
                 MovieId = 1,
             },
             new Models.Review
             {
                 Title = "Overhyped",
                 Content = "I found it a bit predictable and not as thrilling as expected.",
-                Rating = 5,
+                //Rating = new Models.Rating{ RatingValue = 5 },
                 MovieId = 1,
             },
             new Models.Review
             {
                 Title = "Emotional rollercoaster",
                 Content = "The story really hit me emotionally. Brilliant performances.",
-                Rating = 8,
+                //Rating = new Models.Rating{ RatingValue = 8 },
                 MovieId = 1,
             },
             new Models.Review
             {
                 Title = "Good but long",
                 Content = "Great character development, but it could have been shorter.",
-                Rating = 7,
+                //Rating = new Models.Rating{ RatingValue = 7 },
                 MovieId = 1,
             },
             new Models.Review
             {
                 Title = "Cinematic gem",
                 Content = "Visually mesmerizing and well-directed. I was hooked throughout.",
-                Rating = 9,
+                //Rating = new Models.Rating{ RatingValue = 9 },
                 MovieId = 1,
             },
             new Models.Review
             {
                 Title = "Fun and entertaining",
                 Content = "A lighthearted movie that's great for a weekend watch.",
-                Rating = 7,
+                //Rating = new Models.Rating{ RatingValue = 7 },
                 MovieId = 1,
             },
             new Models.Review
             {
                 Title = "Could be better",
                 Content = "Had potential but lacked depth in the storyline.",
-                Rating = 5,
+                //Rating = new Models.Rating{ RatingValue = 5 },
                 MovieId = 1,
             },
             new Models.Review
             {
                 Title = "Thrilling",
                 Content = "Kept me on the edge of my seat! Loved every minute.",
-                Rating = 8,
+                //Rating = new Models.Rating{ RatingValue = 8 },
                 MovieId = 1,
             },
             new Models.Review
             {
                 Title = "Forgettable",
                 Content = "I watched it, but it didn't leave a lasting impression.",
-                Rating = 6,
+                //Rating = new Models.Rating{ RatingValue = 6 },
                 MovieId = 1,
             }
             });

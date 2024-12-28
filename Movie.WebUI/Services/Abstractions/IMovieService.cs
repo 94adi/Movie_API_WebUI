@@ -19,4 +19,6 @@ public interface IMovieService
     Task<GetAllMoviesCarouselResultDto> GetAllMoviesCarousel();
 
     Task<GetMoviesCountResultDto> GetMoviesCount();
+
+    Task<RateMovieResultDto> RateMovie(RateMovieDto rateMovieRequest);
 }

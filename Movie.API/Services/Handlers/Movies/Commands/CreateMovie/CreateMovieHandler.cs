@@ -1,7 +1,7 @@
 ﻿namespace Movie.API.Services.Handlers.Movies.CreateMovie;
 
 public record CreateMovieCommand(string Title, 
-    float Rating, 
+    decimal Rating, 
     string Description,
     IFormFile Image,
     string TrailerUrl,
@@ -16,8 +16,8 @@ public class CreateMovieCommandValidator : AbstractValidator<CreateMovieCommand>
         RuleFor(m => m.Title).NotEmpty().WithMessage("Title is required");
 
         RuleFor(m => m.Rating).NotEmpty()
-            .GreaterThanOrEqualTo(1.0f)
-            .LessThanOrEqualTo(10.0f)
+            .GreaterThanOrEqualTo(1.0m)
+            .LessThanOrEqualTo(10.0m)
             .WithMessage("Rating must be between 1.0 and 10.0");
 
         RuleFor(m => m.Description)

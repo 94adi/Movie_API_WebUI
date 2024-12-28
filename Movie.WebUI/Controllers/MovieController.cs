@@ -120,4 +120,16 @@ public class MovieController(ISender sender,
         
         return View();
     }
+
+    [Authorize]
+    [HttpPost]
+    [Route("/API/Movie/{movieId}/Rate/{rating}")]
+    public async Task<IActionResult> RateMovie(int movieId, int rating)
+    {
+        var command = new RateMovieCommand(movieId, rating);
+
+        var result = await sender.Send(command);
+
+        return Json(new { success = result.IsSuccess });
+    }
 }

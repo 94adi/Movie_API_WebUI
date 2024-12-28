@@ -1,3 +1,5 @@
+using Movie.API.Services.Rating;
+
 var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration.GetConnectionString("Database");
@@ -43,6 +45,8 @@ builder.Services.AddScoped<IReviewService,  ReviewService>();
 builder.Services.AddScoped<IGenreRepository, GenreRepository>();
 builder.Services.AddScoped<IMovieGenreRepository, MovieGenreRepository>();
 builder.Services.AddScoped<IMovieCarouselRepository, MovieCarouselRepository>();
+builder.Services.AddScoped<IRatingRepository, RatingRepository>();
+builder.Services.AddScoped<IRatingService, RatingService>();
 
 builder.Services.AddSwaggerGen();
 

@@ -3,7 +3,7 @@
 public record UpdateMovieCommand(
 int Id,
 string Title,
-float Rating,
+decimal Rating,
 string Description,
 string TrailerUrl,
 IFormFile Image,
@@ -18,8 +18,8 @@ public class UpdateMovieCommandValidator : AbstractValidator<UpdateMovieCommand>
         RuleFor(m => m.Title).NotEmpty().WithMessage("Title is required");
 
         RuleFor(m => m.Rating).NotEmpty()
-            .GreaterThanOrEqualTo(1.0f)
-            .LessThanOrEqualTo(10.0f)
+            .GreaterThanOrEqualTo(1.0m)
+            .LessThanOrEqualTo(10.0m)
             .WithMessage("Rating must be between 1.0 and 10.0");
 
         RuleFor(m => m.Description)

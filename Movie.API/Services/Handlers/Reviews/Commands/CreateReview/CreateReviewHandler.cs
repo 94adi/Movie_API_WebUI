@@ -1,7 +1,4 @@
-﻿
-using Movie.API.Services.Review;
-
-namespace Movie.API.Services.Handlers.Reviews.Commands.CreateReview;
+﻿namespace Movie.API.Services.Handlers.Reviews.Commands.CreateReview;
 
 public record CreateReviewCommand(string Title,
     string Content,

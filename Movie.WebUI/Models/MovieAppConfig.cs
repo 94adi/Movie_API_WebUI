@@ -22,4 +22,5 @@ public class MovieAppConfig
     public string GetMovieReviewsPath { get; set; }
     public string GetMovieReviewsCountPath { get; set; }
     public string GetMoviesCountPath { get; set; }
+    public string RateMoviePath { get; set; }
 }

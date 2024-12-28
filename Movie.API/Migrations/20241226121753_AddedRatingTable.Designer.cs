@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Movie.API.Data;
 
@@ -11,9 +12,11 @@ using Movie.API.Data;
 namespace Movie.API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241226121753_AddedRatingTable")]
+    partial class AddedRatingTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -324,10 +327,10 @@ namespace Movie.API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("MovieId")
+                    b.Property<int>("RatingValue")
                         .HasColumnType("int");
 
-                    b.Property<int>("RatingValue")
+                    b.Property<int>("ReviewId")
                         .HasColumnType("int");
 
                     b.Property<string>("UserId")
@@ -335,7 +338,8 @@ namespace Movie.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("MovieId");
+                    b.HasIndex("ReviewId")
+                        .IsUnique();
 
                     b.HasIndex("UserId");
 
@@ -491,9 +495,9 @@ namespace Movie.API.Migrations
 
             modelBuilder.Entity("Movie.API.Models.Rating", b =>
                 {
-                    b.HasOne("Movie.API.Models.Movie", "Movie")
-                        .WithMany("Ratings")
-                        .HasForeignKey("MovieId")
+                    b.HasOne("Movie.API.Models.Review", "Review")
+                        .WithOne("Rating")
+                        .HasForeignKey("Movie.API.Models.Rating", "ReviewId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -501,7 +505,7 @@ namespace Movie.API.Migrations
                         .WithMany()
                         .HasForeignKey("UserId");
 
-                    b.Navigation("Movie");
+                    b.Navigation("Review");
 
                     b.Navigation("User");
                 });
@@ -538,9 +542,12 @@ namespace Movie.API.Migrations
                 {
                     b.Navigation("MovieGenres");
 
-                    b.Navigation("Ratings");
-
                     b.Navigation("Reviews");
+                });
+
+            modelBuilder.Entity("Movie.API.Models.Review", b =>
+                {
+                    b.Navigation("Rating");
                 });
 #pragma warning restore 612, 618
         }

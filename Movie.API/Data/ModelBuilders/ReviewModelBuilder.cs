@@ -14,11 +14,13 @@ public static class ReviewModelBuilder
         modelBuilder.Entity<Models.Review>()
             .HasOne(r => r.User)
             .WithMany(u => u.Reviews)
-            .HasForeignKey(r => r.UserId);
+            .HasForeignKey(r => r.UserId)
+            .OnDelete(DeleteBehavior.SetNull);
 
         modelBuilder.Entity<Models.Review>()
             .HasOne(r => r.Movie)
             .WithMany(u => u.Reviews)
-            .HasForeignKey(r => r.MovieId);
+            .HasForeignKey(r => r.MovieId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

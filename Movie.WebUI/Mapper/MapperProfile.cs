@@ -25,5 +25,7 @@ public class MapperProfile : Profile
         CreateMap<UpdateMovieDto, MovieDto>().ReverseMap();
 
         CreateMap<UpdateMovieCarouselCommand, UpdateMovieCarouselDto>();
+
+        CreateMap<RateMovieCommand, RateMovieDto>();
     }
 }

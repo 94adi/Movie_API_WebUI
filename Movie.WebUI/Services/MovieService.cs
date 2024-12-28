@@ -240,4 +240,28 @@ public class MovieService : IMovieService
 
         throw new Exception("Could not get result");
     }
+
+    public async Task<RateMovieResultDto> RateMovie(RateMovieDto rateMovieRequest)
+    {
+        var urlBuild = new StringBuilder(_appConfig.RateMoviePath);
+        urlBuild = urlBuild.Replace(oldValue: "{movieId}",
+                            newValue: Convert.ToString(rateMovieRequest.MovieId));
+        urlBuild = urlBuild.Replace(oldValue: "{rating}",
+                            newValue: Convert.ToString(rateMovieRequest.RatingValue));
+
+        var url = urlBuild.ToString();
+
+        var request = new ApiRequest
+        {
+            ApiType = ApiType.POST,
+            Data = { },
+            Url = $"{_baseApiUri}{url}"
+        };
+
+        var result = await _httpService.SendAsync<ApiResponse>(request, isAuthenticated: true);
+
+        bool isSucess = (result != null) && (result.IsSuccess == true);
+
+        return new RateMovieResultDto(isSucess);
+    }
 }

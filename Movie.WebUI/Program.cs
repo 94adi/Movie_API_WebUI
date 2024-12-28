@@ -16,7 +16,7 @@ builder.Services.AddMediatR(config =>
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(opt =>
     {
-        opt.Cookie.HttpOnly = true;
+        opt.Cookie.HttpOnly = false;
         opt.ExpireTimeSpan = TimeSpan.FromMinutes(30);
         opt.SlidingExpiration = true;
         //opt.LoginPath = "";
