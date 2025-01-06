@@ -1,4 +1,6 @@
-﻿namespace Movie.API.Models;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Movie.API.Models;
 
 public class Movie
 {
@@ -6,7 +8,7 @@ public class Movie
 
     public string Title { get; set; }
 
-    public decimal Rating { get; set; }
+    public decimal FinalScore { get; set; }
 
     public string Description { get; set; }
 

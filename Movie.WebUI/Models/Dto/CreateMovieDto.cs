@@ -8,10 +8,6 @@ public class CreateMovieDto
     [Required]
     public string Title { get; set; }
 
-    [Required]
-    [Range(1.0, 10.0)]
-    public float Rating { get; set; }
-
     [MaxLength(1000)]
     public string Description { get; set; }
 

@@ -3,7 +3,6 @@
 public record UpdateMovieCommand(
 int Id,
 string Title,
-decimal Rating,
 string Description,
 string TrailerUrl,
 IFormFile Image,
@@ -16,11 +15,6 @@ public class UpdateMovieCommandValidator : AbstractValidator<UpdateMovieCommand>
     public UpdateMovieCommandValidator()
     {
         RuleFor(m => m.Title).NotEmpty().WithMessage("Title is required");
-
-        RuleFor(m => m.Rating).NotEmpty()
-            .GreaterThanOrEqualTo(1.0m)
-            .LessThanOrEqualTo(10.0m)
-            .WithMessage("Rating must be between 1.0 and 10.0");
 
         RuleFor(m => m.Description)
             .MaximumLength(1000)
@@ -45,7 +39,6 @@ internal class UpdateMovieCommandHandler(IMovieRepository repository,
             {
                 Id = command.Id,
                 Title = command.Title,
-                Rating = command.Rating,
                 Description = command.Description,
                 TrailerUrl = command.TrailerUrl,
                 ReleaseDate = command.ReleaseDate

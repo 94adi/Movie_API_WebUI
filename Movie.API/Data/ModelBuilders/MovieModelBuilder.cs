@@ -23,8 +23,7 @@
                 .HasColumnType("datetime2");
 
             modelBuilder.Entity<Models.Movie>()
-                .Property(m => m.Rating)
-                .HasColumnType("decimal(3,1)");
+                .Ignore(m => m.FinalScore);
         }
     }
 }

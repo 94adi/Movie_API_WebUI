@@ -2,7 +2,6 @@
 
 public record CreateReviewCommand(string Title,
     string Content,
-    float Rating,
     int MovieId,
     string UserId) : ICommand<CreateReviewResult>;
 
@@ -12,8 +11,6 @@ public class CreateReviewCommandValidator : AbstractValidator<CreateReviewComman
 {
     public CreateReviewCommandValidator()
     {
-        RuleFor(r => r.Rating).NotEmpty().WithMessage("Rating field is required");
-
         RuleFor(r => r.MovieId).NotEmpty().WithMessage("Review needs to be associated with a movie");
 
         RuleFor(r => r.UserId).NotEmpty().WithMessage("Review needs to be associated with a user");

@@ -89,7 +89,6 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
         var movieShawShankRedemption = new Models.Movie
         {
             Title = "The Shawshank Redemption",
-            Rating = 9.8m,
             Description = "A beautiful movie about hope and friendship",
             ImageUrl = $"{url}//SeedPosters/shawshank.jpg",
             ImageLocalPath = "wwwroot\\SeedPosters\\shawshank.jpg",
@@ -100,7 +99,6 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
         var movieTheShining = new Models.Movie
         {
             Title = "The Shining",
-            Rating = 8.4m,
             Description = "A modern horror masterpiece",
             ImageUrl = $"{url}//SeedPosters/the_shining.jpg",
             ImageLocalPath = "wwwroot\\SeedPosters\\the_shining.jpg",
@@ -111,7 +109,6 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
         var movieInception = new Models.Movie
         {
             Title = "Inception",
-            Rating = 8.8m,
             Description = "A mind-bending thriller",
             ImageUrl = $"{url}//SeedPosters/default.jpg",
             ImageLocalPath = "wwwroot\\SeedPosters\\default.jpg",
@@ -122,7 +119,6 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
         var moviePulpFiction = new Models.Movie
         {
             Title = "Pulp Fiction",
-            Rating = 8.9m,
             Description = "A cult classic crime film",
             ImageUrl = $"{url}//SeedPosters/default.jpg",
             ImageLocalPath = "wwwroot\\SeedPosters\\default.jpg",
@@ -133,7 +129,6 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
         var movieTheGodfather = new Models.Movie
         {
             Title = "The Godfather",
-            Rating = 9.2m,
             Description = "An iconic mafia drama",
             ImageUrl = $"{url}//SeedPosters/default.jpg",
             ImageLocalPath = "wwwroot\\SeedPosters\\default.jpg",
@@ -144,7 +139,6 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
         var movieInterstellar = new Models.Movie
         {
             Title = "Interstellar",
-            Rating = 8.6m,
             Description = "A sci-fi epic exploring space and time",
             ImageUrl = $"{url}//SeedPosters/default.jpg",
             ImageLocalPath = "wwwroot\\SeedPosters\\default.jpg",
@@ -155,7 +149,6 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
         var movieFightClub = new Models.Movie
         {
             Title = "Fight Club",
-            Rating = 8.8m,
             Description = "A psychological drama with a twist",
             ImageUrl = $"{url}//SeedPosters/default.jpg",
             ImageLocalPath = "wwwroot\\SeedPosters\\default.jpg",
@@ -166,7 +159,6 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
         var movieTheDarkKnight = new Models.Movie
         {
             Title = "The Dark Knight",
-            Rating = 9.0m,
             Description = "A gritty superhero epic",
             ImageUrl = $"{url}//SeedPosters/default.jpg",
             ImageLocalPath = "wwwroot\\SeedPosters\\default.jpg",
@@ -177,7 +169,6 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
         var movieForrestGump = new Models.Movie
         {
             Title = "Forrest Gump",
-            Rating = 8.8m,
             Description = "A heartwarming journey through history",
             ImageUrl = $"{url}//SeedPosters/default.jpg",
             ImageLocalPath = "wwwroot\\SeedPosters\\default.jpg",
@@ -188,7 +179,6 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
         var movieTheMatrix = new Models.Movie
         {
             Title = "The Matrix",
-            Rating = 8.7m,
             Description = "A revolutionary sci-fi action film",
             ImageUrl = $"{url}//SeedPosters/default.jpg",
             ImageLocalPath = "wwwroot\\SeedPosters\\default.jpg",
@@ -199,7 +189,6 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
         var movieGoodfellas = new Models.Movie
         {
             Title = "Goodfellas",
-            Rating = 8.7m,
             Description = "A gripping mob drama",
             ImageUrl = $"{url}//SeedPosters/default.jpg",
             ImageLocalPath = "wwwroot\\SeedPosters\\default.jpg",
@@ -210,7 +199,6 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
         var movieSchindlersList = new Models.Movie
         {
             Title = "Schindler's List",
-            Rating = 9.0m,
             Description = "A powerful Holocaust drama",
             ImageUrl = $"{url}//SeedPosters/default.jpg",
             ImageLocalPath = "wwwroot\\SeedPosters\\default.jpg",

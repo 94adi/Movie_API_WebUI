@@ -31,7 +31,7 @@
                     <div class="col-md-3 col-4">
                         <div id="movieRating">
                             <i class="fas fa-star"></i>
-                            <span>@Model.Movie.Rating</span>
+                            <span>@Model.Movie.FinalScore</span>
                         </div>
                     </div>
                     <div class="col-md-7 col-8">
@@ -66,13 +66,27 @@
             }
 
             <div class="row">
-                <div id="reviewsLink" class="col">
-                    <a asp-controller="Movie" 
-                    asp-action="Reviews"
-                       asp-route-movieId="@Model.Movie.Id"
-                       class="btn btn-outline-dark">See all reviews <span>(@Model.ReviewsCount)</span></a>
+                <div class="col-4">
+                    <div id="reviewsLink" class="col">
+                        <a asp-controller="Movie"
+                           asp-action="Reviews"
+                           asp-route-movieId="@Model.Movie.Id"
+                           class="btn btn-outline-dark">See all reviews <span>(@Model.ReviewsCount)</span>
+                       </a>
+                    </div>
+                </div>
+
+                <div class="col-4">
+                    <div id="reviewsLink" class="col">
+                        <a asp-controller="Movie"
+                           asp-action="AddReview"
+                           asp-route-id="@Model.Movie.Id"
+                           class="btn btn-outline-dark">Add review
+                       </a>
+                    </div>
                 </div>
             </div>
+
             <div class="row">
                 <div class="movieTrailer">
                     <div class="container">

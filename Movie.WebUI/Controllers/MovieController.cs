@@ -58,6 +58,13 @@ public class MovieController(ISender sender,
 
         createReviewVM.ReviewDto.UserId = userId;
         createReviewVM.ReviewDto.MovieId = id;
+        createReviewVM.RatingDto.UserId = userId;
+        createReviewVM.RatingDto.MovieId = id;
+
+        var getMovieQuery = new GetMovieByIdQuery(id);
+        var movieResult = await sender.Send(getMovieQuery);
+
+        createReviewVM.PageTitle = $"Add review for: {movieResult.Movie.Title}";
 
         return View(createReviewVM);
     }
@@ -65,26 +72,27 @@ public class MovieController(ISender sender,
     [Authorize]
     [ValidateAntiForgeryToken]
     [HttpPost]
-    public async Task<IActionResult> AddReview(CreateReviewDto reviewDto)
+    public async Task<IActionResult> AddReview([FromForm] CreateReviewVM createReviewVM)
     {
         if (ModelState.IsValid)
         {
-            var command = new AddReviewCommand(reviewDto);
+            var addReviewCommand = new AddReviewCommand(createReviewVM.ReviewDto);
 
-            var result = await sender.Send(command);
+            var rateMovieCommand = new RateMovieCommand(createReviewVM.RatingDto.MovieId,createReviewVM.RatingDto.RatingValue);
 
-            if (result.IsSuccess)
+            var resultRateMovie = await sender.Send(rateMovieCommand);
+
+            var resultAddReview = await sender.Send(addReviewCommand);
+
+            if (resultAddReview.IsSuccess && resultRateMovie.IsSuccess)
             {
-                return RedirectToAction("Details", "Movie", new { id = reviewDto.MovieId });
+                return RedirectToAction("Details", "Movie", new { id = createReviewVM.ReviewDto.MovieId });
             }
             else
             {
                 ModelState.AddModelError("Review", "Could not add review");
             }
         }
-
-        CreateReviewVM createReviewVM = new CreateReviewVM();
-        createReviewVM.ReviewDto = reviewDto;
 
         return View(createReviewVM);
     }
@@ -104,11 +112,15 @@ public class MovieController(ISender sender,
 
         var totalReviewsCountQuery = new GetReviewsByMovieCountQuery(movieId);
 
-        var query = new GetReviewsByMovieQuery(movieId, page, pageSize);
+        var getReviewsByMovieQuery = new GetReviewsByMovieQuery(movieId, page, pageSize);
 
-        var result = await sender.Send(query);
+        var getMovieQuery = new GetMovieByIdQuery(movieId);
+
+        var result = await sender.Send(getReviewsByMovieQuery);
 
         var totalReviewsCount = await sender.Send(totalReviewsCountQuery);
+
+        var movieResult = await sender.Send(getMovieQuery);
 
         var pagedResult = new PagedResultVM<ReviewDto>
         {
@@ -119,6 +131,8 @@ public class MovieController(ISender sender,
         };
 
         movieReviewsVM.Result = pagedResult;
+
+        movieReviewsVM.MovieTitle = $"Reviews for {movieResult.Movie.Title}";
 
         movieReviewsVM.PopulateFields();
 

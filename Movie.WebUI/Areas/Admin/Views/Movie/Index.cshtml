@@ -18,9 +18,6 @@
 					Title
 				</th>
 				<th>
-					Rating
-				</th>
-				<th>
 					Description
 				</th>
 				<th></th>
@@ -31,7 +28,6 @@
 			{
 				<tr>
 					<td>@item.Title</td>
-					<td>@item.Rating</td>
 					<td>@item.Description</td>
 					<td>
 						<a asp-controller="Movie" asp-action="Update" asp-route-movieId="@item.Id" class="btn btn-success"><i class="bi bi-pencil-square"></i></a>

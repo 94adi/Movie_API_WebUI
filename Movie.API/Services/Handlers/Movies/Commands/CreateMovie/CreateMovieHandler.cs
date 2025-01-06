@@ -1,7 +1,6 @@
 ﻿namespace Movie.API.Services.Handlers.Movies.CreateMovie;
 
 public record CreateMovieCommand(string Title, 
-    decimal Rating, 
     string Description,
     IFormFile Image,
     string TrailerUrl,
@@ -14,11 +13,6 @@ public class CreateMovieCommandValidator : AbstractValidator<CreateMovieCommand>
     public CreateMovieCommandValidator()
     {
         RuleFor(m => m.Title).NotEmpty().WithMessage("Title is required");
-
-        RuleFor(m => m.Rating).NotEmpty()
-            .GreaterThanOrEqualTo(1.0m)
-            .LessThanOrEqualTo(10.0m)
-            .WithMessage("Rating must be between 1.0 and 10.0");
 
         RuleFor(m => m.Description)
             .MaximumLength(1000)
@@ -42,7 +36,6 @@ internal class CreateMovieCommandHandler(IMovieRepository repository,
         var movie = new Models.Movie
         {
             Title = command.Title,
-            Rating = command.Rating,
             Description = command.Description,
             TrailerUrl = command.TrailerUrl,
             ReleaseDate = command.ReleaseDate,

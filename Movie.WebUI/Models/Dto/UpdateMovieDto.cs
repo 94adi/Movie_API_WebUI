@@ -6,8 +6,6 @@ public class UpdateMovieDto
 
     public string Title { get; set; }
 
-    public float Rating { get; set; }
-
     public string Description { get; set; }
 
     public List<GenreDto>? Genres { get; set; }

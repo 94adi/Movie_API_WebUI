@@ -73,25 +73,37 @@
                     {
                          <div class="col-10 m-2 col-md-5 col-lg-3 border bg-secondary text-center">
                             <div class="card">
+                            <a asp-controller="Movie"
+                               asp-action="Details"
+                               asp-route-id="@movie.Id">
                                 <img src="@movie.ImageUrl" class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title">@movie.Title</h5>
-                                    <p class="card-text">@movie.Description</p>
-                                </div>
-                                <ul class="list-group list-group-flush">
-                                    @foreach (var genre in movie.Genres)
-                                    {
-                                        <li class="list-group-item">@genre.Name</li>
-                                    }
+                            </a>
+                            <div class="card-body">
+                                <h5 class="card-title">@movie.Title</h5>
+                                <p class="card-text">@movie.Description</p>
+                            </div>
+                            <ul class="list-group list-group-flush">
+                                @foreach (var genre in movie.Genres)
+                                {
+                                    <li class="list-group-item">@genre.Name</li>
+                                }
 
-                                </ul>
-                                <div class="card-body">
-                                    <a asp-controller="Movie"
-                                       asp-action="Details"
-                                       asp-route-id="@movie.Id"
-                                       asp class="card-link">Details Page</a>
-                                    <a href="#" class="card-link">Add Review</a>
-                                </div>
+                            </ul>
+                            <div class="card-body">                              
+                                <a asp-controller="Movie"
+                                    asp-action="Details"
+                                    asp-route-id="@movie.Id" 
+                                    class="link-info text-decoration-none">Details
+                                </a>
+
+                                <div class="vr mx-3"></div>
+
+                                <a asp-controller="Movie"
+                                    asp-action="AddReview"
+                                    asp-route-id="@movie.Id" 
+                                    class="link-info text-decoration-none">Add Review
+                                </a>                               
+                            </div>
                             </div>
                         </div>
                     }

@@ -8,7 +8,7 @@ namespace Movie.WebUI.Models.Dto
 
         public string Title { get; set; }
 
-        public float Rating { get; set; }
+        public decimal FinalScore { get; set; }
 
         public string Description { get; set; }
 
