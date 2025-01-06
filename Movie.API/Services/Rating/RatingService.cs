@@ -1,5 +1,4 @@
-﻿
-namespace Movie.API.Services.Rating;
+﻿namespace Movie.API.Services.Rating;
 
 public class RatingService(IRatingRepository ratingRepo) : IRatingService
 {

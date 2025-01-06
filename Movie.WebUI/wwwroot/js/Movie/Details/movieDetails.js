@@ -4,18 +4,30 @@
 
     if (ratingSubmitBtn != null)
     {
-        ratingSubmitBtn.addEventListener('click', () => {
+        ratingSubmitBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+
             let url = ratingSubmitBtn.getAttribute('data-url');
             let ratingValue = $("#ratingInput").val();
             url = url + ratingValue;
 
-            fetch(url,
-                {
-                    method: 'POST'
-                })
-                .then(response => response.json())
-                .then(data => console.log('Created post:', data))
-                .catch(error => console.error('Error creating post:', error));
+            fetch(url,{ method: 'POST'})
+                .then(data => changeButtonToLabel(true))
+                .catch(error => changeButtonToLabel(false));
         });
     }
 });
+
+function changeButtonToLabel(isSuccess) {
+    const newLabel = document.createElement("label");
+    if (isSuccess) {
+        newLabel.textContent = "Rating submitted successfully!";
+        newLabel.className = "text-success";
+    }
+    else {
+        newLabel.textContent = "Rating could not be submitted!";
+        newLabel.className = "text-failure";
+    }
+
+    $("#userRatingInput").replaceWith(newLabel);
+}

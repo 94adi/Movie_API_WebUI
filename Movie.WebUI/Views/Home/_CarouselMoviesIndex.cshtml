@@ -22,11 +22,13 @@
             string carouselClass = @index == 0 ? "carousel-item active" : "carousel-item";
 
             <div class="@carouselClass">
-                <img src="@movie.ImageUrl" class="d-block w-100 img-fluid" alt="@movie.Title">
-                <div class="carousel-caption d-none d-md-block">
-                    <h5>@movie.Title</h5>
-                    <p>@movie.Description</p>
-                </div>
+                <a asp-controller="Movie" asp-action="Details" asp-route-id="@movie.Id">
+                    <img src="@movie.ImageUrl" class="d-block w-100 img-fluid" alt="@movie.Title">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5>@movie.Title</h5>
+                        <p>@movie.Description</p>
+                    </div>
+                </a>
             </div>
         }
     </div>

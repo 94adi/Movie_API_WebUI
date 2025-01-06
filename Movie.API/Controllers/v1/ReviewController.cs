@@ -1,6 +1,5 @@
-﻿using Azure;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Movie.API.Services.Handlers.Ratings.Commands.AddUpdateRating;
+﻿using Movie.API.Services.Handlers.Ratings.Commands.AddUpdateRating;
+using Movie.API.Services.Handlers.Ratings.Queries.GetMovieRatingByUserId;
 using Movie.API.Services.Handlers.Reviews.Queries.GetReviewsCountByMovie;
 
 namespace Movie.API.Controllers.v1;
@@ -107,6 +106,29 @@ public class ReviewController : Controller
         var apiResponse = new APIResponse
         {
             Result = review,
+            StatusCode = System.Net.HttpStatusCode.OK
+        };
+
+        return Ok(apiResponse);
+    }
+
+    [HttpGet("/api/v{version:apiVersion}/Movie/{movieId}/Rating")]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<ActionResult<APIResponse>> GetMovieRatingByUserId(int movieId)
+    {
+        var claim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+        var userId = claim?.Value;
+
+        var query = new GetMovieRatingByUserIdQuery(movieId, userId);
+
+        var rating = await _sender.Send(query);
+
+        var apiResponse = new APIResponse
+        {
+            Result = rating,
             StatusCode = System.Net.HttpStatusCode.OK
         };
 

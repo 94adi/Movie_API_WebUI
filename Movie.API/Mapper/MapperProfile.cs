@@ -65,5 +65,7 @@ public class MapperProfile : Profile
             }).ToList()));
 
         CreateMap<GetGenresByMovieIdResult, GetMovieGenresResponse>();
+
+        CreateMap<Rating, RatingDto>();
     }
 }

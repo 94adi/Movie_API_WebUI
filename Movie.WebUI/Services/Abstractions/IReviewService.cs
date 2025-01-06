@@ -9,4 +9,6 @@ public interface IReviewService
     Task GetReviewById(int reviewId);
 
     Task<GetMovieReviewsCountResultDto> GetMovieReviewsCount(int movieId);
+
+    Task<GetMovieRatingByUserResultDto> GetMovieRatingByUser(int movieId);
 }

@@ -15,16 +15,28 @@ public class MovieController(ISender sender,
     public async Task<IActionResult> Details(int id)
     {
         var viewModel = new DetailsVM();
-        var query = new GetMovieByIdQuery(id);
 
+        var getMovieByIdQuery = new GetMovieByIdQuery(id);
         var totalReviewsCountQuery = new GetReviewsByMovieCountQuery(id);
 
-        var result = await sender.Send(query);
+        var result = await sender.Send(getMovieByIdQuery);
 
         var totalReviewsCountResult = await sender.Send(totalReviewsCountQuery);
 
+        if (User != null && User.Identity.IsAuthenticated)
+        {
+            var getMovieRatingByUserQuery = new GetMovieRatingByUserQuery(id);
+            var userMovieRating = await sender.Send(getMovieRatingByUserQuery);
+            viewModel.UserRating = userMovieRating?.Rating?.RatingValue;
+        }
+        else
+        {
+            viewModel.UserRating = null;
+        }
+
         viewModel.Movie = result.Movie;
         viewModel.ReviewsCount = totalReviewsCountResult.ReviewsCount;
+        
 
         viewModel.Movie.TrailerUrl = YouTubeHelper.ConvertToEmbedUrl(viewModel.Movie.TrailerUrl);
 

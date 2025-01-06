@@ -188,3 +188,13 @@ footer {
 .white-label{
     color: white;
 }
+
+.text-success {
+    color: green;
+    font-weight: bold;
+}
+
+.text-failure {
+    color: red;
+    font-weight: bold;
+}

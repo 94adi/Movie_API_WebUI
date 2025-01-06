@@ -103,6 +103,38 @@ public class ReviewService : IReviewService
         throw new Exception("Could not get result");
     }
 
+    public async Task<GetMovieRatingByUserResultDto> GetMovieRatingByUser(int movieId)
+    {
+        var url = _movieAppConfig.GetMovieRatingByUserPath
+                        .Replace(oldValue: "{movieId}", newValue: Convert.ToString(movieId));
+
+        var request = new ApiRequest
+        {
+            ApiType = ApiType.GET,
+            Data = { },
+            Url = $"{_baseApiUri}{url}"
+        };
+
+        var response = await _httpService.SendAsync<ApiResponse>(request, isAuthenticated: true);
+
+        bool isResponseAvailable = (response != null) &&
+            (response.IsSuccess == true) &&
+            (response.Result != null);
+
+        var stringResult = Convert.ToString(response.Result);
+
+        GetMovieRatingByUserResultDto getMovieRatingByUserResult = null;
+
+        if (isResponseAvailable)
+        {
+            getMovieRatingByUserResult = JsonConvert.
+                DeserializeObject<GetMovieRatingByUserResultDto>(stringResult);
+        }
+
+        return getMovieRatingByUserResult;
+
+    }
+
     public async Task GetReviewById(int reviewId)
     {
     }

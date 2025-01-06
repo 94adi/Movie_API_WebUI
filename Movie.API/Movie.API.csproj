@@ -32,8 +32,4 @@
     <ProjectReference Include="..\Movie.BuildingBlocks\Movie.BuildingBlocks.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Services\Handlers\Ratings\Queries\" />
-  </ItemGroup>
-
 </Project>
