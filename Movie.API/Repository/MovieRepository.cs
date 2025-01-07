@@ -53,4 +53,9 @@ public class MovieRepository : Repository<Movie.API.Models.Movie>, IMovieReposit
         return await query.FirstOrDefaultAsync();
         
     }
+
+    //public Task GetMovieReviewsWithRatings()
+    //{
+
+    //}
 }

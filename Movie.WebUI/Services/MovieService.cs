@@ -264,4 +264,35 @@ public class MovieService : IMovieService
 
         return new RateMovieResultDto(isSucess);
     }
+
+    public async Task<GetMovieRatingResultDto> GetMovieRating(int movieId)
+    {
+        var url = _appConfig.GetMovieRatingPath.Replace(oldValue: "{movieId}", 
+                                newValue: Convert.ToString(movieId));
+
+        var request = new ApiRequest
+        {
+            ApiType = ApiType.GET,
+            Data = { },
+            Url = $"{_baseApiUri}{url}"
+        };
+
+        var response = await _httpService.SendAsync<ApiResponse>(request, isAuthenticated: false);
+
+        bool isResponseAvailable = (response != null) &&
+                                    (response.IsSuccess == true) &&
+                                    (response.Result != null);
+
+        var stringResult = Convert.ToString(response.Result);
+
+        GetMovieRatingResultDto result = null;
+
+        if (isResponseAvailable)
+        {
+            result = JsonConvert.
+                DeserializeObject<GetMovieRatingResultDto>(stringResult);
+        }
+
+        return result;
+    }
 }

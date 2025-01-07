@@ -112,7 +112,7 @@ public class ReviewController : Controller
         return Ok(apiResponse);
     }
 
-    [HttpGet("/api/v{version:apiVersion}/Movie/{movieId}/Rating")]
+    [HttpGet("/api/v{version:apiVersion}/Movie/{movieId}/User/Rating")]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

@@ -28,15 +28,9 @@
             @if(User.Identity?.IsAuthenticated == true)
             {
                 <div id="movieRatingSection" class="row justify-content-between">
-                    <div class="col-md-3 col-4">
-                        <div id="movieRating">
-                            <i class="fas fa-star"></i>
-                            <span>@Model.Movie.FinalScore</span>
-                        </div>
-                    </div>
-                    <div class="col-md-7 col-8">
+                    <div class="col-7 col-sm-12">
                         <div id="userRatingInput">
-                            <label>Add your rating: </label>
+                            <label>Rate movie</label>
                             @if(Model.UserRating.HasValue)
                             {
                                 <input id="ratingInput" 
@@ -65,7 +59,18 @@
                 </div>
             }
 
-            <div class="row">
+            <div class="row justify-content-between">
+                <div class="col-3">
+                    <div id="movieRating">
+                        <div class="star-rating">&#9733;</div>
+                        @if (@Model.Movie.FinalScore > 0.0M){
+                            <span id="rating-text">@($"{Model.Movie.FinalScore:F1}")</span>
+                        }
+                        else{
+                            <span id="rating-text">No rating</span>
+                        }
+                    </div>
+                </div>
                 <div class="col-4">
                     <div id="reviewsLink" class="col">
                         <a asp-controller="Movie"
@@ -76,7 +81,7 @@
                     </div>
                 </div>
 
-                <div class="col-4">
+                <div class="col-3">
                     <div id="reviewsLink" class="col">
                         <a asp-controller="Movie"
                            asp-action="AddReview"

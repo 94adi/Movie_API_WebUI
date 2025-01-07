@@ -10,5 +10,5 @@ public interface IRatingService
 
     Task<IList<Models.Rating>> GetMovieRatings(int movieId);
 
-    Task<double> GetMovieFinalRating(int movieId);
+    Task<decimal> GetMovieFinalRating(int movieId);
 }

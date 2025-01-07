@@ -7,13 +7,13 @@ public class RatingService(IRatingRepository ratingRepo) : IRatingService
         await ratingRepo.CreateAsync(rating);
     }
 
-    public async Task<double> GetMovieFinalRating(int movieId)
+    public async Task<decimal> GetMovieFinalRating(int movieId)
     {
-        double finalRating = 0.0;
+        decimal finalRating = 0.0M;
 
         var ratings = await this.GetMovieRatings(movieId);
 
-        if (ratings != null) 
+        if ((ratings != null) && (ratings.Count() > 0)) 
         {
             foreach (var rating in ratings) 
             {

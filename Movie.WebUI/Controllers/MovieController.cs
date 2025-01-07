@@ -18,10 +18,11 @@ public class MovieController(ISender sender,
 
         var getMovieByIdQuery = new GetMovieByIdQuery(id);
         var totalReviewsCountQuery = new GetReviewsByMovieCountQuery(id);
+        var movieScoreQuery = new GetMovieRatingQuery(id);
 
         var result = await sender.Send(getMovieByIdQuery);
-
         var totalReviewsCountResult = await sender.Send(totalReviewsCountQuery);
+        var movieScore = await sender.Send(movieScoreQuery);
 
         if (User != null && User.Identity.IsAuthenticated)
         {
@@ -39,6 +40,8 @@ public class MovieController(ISender sender,
         
 
         viewModel.Movie.TrailerUrl = YouTubeHelper.ConvertToEmbedUrl(viewModel.Movie.TrailerUrl);
+
+        viewModel.Movie.FinalScore = movieScore.Rating.HasValue ? movieScore.Rating.Value : 0;
 
         if (result == null)
         {

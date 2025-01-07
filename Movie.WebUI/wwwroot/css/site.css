@@ -198,3 +198,19 @@ footer {
     color: red;
     font-weight: bold;
 }
+
+.star-rating {
+    font-size: 25px;
+    color: gold;
+    display: inline-block;
+    padding-left: 15%;
+}
+
+.star-rating:hover {
+    color: orange;
+    cursor: pointer;
+}
+
+#userRatingInput{
+    margin-left:5%;
+}

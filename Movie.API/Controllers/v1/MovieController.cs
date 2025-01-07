@@ -4,6 +4,7 @@ using Movie.API.Services.Handlers.Genres.Queries.GetGenresByMovieId;
 using Movie.API.Services.Handlers.Movies.Commands.AddGenresToMovie;
 using Movie.API.Services.Handlers.Movies.Commands.DeleteMovie;
 using Movie.API.Services.Handlers.Movies.Commands.UpdateMovieCarousel;
+using Movie.API.Services.Handlers.Movies.Queries.GetMovieRating;
 using Movie.API.Services.Handlers.Movies.Queries.GetMoviesCarousel;
 using Movie.API.Services.Handlers.Movies.Queries.GetMoviesCount;
 
@@ -317,6 +318,25 @@ public class MovieController : Controller
             StatusCode = System.Net.HttpStatusCode.OK
         };
 
+        return Ok(apiResponse);
+    }
+
+    [HttpGet("/api/v{version:apiVersion}/[controller]/{movieId}/Rating")]
+    [AllowAnonymous]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<APIResponse>> GetMovieRating(int movieId)
+    {
+        var finalRating = await _sender.Send(new GetMovieRatingQuery(movieId));
+
+        var apiResponse = new APIResponse
+        {
+            Result = finalRating,
+            IsSuccess = true,
+            StatusCode = System.Net.HttpStatusCode.OK
+        };
+        
         return Ok(apiResponse);
     }
 
