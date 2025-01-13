@@ -27,3 +27,4 @@ global using static Movie.BuildingBlocks.CQRS.ICommandHandler;
 global using Movie.WebUI.Models.ViewModel;
 global using Movie.WebUI.Services.Handlers.Reviews.Commands;
 global using Movie.WebUI.Services.Handlers.Reviews.Queries;
+global using Movie.WebUI.Services.Handlers.Ratings.Queries;

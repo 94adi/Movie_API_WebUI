@@ -28,8 +28,14 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
                 Email = "admin@admin.com",
                 EmailConfirmed = true,
                 RegisteredOn = DateTime.UtcNow
+            },
+            new ApplicationUser
+            {
+                UserName = "creator@admin.com",
+                Email = "creator@admin.com",
+                EmailConfirmed = true,
+                RegisteredOn = DateTime.UtcNow
             }
-
         }, isAdmin: true);
 
         await AddSeedUsers(new List<ApplicationUser>
@@ -44,6 +50,13 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
         },
         password: "u$3rp@s$w0rD",
         isAdmin: false);
+
+        var creatorUser = await userManager.FindByEmailAsync("creator@admin.com");
+
+        if (creatorUser == null)
+            throw new Exception("Creator user could not be created");
+
+        var creatorUserId = creatorUser.Id;
 
         var genreHorror = new Genre
         {
@@ -273,81 +286,80 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
             {
                 Title = "Great movie",
                 Content = "I really enjoyed this movie",
-                //Rating = new Models.Rating{ RatingValue = 7 },
+                UserId = creatorUserId,
                 MovieId = 1,
             },
             new Models.Review
             {
                 Title = "Masterpiece",
                 Content = "Absolutely stunning visuals and a captivating story. A must-watch!",
-                //Rating = new Models.Rating{ RatingValue = 9 },
+                UserId = creatorUserId,
                 MovieId = 1,
             },
             new Models.Review
             {
                 Title = "Not bad",
                 Content = "Enjoyed it overall, but felt the pacing was a little slow.",
-                //Rating = new Models.Rating{ RatingValue = 6 },
+                UserId = creatorUserId,
                 MovieId = 1,
             },
             new Models.Review
             {
                 Title = "Overhyped",
                 Content = "I found it a bit predictable and not as thrilling as expected.",
-                //Rating = new Models.Rating{ RatingValue = 5 },
+                UserId = creatorUserId,
                 MovieId = 1,
             },
             new Models.Review
             {
                 Title = "Emotional rollercoaster",
                 Content = "The story really hit me emotionally. Brilliant performances.",
-                //Rating = new Models.Rating{ RatingValue = 8 },
+                UserId = creatorUserId,
                 MovieId = 1,
             },
             new Models.Review
             {
                 Title = "Good but long",
                 Content = "Great character development, but it could have been shorter.",
-                //Rating = new Models.Rating{ RatingValue = 7 },
+                UserId = creatorUserId,
                 MovieId = 1,
             },
             new Models.Review
             {
                 Title = "Cinematic gem",
                 Content = "Visually mesmerizing and well-directed. I was hooked throughout.",
-                //Rating = new Models.Rating{ RatingValue = 9 },
+                UserId = creatorUserId,
                 MovieId = 1,
             },
             new Models.Review
             {
                 Title = "Fun and entertaining",
                 Content = "A lighthearted movie that's great for a weekend watch.",
-                //Rating = new Models.Rating{ RatingValue = 7 },
+                UserId = creatorUserId,
                 MovieId = 1,
             },
             new Models.Review
             {
                 Title = "Could be better",
                 Content = "Had potential but lacked depth in the storyline.",
-                //Rating = new Models.Rating{ RatingValue = 5 },
+                UserId = creatorUserId,
                 MovieId = 1,
             },
             new Models.Review
             {
                 Title = "Thrilling",
                 Content = "Kept me on the edge of my seat! Loved every minute.",
-                //Rating = new Models.Rating{ RatingValue = 8 },
+                UserId = creatorUserId,
                 MovieId = 1,
             },
             new Models.Review
             {
                 Title = "Forgettable",
                 Content = "I watched it, but it didn't leave a lasting impression.",
-                //Rating = new Models.Rating{ RatingValue = 6 },
+                UserId = creatorUserId,
                 MovieId = 1,
             }
             });
-
     }
 
     private async Task AddMovieReview(IEnumerable<Models.Review> movieReviews)

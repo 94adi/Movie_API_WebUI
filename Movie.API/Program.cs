@@ -1,5 +1,3 @@
-using Movie.API.Services.Rating;
-
 var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration.GetConnectionString("Database");
@@ -105,6 +103,8 @@ else
 app.UseStaticFiles();
 
 app.UseHttpsRedirection();
+
+app.UseRouting();
 
 app.UseAuthentication();
 

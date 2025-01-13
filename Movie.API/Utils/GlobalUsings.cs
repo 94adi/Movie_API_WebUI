@@ -50,3 +50,4 @@ global using Movie.API.Services.Handlers.Reviews.Queries.GetReviewsByUserId;
 global using Movie.API.Services.Handlers.Genres.Commands.CreateGenre;
 global using Movie.API.Services.Handlers.Genres.Queries.GetGenre;
 global using Movie.API.Services.Handlers.Genres.Queries.GetGenres;
+global using Movie.API.Services.Rating;

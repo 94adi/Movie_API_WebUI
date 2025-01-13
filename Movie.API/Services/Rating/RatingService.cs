@@ -33,6 +33,17 @@ public class RatingService(IRatingRepository ratingRepo) : IRatingService
         return rating;
     }
 
+    public async Task<IEnumerable<Models.Rating>> GetMovieRatingsByUsers(int movieId, 
+        IEnumerable<string> userIds)
+    {
+        var result = await ratingRepo.GetAllAsync(r => r.MovieId == movieId && 
+                            userIds.Contains(r.UserId));
+        //var ratings = query.ToList();
+        //var result = ratings.Where(r => userIds.Contains(r.UserId)).ToList();
+
+        return result;
+    }
+
     public async Task<IList<Models.Rating>> GetMovieRatings(int movieId)
     {
         var ratings = await ratingRepo.GetAllAsync(r => r.MovieId == movieId);

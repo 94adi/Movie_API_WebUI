@@ -25,4 +25,5 @@ public class MovieAppConfig
     public string RateMoviePath { get; set; }
     public string GetMovieRatingByUserPath { get; set; }
     public string GetMovieRatingPath { get; set; }
+    public string GetMovieRatingsPath { get; set; }
 }

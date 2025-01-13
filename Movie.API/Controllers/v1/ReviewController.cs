@@ -1,5 +1,7 @@
-﻿using Movie.API.Services.Handlers.Ratings.Commands.AddUpdateRating;
+﻿using Movie.API.Models;
+using Movie.API.Services.Handlers.Ratings.Commands.AddUpdateRating;
 using Movie.API.Services.Handlers.Ratings.Queries.GetMovieRatingByUserId;
+using Movie.API.Services.Handlers.Ratings.Queries.GetMovieRatingsByUserIds;
 using Movie.API.Services.Handlers.Reviews.Queries.GetReviewsCountByMovie;
 
 namespace Movie.API.Controllers.v1;
@@ -134,6 +136,29 @@ public class ReviewController : Controller
 
         return Ok(apiResponse);
     }
+
+    [AllowAnonymous]
+    [HttpGet("/api/v{version:apiVersion}/Movie/{movieId}/Users/Ratings")]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<ActionResult<APIResponse>> GetMovieRatingsByUsersId(int movieId, 
+        [FromBody] GetMovieUsersRatingsRequest request)
+    {
+        var query = new GetMovieRatingsByUserIdsQuery(movieId, request.UserIds);
+
+        var result = await _sender.Send(query);
+
+        var apiResponse = new APIResponse
+        {
+            Result = result,
+            StatusCode = System.Net.HttpStatusCode.OK
+        };
+
+        return Ok(apiResponse);
+    }
+
 
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]

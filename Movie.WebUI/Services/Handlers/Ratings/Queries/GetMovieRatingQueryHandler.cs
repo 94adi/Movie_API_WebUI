@@ -1,4 +1,4 @@
-﻿namespace Movie.WebUI.Services.Handlers.Movies.Queries;
+﻿namespace Movie.WebUI.Services.Handlers.Ratings.Queries;
 
 public record GetMovieRatingQuery(int MovieId) : IQuery<GetMovieRatingResult>;
 

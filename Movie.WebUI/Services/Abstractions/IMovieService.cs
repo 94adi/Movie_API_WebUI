@@ -23,4 +23,6 @@ public interface IMovieService
     Task<RateMovieResultDto> RateMovie(RateMovieDto rateMovieRequest);
 
     Task<GetMovieRatingResultDto> GetMovieRating(int movieId);
+
+    Task<GetMovieRatingsResultDto> GetMovieRatings(int movieId, GetMovieRatingsRequestDto request);
 }

@@ -3,8 +3,7 @@
 namespace Movie.WebUI.Controllers;
 
 public class MovieController(ISender sender,
-    ITokenProvider tokenProvider,
-    IReviewService reviewService) : Controller
+    ITokenProvider tokenProvider) : Controller
 {
     [HttpGet]
     public IActionResult Index()
@@ -121,9 +120,26 @@ public class MovieController(ISender sender,
 
         var result = await sender.Send(getReviewsByMovieQuery);
 
+        var reviewUserIds = result.ReviewDtos.Select(r => r.UserId).Distinct().ToList();
+
+        var getMovieRatingsByUserIdsQuery = new GetMovieRatingsByUserIdsQuery(movieId, reviewUserIds);
+
+        var movieRatingsByUserIds = await sender.Send(getMovieRatingsByUserIdsQuery);
+
         var totalReviewsCount = await sender.Send(totalReviewsCountQuery);
 
         var movieResult = await sender.Send(getMovieQuery);
+
+        foreach (var review in result.ReviewDtos)
+        {
+            var ratingValue = movieRatingsByUserIds.RatingDtos
+                    .FirstOrDefault(r => r.UserId == review.UserId)?.RatingValue;
+            if (ratingValue.HasValue)
+            {
+                review.Rating = ratingValue.Value;
+            }
+        } 
+
 
         var pagedResult = new PagedResultVM<ReviewDto>
         {
