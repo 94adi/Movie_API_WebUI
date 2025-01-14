@@ -3,7 +3,8 @@
 namespace Movie.WebUI.Controllers;
 
 public class MovieController(ISender sender,
-    ITokenProvider tokenProvider) : Controller
+    ITokenProvider tokenProvider,
+    IMapper mapper) : Controller
 {
     [HttpGet]
     public IActionResult Index()
@@ -52,51 +53,82 @@ public class MovieController(ISender sender,
 
     [Authorize]
     [HttpGet]
-    public async Task<IActionResult> AddReview(int id)
+    public async Task<IActionResult> AddEditReview(int id)
     {
-        CreateReviewVM createReviewVM = new CreateReviewVM();
+        UpsertReviewVM upsertReviewVM = new UpsertReviewVM();
 
         var userId = tokenProvider.GetUserId();
 
-        createReviewVM.ReviewDto.UserId = userId;
-        createReviewVM.ReviewDto.MovieId = id;
-        createReviewVM.RatingDto.UserId = userId;
-        createReviewVM.RatingDto.MovieId = id;
+        upsertReviewVM.ReviewDto.UserId = userId;
+        upsertReviewVM.ReviewDto.MovieId = id;
+        upsertReviewVM.RatingDto.UserId = userId;
+        upsertReviewVM.RatingDto.MovieId = id;
 
         var getMovieQuery = new GetMovieByIdQuery(id);
         var movieResult = await sender.Send(getMovieQuery);
 
-        createReviewVM.PageTitle = $"Add review for: {movieResult.Movie.Title}";
+        //if movieResult is null redirect to error page
+        
+        var reviewQuery = new GetUserMovieReviewQuery(movieResult.Movie.Id, userId);
 
-        return View(createReviewVM);
+        var reviewResult = await sender.Send(reviewQuery);
+
+        var review = reviewResult.ReviewDto;
+
+        if (review != null)
+        {
+            PopulateReviewValues(upsertReviewVM, review);
+            var userMovieRatingQuery = new GetMovieRatingByUserQuery(movieResult.Movie.Id);
+            var userMovieRating = await sender.Send(userMovieRatingQuery);
+            upsertReviewVM.RatingDto.RatingValue = userMovieRating.Rating.RatingValue;
+            upsertReviewVM.PageTitle = $"Edit review for {movieResult.Movie.Title}";
+        }
+        else
+        {
+            upsertReviewVM.PageTitle = $"Add review for: {movieResult.Movie.Title}";
+        }
+        return View(upsertReviewVM);
     }
 
     [Authorize]
     [ValidateAntiForgeryToken]
     [HttpPost]
-    public async Task<IActionResult> AddReview([FromForm] CreateReviewVM createReviewVM)
+    public async Task<IActionResult> AddEditReview([FromForm] UpsertReviewVM viewModel)
     {
         if (ModelState.IsValid)
         {
-            var addReviewCommand = new AddReviewCommand(createReviewVM.ReviewDto);
+            bool isReviewSubmitted = false;
 
-            var rateMovieCommand = new RateMovieCommand(createReviewVM.RatingDto.MovieId,createReviewVM.RatingDto.RatingValue);
+            var rateMovieCommand = new RateMovieCommand(viewModel.RatingDto.MovieId,
+                viewModel.RatingDto.RatingValue);
 
             var resultRateMovie = await sender.Send(rateMovieCommand);
 
-            var resultAddReview = await sender.Send(addReviewCommand);
-
-            if (resultAddReview.IsSuccess && resultRateMovie.IsSuccess)
+            if (viewModel.ReviewDto.Id.HasValue)
             {
-                return RedirectToAction("Details", "Movie", new { id = createReviewVM.ReviewDto.MovieId });
+                var updateReviewCommand = mapper.Map<UpdateReviewCommand>(viewModel.ReviewDto);
+                var updateReviewResult = await sender.Send(updateReviewCommand);
+                isReviewSubmitted = updateReviewResult.IsSuccess;
             }
             else
             {
-                ModelState.AddModelError("Review", "Could not add review");
+                var addReviewCommand = new AddReviewCommand(viewModel.ReviewDto);
+                var resultAddReview = await sender.Send(addReviewCommand);
+                isReviewSubmitted = resultAddReview.IsSuccess;
+            }
+
+
+            if (isReviewSubmitted && resultRateMovie.IsSuccess)
+            {
+                return RedirectToAction("Details", "Movie", new { id = viewModel.ReviewDto.MovieId });
+            }
+            else
+            {
+                ModelState.AddModelError("Review", "Could not submit review");
             }
         }
 
-        return View(createReviewVM);
+        return View(viewModel);
     }
 
     [AllowAnonymous]
@@ -176,5 +208,13 @@ public class MovieController(ISender sender,
         var result = await sender.Send(command);
 
         return Json(new { success = result.IsSuccess });
+    }
+
+    private void PopulateReviewValues(UpsertReviewVM viewModel, ReviewDto review)
+    {
+        viewModel.ReviewDto.Id = review.Id;
+        viewModel.ReviewDto.Title = review.Title;
+        viewModel.ReviewDto.Content = review.Content;
+        viewModel.RatingDto.RatingValue = review.Rating;
     }
 }

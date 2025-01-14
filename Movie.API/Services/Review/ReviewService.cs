@@ -70,4 +70,16 @@ public class ReviewService(IReviewRepository reviewRepo) : IReviewService
     {
         return await reviewRepo.GetReviewsCountByMovieId(movieId);
     }
+
+    public async Task UpdateReview(Models.Review review)
+    {
+        await reviewRepo.UpdateAsync(review);
+    }
+
+    public async Task<Models.Review> GetUserMovieReview(int movieId, string userId)
+    {
+        var review = await reviewRepo.GetAsync(r => r.MovieId == movieId && r.UserId == userId);
+
+        return review;
+    }
 }

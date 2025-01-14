@@ -5,18 +5,41 @@
 
     @if(@Model.Result.TotalCount == 0){
         <h1 class="text-center text-white">This movie doesn't have any reviews yet</h1>
+        <div class="d-flex justify-content-center mt-4">
+            <a asp-controller="Movie"
+               asp-action="Details"
+               asp-route-id="@Model.MovieId"
+               class="btn btn-outline-light">
+                Go back to movie
+            </a>
+        </div>
+
     }
-    else{
-        <div class="row">
-            <div class="col-6 mb-3">
-                <div id="reviewsLink" class="col">
-                    <a asp-controller="Movie"
-                       asp-action="AddReview"
-                       asp-route-id="@Model.MovieId"
-                       class="btn btn-outline-light">
-                        Add review
-                    </a>
-                </div>
+    else
+    {
+        <div class="row d-flex justify-content-between">
+            @if(User.Identity.IsAuthenticated)
+            {
+            
+                    <div class="col-2 mb-3">
+                        <div id="reviewsLink" class="col">
+                            <a asp-controller="Movie"
+                               asp-action="AddEditReview"
+                               asp-route-id="@Model.MovieId"
+                               class="btn btn-outline-light">
+                                Add review
+                            </a>
+                        </div>
+                    </div>
+            }
+
+            <div class="col-2 mb-3">
+                <a asp-controller="Movie"
+                   asp-action="Details"
+                   asp-route-id="@Model.MovieId"
+                   class="btn btn-outline-light">
+                    Go back to movie
+                </a>
             </div>
         </div>
 
@@ -99,10 +122,23 @@
             <div class="col-md-10">
                 @foreach(var review in Model.Result.Items)
                 {
-                    <div class="row p-3 border bg-light m-2 text-center">
+                    <div class="row p-3 border bg-light mb-5 text-center">
                         <h5>@review.Title</h5>
                         <p>@review.Content</p>
-                        <span class="badge bg-primary">Rating: @review.Rating</span>
+                        <div>
+                            <span class="badge bg-primary">
+                                Rating:
+                                @if (@review.Rating == 0)
+                                {
+                                    <span>Unavaliable</span>
+                                }
+                                else
+                                {
+                                    <span>@review.Rating</span>
+                                }
+                            </span>
+                        </div>
+
                     </div>
                 }
             </div>

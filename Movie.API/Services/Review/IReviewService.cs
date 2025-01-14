@@ -1,6 +1,4 @@
-﻿using Movie.API.Models.Enums;
-
-namespace Movie.API.Services.Review;
+﻿namespace Movie.API.Services.Review;
 
 public interface IReviewService
 {
@@ -14,7 +12,11 @@ public interface IReviewService
 
     Task AddReview(Models.Review review);
 
+    Task UpdateReview(Models.Review review);
+
     Task RateReview(string userId, int reviewId, ReviewRating reviewRating);
 
     Task DeleteReview(int reviewId);
+
+    Task<Models.Review> GetUserMovieReview(int movieId, string userId);
 }

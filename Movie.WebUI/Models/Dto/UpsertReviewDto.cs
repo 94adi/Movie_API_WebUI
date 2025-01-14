@@ -1,6 +1,6 @@
 ﻿namespace Movie.WebUI.Models.Dto;
 
-public class CreateReviewDto
+public class UpsertReviewDto
 {
     public int? Id { get; set; }
 

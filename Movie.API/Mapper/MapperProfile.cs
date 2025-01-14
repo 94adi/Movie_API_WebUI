@@ -4,6 +4,7 @@ using Movie.API.Services.Handlers.Genres.Commands.CreateGenre;
 using Movie.API.Services.Handlers.Genres.Commands.UpdateGenre;
 using Movie.API.Services.Handlers.Genres.Queries.GetGenres;
 using Movie.API.Services.Handlers.Genres.Queries.GetGenresByMovieId;
+using Movie.API.Services.Handlers.Reviews.Commands.UpdateReview;
 
 namespace Movie.API.Mapper;
 
@@ -67,5 +68,7 @@ public class MapperProfile : Profile
         CreateMap<GetGenresByMovieIdResult, GetMovieGenresResponse>();
 
         CreateMap<Rating, RatingDto>();
+
+        CreateMap<UpdateReviewRequest, UpdateReviewCommand>();
     }
 }

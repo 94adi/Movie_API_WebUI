@@ -1,5 +1,4 @@
-﻿
-namespace Movie.API.Services.Handlers.Reviews.Queries.GetReviewsByUserId;
+﻿namespace Movie.API.Services.Handlers.Reviews.Queries.GetReviewsByUserId;
 
 public record GetReviewsByUserQuery(string UserId,
     int PageNumber = 1,

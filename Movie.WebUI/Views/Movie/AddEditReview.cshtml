@@ -1,12 +1,13 @@
-﻿@model Movie.WebUI.Models.ViewModel.CreateReviewVM
+﻿@model Movie.WebUI.Models.ViewModel.UpsertReviewVM
 
-<form asp-action="AddReview" asp-controller="Movie" >
+<form asp-action="AddEditReview" asp-controller="Movie">
 
     <input type="hidden" asp-for=@Model.ReviewDto.UserId />
     <input type="hidden" asp-for=@Model.ReviewDto.MovieId />
     <input type="hidden" asp-for=@Model.RatingDto.UserId />
     <input type="hidden" asp-for=@Model.RatingDto.MovieId />
-    
+    <input type="hidden" asp-for=@Model.ReviewDto.Id />
+
     <br />
     <div class="container border p-3">
         <h1 class="text-primary text-white">@Model.PageTitle</h1>
@@ -20,7 +21,18 @@
                     <label asp-for=@Model.RatingDto.RatingValue class="control-label white-label pt-2" style="font-size:20px;"></label>
                 </div>
                 <div class="col-1 pb-3">
-                    <input asp-for=@Model.RatingDto.RatingValue type="number" value="5" min="1" max="10" step="1" class="form-control" />
+                    @{
+                        var ratingValue = Model.RatingDto.RatingValue > 0
+                                            ? @Model.RatingDto.RatingValue.ToString() : "5";
+
+                    <input asp-for=@Model.RatingDto.RatingValue 
+                    type="number"
+                    value="@ratingValue"
+                    min="1" 
+                    max="10" 
+                    step="1" 
+                    class="form-control" />
+                    }
                     <span asp-validation-for=@Model.RatingDto.RatingValue class="text-danger"></span>
                 </div>
             </div>

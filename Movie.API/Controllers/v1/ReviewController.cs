@@ -1,10 +1,4 @@
-﻿using Movie.API.Models;
-using Movie.API.Services.Handlers.Ratings.Commands.AddUpdateRating;
-using Movie.API.Services.Handlers.Ratings.Queries.GetMovieRatingByUserId;
-using Movie.API.Services.Handlers.Ratings.Queries.GetMovieRatingsByUserIds;
-using Movie.API.Services.Handlers.Reviews.Queries.GetReviewsCountByMovie;
-
-namespace Movie.API.Controllers.v1;
+﻿namespace Movie.API.Controllers.v1;
 
 [ApiController]
 [Route("api/v{version:apiVersion}/[controller]")]
@@ -93,7 +87,7 @@ public class ReviewController : Controller
         return Ok(apiResponse);
     }
 
-    [AllowAnonymous]
+    //[AllowAnonymous]
     [HttpGet("{id:int}", Name = "GetReview")]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -110,6 +104,30 @@ public class ReviewController : Controller
             Result = review,
             StatusCode = System.Net.HttpStatusCode.OK
         };
+
+        return Ok(apiResponse);
+    }
+
+    [HttpGet("/api/v{version:apiVersion}/Movie/{movieId}/User/{userId}")]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<ActionResult<APIResponse>> GetUserMovieReview(int movieId, string userId)
+    {
+        var query = new GetUserMovieReviewQuery(movieId, userId);
+
+        var review = await _sender.Send(query);
+
+        var apiResponse = new APIResponse
+        {
+            Result = review,
+            StatusCode = System.Net.HttpStatusCode.OK
+        };
+
+        if (review is null)
+        {
+            apiResponse.StatusCode = System.Net.HttpStatusCode.NotFound;
+        }
 
         return Ok(apiResponse);
     }
@@ -179,6 +197,36 @@ public class ReviewController : Controller
         };
 
         return CreatedAtRoute("GetReview", new { id = response.Id }, apiResponse);
+    }
+
+    [HttpPut]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<APIResponse>> UpdateReview([FromBody] UpdateReviewRequest request)
+    {
+        var command = _mapper.Map<UpdateReviewCommand>(request);
+
+        var result = await _sender.Send(command);
+
+        var apiResponse = new APIResponse
+        {
+            IsSuccess = result.IsSuccess,
+            Result = result.IsSuccess,
+        };
+
+        if (!result.IsSuccess)
+        {
+            apiResponse.StatusCode = System.Net.HttpStatusCode.InternalServerError;
+        }
+        else
+        {
+            apiResponse.StatusCode = System.Net.HttpStatusCode.OK;
+        }
+
+        return Ok(apiResponse);
     }
 
     [HttpPost("/api/v{version:apiVersion}/Movie/{movieId}/Rating/{rating}")]

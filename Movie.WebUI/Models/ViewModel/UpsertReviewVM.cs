@@ -1,14 +1,14 @@
 ﻿namespace Movie.WebUI.Models.ViewModel;
 
-public class CreateReviewVM
+public class UpsertReviewVM
 {
-    public CreateReviewDto ReviewDto { get; set; }
+    public UpsertReviewDto ReviewDto { get; set; }
 
-    public CreateRatingDto RatingDto { get; set; }
+    public UpsertRatingDto RatingDto { get; set; }
 
     public string PageTitle { get; set; }
 
-    public CreateReviewVM()
+    public UpsertReviewVM()
     {
         ReviewDto = new();
         RatingDto = new();

@@ -14,7 +14,7 @@ public class ReviewService : IReviewService
         _baseApiUri = $"{_movieAppConfig.MovieApiBase}{_movieAppConfig.MovieApiVersion}";
     }
 
-    public async Task<CreateReviewResultDto> AddReview(CreateReviewDto reviewDto)
+    public async Task<CreateReviewResultDto> AddReview(UpsertReviewDto reviewDto)
     {
         var request = new ApiRequest
         {
@@ -135,7 +135,92 @@ public class ReviewService : IReviewService
 
     }
 
-    public async Task GetReviewById(int reviewId)
+    public async Task<GetReviewByIdResultDto> GetReviewById(int reviewId)
     {
+        var url = _movieAppConfig.GetReviewByIdPath
+                .Replace(oldValue: "{id}", newValue: Convert.ToString(reviewId));
+
+        var request = new ApiRequest
+        {
+            ApiType = ApiType.GET,
+            Data = { },
+            Url = $"{_baseApiUri}{url}"
+        };
+
+        var response = await _httpService.SendAsync<ApiResponse>(request, isAuthenticated: true);
+
+        bool isResponseAvailable = (response != null) &&
+            (response.IsSuccess == true) &&
+            (response.Result != null);
+
+        var stringResult = Convert.ToString(response.Result);
+
+        GetReviewByIdResultDto getMovieRatingByUserResult = null;
+
+        if (isResponseAvailable)
+        {
+            getMovieRatingByUserResult = JsonConvert.
+                DeserializeObject<GetReviewByIdResultDto>(stringResult);
+        }
+
+        return getMovieRatingByUserResult;
+    }
+
+    public async Task<GetUserMovieReviewResultDto> GetUserMovieReview(int movieId, string userId)
+    {
+        var url = _movieAppConfig.GetUserMovieReviewPath
+                    .Replace(oldValue: "{movieId}", newValue: Convert.ToString(movieId))
+                    .Replace(oldValue: "{userId}", newValue: userId);
+
+
+        var request = new ApiRequest
+        {
+            ApiType = ApiType.GET,
+            Data = { },
+            Url = $"{_baseApiUri}{url}"
+        };
+
+        var response = await _httpService.SendAsync<ApiResponse>(request, isAuthenticated: true);
+
+        bool isResponseAvailable = (response != null) &&
+           (response.IsSuccess == true) &&
+           (response.Result != null);
+
+        var stringResult = Convert.ToString(response.Result);
+
+        GetUserMovieReviewResultDto getUserMovieReviewResult = null;
+
+        if (isResponseAvailable)
+        {
+            getUserMovieReviewResult = JsonConvert.
+                DeserializeObject<GetUserMovieReviewResultDto>(stringResult);
+        }
+
+        return getUserMovieReviewResult;
+    }
+
+    public async Task<UpdateReviewResultDto> UpdateReview(UpdateReviewDto updateReviewDto)
+    {
+        var url = _movieAppConfig.UpdateReviewPath;
+
+        var request = new ApiRequest
+        {
+            ApiType = ApiType.PUT,
+            Data = updateReviewDto,
+            Url = $"{_baseApiUri}{url}"
+        };
+
+        var response = await _httpService.SendAsync<ApiResponse>(request, isAuthenticated: true);
+
+        bool isResponseAvailable = (response != null) &&
+            (response.IsSuccess == true) &&
+            (response.Result != null);
+
+        if (!isResponseAvailable)
+        {
+            return new UpdateReviewResultDto(false);
+        }
+
+        return new UpdateReviewResultDto(response.IsSuccess);      
     }
 }

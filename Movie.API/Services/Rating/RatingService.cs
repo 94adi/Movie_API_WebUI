@@ -1,4 +1,6 @@
-﻿namespace Movie.API.Services.Rating;
+﻿using System.Buffers;
+
+namespace Movie.API.Services.Rating;
 
 public class RatingService(IRatingRepository ratingRepo) : IRatingService
 {
@@ -36,10 +38,13 @@ public class RatingService(IRatingRepository ratingRepo) : IRatingService
     public async Task<IEnumerable<Models.Rating>> GetMovieRatingsByUsers(int movieId, 
         IEnumerable<string> userIds)
     {
+        if (userIds == null || !userIds.Any())
+        {
+            return Enumerable.Empty<Models.Rating>();
+        }
+
         var result = await ratingRepo.GetAllAsync(r => r.MovieId == movieId && 
-                            userIds.Contains(r.UserId));
-        //var ratings = query.ToList();
-        //var result = ratings.Where(r => userIds.Contains(r.UserId)).ToList();
+                            userIds.Contains(r.UserId));       
 
         return result;
     }

@@ -27,5 +27,9 @@ public class MapperProfile : Profile
         CreateMap<UpdateMovieCarouselCommand, UpdateMovieCarouselDto>();
 
         CreateMap<RateMovieCommand, RateMovieDto>();
+
+        CreateMap<UpdateReviewCommand, UpdateReviewDto>();
+
+        CreateMap<UpsertReviewDto, UpdateReviewCommand>();
     }
 }

@@ -81,15 +81,19 @@
                     </div>
                 </div>
 
-                <div class="col-3">
-                    <div id="reviewsLink" class="col">
-                        <a asp-controller="Movie"
-                           asp-action="AddReview"
-                           asp-route-id="@Model.Movie.Id"
-                           class="btn btn-outline-dark">Add review
-                       </a>
+                @if(User.Identity.IsAuthenticated)
+                {
+                    <div class="col-3">
+                        <div id="reviewsLink" class="col">
+                            <a asp-controller="Movie"
+                               asp-action="AddEditReview"
+                               asp-route-id="@Model.Movie.Id"
+                               class="btn btn-outline-dark">
+                                Add review
+                            </a>
+                        </div>
                     </div>
-                </div>
+                }
             </div>
 
             <div class="row">

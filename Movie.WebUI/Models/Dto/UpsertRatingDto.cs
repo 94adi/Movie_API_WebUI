@@ -1,6 +1,6 @@
 ﻿namespace Movie.WebUI.Models.Dto;
 
-public class CreateRatingDto
+public class UpsertRatingDto
 {
     [Required]
     public string UserId { get; set; }

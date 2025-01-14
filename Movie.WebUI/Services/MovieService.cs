@@ -238,7 +238,7 @@ public class MovieService : IMovieService
             return result;
         }
 
-        throw new Exception("Could not get result");
+        return new GetMoviesCountResultDto(0);
     }
 
     public async Task<RateMovieResultDto> RateMovie(RateMovieDto rateMovieRequest)

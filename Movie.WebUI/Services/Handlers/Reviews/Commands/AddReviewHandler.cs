@@ -1,6 +1,6 @@
 ﻿namespace Movie.WebUI.Services.Handlers.Reviews.Commands;
 
-public record AddReviewCommand(CreateReviewDto Review) : ICommand<AddReviewResult>;
+public record AddReviewCommand(UpsertReviewDto Review) : ICommand<AddReviewResult>;
 
 public record AddReviewResult(int Id, bool IsSuccess);
 
