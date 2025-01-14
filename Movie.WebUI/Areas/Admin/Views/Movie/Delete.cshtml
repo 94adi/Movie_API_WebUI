@@ -3,7 +3,7 @@
 <form method="post" asp-action="Delete" asp-controller="Movie">
     <br />
     <div class="container border p-3">
-        <h1 class="text-primary">Delete Movie: @Model.Title</h1>
+        <h1 class="text-primary text-white">Delete Movie: @Model.Title</h1>
         <hr />
 
         <input hidden asp-for="Id" />
@@ -12,21 +12,21 @@
             <div class="col-10">
                 <div class="row">
                     <div class="col-2">
-                        <label asp-for="Title" class="control-label pt-2" style="font-size:20px;"></label>
+                        <label asp-for="Title" class="control-label white-label form-label-size pt-2"></label>
                     </div>
                     <div class="col-10 pb-3">
                         <input asp-for="Title" disabled class="form-control" />
                     </div>
 
                     <div class="col-2">
-                        <label asp-for="Description" class="control-label pt-2" style="font-size:20px;"></label>
+                        <label asp-for="Description" class="control-label white-label form-label-size pt-2"></label>
                     </div>
                     <div class="col-10 pb-3">
                         <textarea asp-for="Description" disabled class="form-control" rows="5">
                         </textarea>
                     </div>
                     <div class="col-2">
-                        <label asp-for="ReleaseDate" class="control-label pt-2" style="font-size:20px;"></label>
+                        <label asp-for="ReleaseDate" class="control-label white-label form-label-size pt-2"></label>
                     </div>
 
                     <div class="col-10 pb-3">

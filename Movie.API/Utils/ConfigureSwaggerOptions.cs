@@ -62,3 +62,23 @@ public class ConfigureSwaggerOptions(IApiVersionDescriptionProvider provider)
         }
     }
 }
+
+public static class SwaggerExtensions
+{
+    public static IApplicationBuilder UseCustomSwaggerUI(this IApplicationBuilder app)
+    {
+        var provider = app.ApplicationServices.GetRequiredService<IApiVersionDescriptionProvider>();
+
+        app.UseSwaggerUI(opt =>
+        {
+            foreach (var description in provider.ApiVersionDescriptions.Reverse())
+            {
+                opt.SwaggerEndpoint($"/swagger/{description.GroupName}/swagger.json",
+                    $"Movie API {description.ApiVersion}");
+            }
+            opt.RoutePrefix = string.Empty;
+        });
+
+        return app;
+    }
+}

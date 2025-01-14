@@ -27,7 +27,7 @@
                                asp-action="AddEditReview"
                                asp-route-id="@Model.MovieId"
                                class="btn btn-outline-light">
-                                Add review
+                                Submit review
                             </a>
                         </div>
                     </div>
@@ -124,7 +124,7 @@
                 {
                     <div class="row p-3 border bg-light mb-5 text-center">
                         <h5>@review.Title</h5>
-                        <p>@review.Content</p>
+                        <p>@Html.Raw(review.Content?.Replace("\n", "<br>"))</p>
                         <div>
                             <span class="badge bg-primary">
                                 Rating:

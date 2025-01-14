@@ -3,14 +3,15 @@
 <form asp-action="Create" asp-controller="Movie" enctype="multipart/form-data">
     <br />
     <div class="container border p-3">
-        <h1 class="text-primary">Create Movie</h1>
+        <h1 class="text-primary text-white">Create Movie</h1>
         <hr />
 
         <div class="row">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <div class="col-2">
-                <label asp-for=@Model.MovieDto.Title class="control-label pt-2" style="font-size:20px;"></label>
+                <label asp-for=@Model.MovieDto.Title class="control-label white-label form-label-size pt-2">
+                </label>
             </div>
             <div class="col-10 pb-3">
                 <input asp-for=@Model.MovieDto.Title class="form-control" />
@@ -18,7 +19,8 @@
             </div>
 
             <div class="col-2">
-                <label asp-for=@Model.MovieDto.Description class="control-label pt-2" style="font-size:20px;"></label>
+                <label asp-for=@Model.MovieDto.Description class="control-label white-label form-label-size pt-2">
+                </label>
             </div>
             <div class="col-10 pb-3">
                 <textarea asp-for=@Model.MovieDto.Description class="form-control" rows="5"></textarea>
@@ -26,7 +28,8 @@
             </div>
 
             <div class="col-2">
-                <label asp-for=@Model.MovieDto.TrailerUrl class="control-label pt-2" style="font-size:20px;"></label>
+                <label asp-for=@Model.MovieDto.TrailerUrl class="control-label white-label form-label-size pt-2">
+                </label>
             </div>
             <div class="col-10 pb-3">
                 <input asp-for=@Model.MovieDto.TrailerUrl class="form-control" rows="5"/>
@@ -34,7 +37,8 @@
             </div>
 
             <div class="col-2">
-                <label asp-for=@Model.GenreOptions class="control-label pt-2" style="font-size:20px;"></label>
+                <label asp-for=@Model.GenreOptions class="control-label white-label form-label-size pt-2">
+                </label>
             </div>
             <div class="col-10 pb-3">
                 <select asp-for=@Model.MovieDto.SelectedGenres
@@ -50,7 +54,8 @@
             </div>
 
             <div class="col-2">
-                <label asp-for=@Model.MovieDto.ImageUrl class="control-label pt-2" style="font-size:20px;"></label>
+                <label asp-for=@Model.MovieDto.ImageUrl class="control-label white-label form-label-size pt-2">
+                </label>
             </div>
             <div class="col-10 pb-3">
                 <input asp-for=@Model.MovieDto.Image class="form-control" />
@@ -59,7 +64,8 @@
             </div>
 
             <div class="col-2">
-                <label asp-for=@Model.MovieDto.ReleaseDate class="control-label pt-2" style="font-size:20px;"></label>
+                <label asp-for=@Model.MovieDto.ReleaseDate class="control-label white-label form-label-size pt-2">
+                </label>
             </div>
 
             <div class="col-10 pb-3">

@@ -73,13 +73,14 @@ builder.Services.AddAuthentication(opt =>
 builder.Services.AddApiVersioning(opt =>
 {
     opt.AssumeDefaultVersionWhenUnspecified = true;
-    opt.DefaultApiVersion = new ApiVersion(1, 0);
+    opt.DefaultApiVersion = new ApiVersion(2,0);
     opt.ReportApiVersions = true;
 })
 .AddApiExplorer(opt =>
 {
     opt.GroupNameFormat = "'v'VVV";
     opt.SubstituteApiVersionInUrl = true;
+    opt.DefaultApiVersion = new ApiVersion(2,0);
 });
 
 builder.Services.AddExceptionHandler<CustomExceptionHandler>();
@@ -92,19 +93,21 @@ if (app.Environment.IsDevelopment())
 {
     await app.ApplyMigration();
     await app.SeedDatabase();
-    app.UseSwagger();
-    app.UseSwaggerUI();
 }
 else
 {
     await app.ApplyMigration();
 }
 
-app.UseStaticFiles();
-
 app.UseHttpsRedirection();
 
 app.UseRouting();
+
+app.UseSwagger();
+
+app.UseCustomSwaggerUI();
+
+app.UseStaticFiles();
 
 app.UseAuthentication();
 
@@ -118,5 +121,7 @@ app.UseHealthChecks("/health", new Microsoft.AspNetCore.Diagnostics.HealthChecks
 {
     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
 }).UseAuthorization();
+
+app.UseRedirectSwaggerHomepage();
 
 app.Run();

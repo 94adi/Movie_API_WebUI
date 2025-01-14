@@ -189,6 +189,10 @@ footer {
     color: white;
 }
 
+.form-label-size {
+    font-size: 20px;
+}
+
 .text-success {
     color: green;
     font-weight: bold;

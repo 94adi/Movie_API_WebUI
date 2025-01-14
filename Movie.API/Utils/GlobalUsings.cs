@@ -57,3 +57,5 @@ global using Movie.API.Services.Handlers.Ratings.Queries.GetMovieRatingsByUserId
 global using Movie.API.Services.Handlers.Reviews.Commands.UpdateReview;
 global using Movie.API.Services.Handlers.Reviews.Queries.GetReviewsCountByMovie;
 global using Movie.API.Services.Handlers.Reviews.Queries.GetUserMovieReview;
+global using Asp.Versioning.ApiExplorer;
+global using Movie.API.Middleware;
