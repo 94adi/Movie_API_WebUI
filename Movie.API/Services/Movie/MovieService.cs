@@ -1,21 +1,20 @@
-﻿namespace Movie.API.Services.Movie;
+﻿using Movie.API.Services.File;
+
+namespace Movie.API.Services.Movie;
 
 public class MovieService : IMovieService
 {
-    private readonly StorageSettings _storageSettings;
-    private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly IMovieRepository _movieRepository;
     private readonly IMovieGenreRepository _movieGenreRepository;
+    private readonly IFileShareService _fileShareService;
 
-    public MovieService(IOptions<StorageSettings> storageOptions,
-        IHttpContextAccessor httpContextAccessor,
-        IMovieRepository movieRepository,
-        IMovieGenreRepository movieGenreRepository)
+    public MovieService(IMovieRepository movieRepository,
+        IMovieGenreRepository movieGenreRepository,
+        IFileShareService fileShareService)
     {
-        _storageSettings = storageOptions.Value;
-        _httpContextAccessor = httpContextAccessor;
         _movieRepository = movieRepository;
         _movieGenreRepository = movieGenreRepository;
+        _fileShareService = fileShareService;
     }
 
     public async Task<Models.Movie> GetByIdAsync(int id, bool includeGenres = false)
@@ -31,53 +30,22 @@ public class MovieService : IMovieService
 
     public async Task StoreMoviePoster(Models.Movie movie, IFormFile poster)
     {
-        if(poster != null)
+        if(poster != null && poster.Length > 0)
         {
             var movieId = movie.Id;
-            string randomString = Utilities.GenerateRandomString(10);
-            string fileName = movieId + "_" + randomString + Path.GetExtension(poster.FileName);
+            string fileGuid = Guid.NewGuid().ToString();
+            string fileName = $"{movieId}_{fileGuid}{Path.GetExtension(poster.FileName)}";
 
-            string filePath = _storageSettings.ImageStoragePath + fileName;
-
-            var imageLocation = Path.Combine(Directory.GetCurrentDirectory(), filePath);
-
-            var folderLocation = Path.Combine(Directory.GetCurrentDirectory(), _storageSettings.ImageStoragePath);
-
-            if (!Directory.Exists(folderLocation))
-            {
-                Directory.CreateDirectory(folderLocation);
-            }
-
-            FileInfo file = new FileInfo(imageLocation);
-
-            if (file.Exists)
-            {
-                file.Delete();
-            }
-            using (var fileStream = new FileStream(imageLocation, FileMode.Create))
-            {
-                poster.CopyTo(fileStream);
-            }
-            var httpContext = _httpContextAccessor.HttpContext;
-            var baseUrl = $"{httpContext.Request.Scheme}://{httpContext.Request.Host.Value}/{httpContext.Request.PathBase.Value}";
-            string imageUrl = baseUrl + _storageSettings.ImageStorageFolder + fileName;
-            string imageLocationPath = filePath;
-
-            movie.ImageLocalPath = imageLocationPath;
-            movie.ImageUrl = imageUrl ??= "https://placehold.co/600x400";
+            await _fileShareService.UploadFileAsync(fileName, poster.OpenReadStream());
+          
+            movie.ImageFileName = fileName;
         }
         else
         {
             var movieFromDb = await _movieRepository.GetByIdAsync(movie.Id);
-            if(!String.IsNullOrEmpty(movieFromDb.ImageLocalPath) &&
-                (!String.IsNullOrEmpty(movieFromDb.ImageUrl)))
+            if(!String.IsNullOrEmpty(movieFromDb.ImageFileName))
             {
-                movie.ImageLocalPath = movieFromDb.ImageLocalPath;
-                movie.ImageUrl = movieFromDb.ImageUrl;
-            }
-            else
-            {
-                movie.ImageUrl = "https://placehold.co/600x400";
+                movie.ImageFileName = movieFromDb.ImageFileName;
             }
         }
 
@@ -94,6 +62,21 @@ public class MovieService : IMovieService
             {
                 await _movieGenreRepository.RemoveAsync(movieGenre);
             }
+        }
+    }
+
+    public async Task AddPosterUrls(IEnumerable<Models.Movie> movies)
+    {
+        if ((movies == null) || !movies.Any())
+        {
+            return;
+        }
+
+        foreach(var movie in movies)
+        {
+            //TO DO: store in cache and verify if exists before calling
+            movie.ImageUrl = _fileShareService.GenerateFileUrl(movie.ImageFileName, 
+                new TimeSpan(1, 0, 0));
         }
     }
 
@@ -115,5 +98,10 @@ public class MovieService : IMovieService
     {
         var movies = await _movieRepository.GetAllAsync();
         return movies.Count();
+    }
+
+    public async Task<IList<Models.Movie>> GetMoviesWithGenres(int pageNumber = 1, int pageSize = 0)
+    {
+        return await _movieRepository.GetMoviesWithGenres(pageNumber, pageSize);
     }
 }

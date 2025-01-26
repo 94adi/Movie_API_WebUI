@@ -103,8 +103,6 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
         {
             Title = "The Shawshank Redemption",
             Description = "A beautiful movie about hope and friendship",
-            ImageUrl = $"{url}//SeedPosters/shawshank.jpg",
-            ImageLocalPath = "wwwroot\\SeedPosters\\shawshank.jpg",
             ReleaseDate = new DateOnly(1994, 2, 12),
             CreatedDate = DateTime.Now
         };
@@ -113,8 +111,6 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
         {
             Title = "The Shining",
             Description = "A modern horror masterpiece",
-            ImageUrl = $"{url}//SeedPosters/the_shining.jpg",
-            ImageLocalPath = "wwwroot\\SeedPosters\\the_shining.jpg",
             ReleaseDate = new DateOnly(1980, 5, 8),
             CreatedDate = DateTime.Now
         };
@@ -123,8 +119,6 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
         {
             Title = "Inception",
             Description = "A mind-bending thriller",
-            ImageUrl = $"{url}//SeedPosters/default.jpg",
-            ImageLocalPath = "wwwroot\\SeedPosters\\default.jpg",
             ReleaseDate = new DateOnly(2010, 7, 16),
             CreatedDate = DateTime.Now
         };
@@ -133,8 +127,6 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
         {
             Title = "Pulp Fiction",
             Description = "A cult classic crime film",
-            ImageUrl = $"{url}//SeedPosters/default.jpg",
-            ImageLocalPath = "wwwroot\\SeedPosters\\default.jpg",
             ReleaseDate = new DateOnly(1994, 10, 14),
             CreatedDate = DateTime.Now
         };
@@ -143,8 +135,6 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
         {
             Title = "The Godfather",
             Description = "An iconic mafia drama",
-            ImageUrl = $"{url}//SeedPosters/default.jpg",
-            ImageLocalPath = "wwwroot\\SeedPosters\\default.jpg",
             ReleaseDate = new DateOnly(1972, 3, 24),
             CreatedDate = DateTime.Now
         };
@@ -153,8 +143,6 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
         {
             Title = "Interstellar",
             Description = "A sci-fi epic exploring space and time",
-            ImageUrl = $"{url}//SeedPosters/default.jpg",
-            ImageLocalPath = "wwwroot\\SeedPosters\\default.jpg",
             ReleaseDate = new DateOnly(2014, 11, 7),
             CreatedDate = DateTime.Now
         };
@@ -163,8 +151,6 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
         {
             Title = "Fight Club",
             Description = "A psychological drama with a twist",
-            ImageUrl = $"{url}//SeedPosters/default.jpg",
-            ImageLocalPath = "wwwroot\\SeedPosters\\default.jpg",
             ReleaseDate = new DateOnly(1999, 10, 15),
             CreatedDate = DateTime.Now
         };
@@ -173,8 +159,6 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
         {
             Title = "The Dark Knight",
             Description = "A gritty superhero epic",
-            ImageUrl = $"{url}//SeedPosters/default.jpg",
-            ImageLocalPath = "wwwroot\\SeedPosters\\default.jpg",
             ReleaseDate = new DateOnly(2008, 7, 18),
             CreatedDate = DateTime.Now
         };
@@ -183,8 +167,6 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
         {
             Title = "Forrest Gump",
             Description = "A heartwarming journey through history",
-            ImageUrl = $"{url}//SeedPosters/default.jpg",
-            ImageLocalPath = "wwwroot\\SeedPosters\\default.jpg",
             ReleaseDate = new DateOnly(1994, 7, 6),
             CreatedDate = DateTime.Now
         };
@@ -193,8 +175,6 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
         {
             Title = "The Matrix",
             Description = "A revolutionary sci-fi action film",
-            ImageUrl = $"{url}//SeedPosters/default.jpg",
-            ImageLocalPath = "wwwroot\\SeedPosters\\default.jpg",
             ReleaseDate = new DateOnly(1999, 3, 31),
             CreatedDate = DateTime.Now
         };
@@ -203,8 +183,6 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
         {
             Title = "Goodfellas",
             Description = "A gripping mob drama",
-            ImageUrl = $"{url}//SeedPosters/default.jpg",
-            ImageLocalPath = "wwwroot\\SeedPosters\\default.jpg",
             ReleaseDate = new DateOnly(1990, 9, 19),
             CreatedDate = DateTime.Now
         };
@@ -213,8 +191,6 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
         {
             Title = "Schindler's List",
             Description = "A powerful Holocaust drama",
-            ImageUrl = $"{url}//SeedPosters/default.jpg",
-            ImageLocalPath = "wwwroot\\SeedPosters\\default.jpg",
             ReleaseDate = new DateOnly(1993, 12, 15),
             CreatedDate = DateTime.Now
         };
@@ -364,6 +340,13 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
 
     private async Task AddMovieReview(IEnumerable<Models.Review> movieReviews)
     {
+        var existingMovieReviews = await reviewRepository.GetAllAsync();
+
+        if(existingMovieReviews != null && existingMovieReviews.Any())
+        {
+            return;
+        }
+
         var userId = userManager.FindByEmailAsync("user@user.com").GetAwaiter().GetResult().Id;
 
         if (movieReviews != null && movieReviews.Count() > 0)
@@ -379,7 +362,13 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
 
     private async Task AddMovieCarousel(IEnumerable<Models.MovieCarousel> movieCarousels)
     {
-        if(movieCarousels != null && movieCarousels.Count() > 0)
+        var existingMovieCarousels = await movieCarouselRepo.GetAllAsync();
+        if(existingMovieCarousels != null && existingMovieCarousels.Any())
+        {
+            return;
+        }
+
+        if (movieCarousels != null && movieCarousels.Count() > 0)
         {
             foreach (var movieCarousel in movieCarousels) 
             { 
@@ -390,6 +379,12 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
 
     private async Task AddMovies(IEnumerable<Models.Movie> movies)
     {
+        var existingMovies = await movieRepo.GetAllAsync();
+        if (existingMovies != null && existingMovies.Any())
+        {
+            return;
+        }
+
         if(movies != null && movies.Count() > 0)
         {
             foreach (var movie in movies)
@@ -401,6 +396,12 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
 
     private async Task AddMovieGenres(IEnumerable<Models.MovieGenre> movieGenres)
     {
+        var existingMovieGenres = await movieGenreRepo.GetAllAsync();
+        if(existingMovieGenres != null && existingMovieGenres.Any())
+        {
+            return;
+        }
+
         if (movieGenres != null && movieGenres.Count() > 0)
         {
             foreach (var movieGenre in movieGenres)
@@ -412,6 +413,12 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
 
     private async Task AddGenres(IEnumerable<Models.Genre> genres)
     {
+        var existingGenres = await genreRepo.GetAllAsync();
+        if (existingGenres != null && existingGenres.Any())
+        {
+            return;
+        }
+
         if (genres != null && genres.Count() > 0)
         {
             foreach (var genre in genres)

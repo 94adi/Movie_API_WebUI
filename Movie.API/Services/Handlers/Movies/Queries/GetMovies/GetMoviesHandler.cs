@@ -8,14 +8,16 @@ public record GetMoviesResult
     public int TotalPages { get; set; }
 }
 
-internal class GetMoviesQueryHandler(IMovieRepository movieRepository,
+internal class GetMoviesQueryHandler(IMovieService movieService,
     IMapper mapper) :
     IQueryHandler<GetMoviesQuery, GetMoviesResult>
 {
     public async Task<GetMoviesResult> Handle(GetMoviesQuery query, CancellationToken cancellationToken)
     {
-        var movies = await movieRepository.GetMoviesWithGenres(pageSize: query.PageSize,
+        var movies = await movieService.GetMoviesWithGenres(pageSize: query.PageSize,
             pageNumber: query.PageNumber);
+
+        await movieService.AddPosterUrls(movies);
 
         var movieDtos = mapper.Map<List<Models.Dto.MovieDto>>(movies);
 

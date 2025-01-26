@@ -1,3 +1,6 @@
+using Movie.API.Services.File;
+using Microsoft.Extensions.Azure;
+
 var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration.GetConnectionString("Database");
@@ -5,9 +8,20 @@ var connectionString = builder.Configuration.GetConnectionString("Database");
 builder.Services.Configure<StorageSettings>(
     builder.Configuration.GetSection("StorageSettings"));
 
+builder.Services.Configure<FileShareConfig>(
+    builder.Configuration.GetSection("AzureFileShare")
+    );
+
 builder.Services.AddDbContext<ApplicationDbContext>(opt =>
 {
-    opt.UseSqlServer(connectionString);
+    opt.UseSqlServer(connectionString, sqlOptions =>
+    {
+        sqlOptions.EnableRetryOnFailure(
+            maxRetryCount: 5,
+            maxRetryDelay: TimeSpan.FromSeconds(15),
+            errorNumbersToAdd: null
+        );
+    });
 });
 
 builder.Services.AddIdentity<ApplicationUser,IdentityRole>()
@@ -45,6 +59,7 @@ builder.Services.AddScoped<IMovieGenreRepository, MovieGenreRepository>();
 builder.Services.AddScoped<IMovieCarouselRepository, MovieCarouselRepository>();
 builder.Services.AddScoped<IRatingRepository, RatingRepository>();
 builder.Services.AddScoped<IRatingService, RatingService>();
+builder.Services.AddSingleton<IFileShareService, FileShareService>();
 
 builder.Services.AddSwaggerGen();
 
@@ -91,12 +106,12 @@ var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
-    await app.ApplyMigration();
-    await app.SeedDatabase();
+    app.ApplyMigration().GetAwaiter().GetResult();
+    app.SeedDatabase().GetAwaiter().GetResult();
 }
 else
 {
-    await app.ApplyMigration();
+    app.ApplyMigration().GetAwaiter().GetResult();
 }
 
 app.UseHttpsRedirection();

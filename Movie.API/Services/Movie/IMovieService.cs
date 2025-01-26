@@ -11,4 +11,8 @@ public interface IMovieService
     Task AddMovieGenres(int movieId, IEnumerable<int> genreIds);
 
     Task<int> GetMoviesCount();
+
+    Task<IList<Models.Movie>> GetMoviesWithGenres(int pageNumber = 1, int pageSize = 0);
+
+    Task AddPosterUrls(IEnumerable<Models.Movie> movies);
 }

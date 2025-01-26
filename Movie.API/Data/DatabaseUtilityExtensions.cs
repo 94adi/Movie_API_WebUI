@@ -8,8 +8,7 @@ public static class DatabaseUtilityExtensions
         {
             var _db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
-            await _db.Database.EnsureDeletedAsync();
-
+            //await _db.Database.EnsureDeletedAsync();
             if (_db.Database.GetPendingMigrations().Count() > 0)
             {
                 await _db.Database.MigrateAsync();
