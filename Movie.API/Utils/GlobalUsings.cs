@@ -59,3 +59,7 @@ global using Movie.API.Services.Handlers.Reviews.Queries.GetReviewsCountByMovie;
 global using Movie.API.Services.Handlers.Reviews.Queries.GetUserMovieReview;
 global using Asp.Versioning.ApiExplorer;
 global using Movie.API.Middleware;
+global using Azure.Identity;
+global using Azure.Security.KeyVault.Secrets;
+global using Movie.API.Services.File;
+global using Movie.API.Extensions;

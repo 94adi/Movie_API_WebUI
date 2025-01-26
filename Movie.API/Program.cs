@@ -1,106 +1,10 @@
-using Movie.API.Services.File;
-using Microsoft.Extensions.Azure;
-
 var builder = WebApplication.CreateBuilder(args);
 
-var connectionString = builder.Configuration.GetConnectionString("Database");
+builder.Configuration.AddUserSecrets<Program>();
 
-builder.Services.Configure<StorageSettings>(
-    builder.Configuration.GetSection("StorageSettings"));
+builder.RegisterAzureConfigs();
 
-builder.Services.Configure<FileShareConfig>(
-    builder.Configuration.GetSection("AzureFileShare")
-    );
-
-builder.Services.AddDbContext<ApplicationDbContext>(opt =>
-{
-    opt.UseSqlServer(connectionString, sqlOptions =>
-    {
-        sqlOptions.EnableRetryOnFailure(
-            maxRetryCount: 5,
-            maxRetryDelay: TimeSpan.FromSeconds(15),
-            errorNumbersToAdd: null
-        );
-    });
-});
-
-builder.Services.AddIdentity<ApplicationUser,IdentityRole>()
-    .AddEntityFrameworkStores<ApplicationDbContext>();
-
-builder.Services.AddControllers();
-
-builder.Services.AddEndpointsApiExplorer();
-
-builder.Services.AddAutoMapper(typeof(MapperProfile));
-
-var assembly = typeof(Program).Assembly;
-
-builder.Services.AddMediatR(config =>
-{
-    config.RegisterServicesFromAssembly(assembly);
-    config.AddOpenBehavior(typeof(ValidationBehavior<,>));
-    config.AddOpenBehavior(typeof(LoggingBehavior<,>));
-});
-
-builder.Services.AddValidatorsFromAssembly(assembly);
-
-builder.Services.AddScoped<IMovieRepository, MovieRepository>();
-builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
-builder.Services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
-builder.Services.AddScoped<ITokenService, TokenService>();
-builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<ISeedDataService, SeedDataService>();
-builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IMovieService, MovieService>();
-builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
-builder.Services.AddScoped<IReviewService,  ReviewService>();
-builder.Services.AddScoped<IGenreRepository, GenreRepository>();
-builder.Services.AddScoped<IMovieGenreRepository, MovieGenreRepository>();
-builder.Services.AddScoped<IMovieCarouselRepository, MovieCarouselRepository>();
-builder.Services.AddScoped<IRatingRepository, RatingRepository>();
-builder.Services.AddScoped<IRatingService, RatingService>();
-builder.Services.AddSingleton<IFileShareService, FileShareService>();
-
-builder.Services.AddSwaggerGen();
-
-var key = builder.GetPrivateKey();
-
-builder.Services.AddAuthentication(opt =>
-{
-    opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-})
-.AddJwtBearer(opt =>
-{
-    //dev settings
-    opt.TokenValidationParameters = new TokenValidationParameters
-    {
-        
-        ValidateIssuer = false,
-        ValidateIssuerSigningKey = true,
-        ValidateAudience = false,
-        IssuerSigningKey = new SymmetricSecurityKey(key)
-    };
-    //opt.RequireHttpsMetadata = false;
-    opt.SaveToken = true;
-});
-
-builder.Services.AddApiVersioning(opt =>
-{
-    opt.AssumeDefaultVersionWhenUnspecified = true;
-    opt.DefaultApiVersion = new ApiVersion(2,0);
-    opt.ReportApiVersions = true;
-})
-.AddApiExplorer(opt =>
-{
-    opt.GroupNameFormat = "'v'VVV";
-    opt.SubstituteApiVersionInUrl = true;
-    opt.DefaultApiVersion = new ApiVersion(2,0);
-});
-
-builder.Services.AddExceptionHandler<CustomExceptionHandler>();
-
-builder.Services.AddHealthChecks().AddSqlServer(connectionString);
+builder.RegisterServices();
 
 var app = builder.Build();
 

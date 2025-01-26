@@ -38,4 +38,15 @@ public static class Utilities
 
         return url;
     }
+
+    public static string GetDatabaseConnectionString(this WebApplicationBuilder builder, string env)
+    {
+        env = env.ToLower();
+        return env switch
+        {
+            "local" => builder.Configuration.GetConnectionString("Database"),
+            "azure" => builder.Configuration["AzureDatabase:ConnectionString"],
+            _ => builder.Configuration.GetConnectionString("Database")
+        };
+    }
 }
