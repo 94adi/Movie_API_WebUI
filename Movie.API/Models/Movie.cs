@@ -16,7 +16,7 @@ public class Movie
 
     public string? ImageUrl { get; set; }
 
-    public string? ImageLocalPath { get; set; }
+    public string? ImageFileName { get; set; }
 
     public ICollection<Review> Reviews { get; set; } = new List<Review>();
 

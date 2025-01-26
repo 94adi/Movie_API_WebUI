@@ -14,7 +14,7 @@ public class MovieDto
 
     public string? ImageUrl { get; set; }
 
-    public string? ImageLocalPath { get; set; }
+    public string? ImageFileName { get; set; }
 
     public string? TrailerUrl { get; set; }
 

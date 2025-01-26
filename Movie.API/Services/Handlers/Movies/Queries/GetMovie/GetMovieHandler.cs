@@ -4,7 +4,6 @@
 
     public record GetMovieResult(Models.Dto.MovieDto MovieDto);
 
-
     internal class GetMovieHandler(IMovieService movieService,
         IMapper mapper)
         : IQueryHandler<GetMovieQuery, GetMovieResult>
@@ -17,6 +16,8 @@
             {
                 throw new NotFoundException("Item was not found");
             }
+
+            await movieService.AddPosterUrls(new List<Models.Movie> { result });
 
             var movieDto = mapper.Map<Models.Dto.MovieDto>(result);
 
