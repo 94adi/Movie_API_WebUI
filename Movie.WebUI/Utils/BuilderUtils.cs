@@ -7,7 +7,7 @@ public static class BuilderUtils
         environment = environment.ToLower();
         return environment switch
         {
-            "local" => "LocalApiConfig",
+            "development" => "LocalApiConfig",
             "azure" => "AzureApiConfig",
             _ => "LocalApiConfig"
         };
@@ -15,7 +15,7 @@ public static class BuilderUtils
 
     public static WebApplicationBuilder RegisterServices(this WebApplicationBuilder appBuilder)
     {
-        var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Local";
+        var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development";
         var apiConfigkey = GetAPIConfigKey(environment);
 
         appBuilder.Services.Configure<MovieApiConfig>(appBuilder.Configuration.GetSection(apiConfigkey));
