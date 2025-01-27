@@ -1,17 +1,14 @@
 ﻿namespace Movie.WebUI.Services;
 
-public class MovieService : IMovieService
+public class MovieService : BaseService, IMovieService
 {
     private readonly IBaseHttpService _httpService;
-    private readonly MovieAppConfig _appConfig;
-    private string _baseApiUri;
 
     public MovieService(IBaseHttpService httpService,
-        IOptions<MovieAppConfig> appConfig)
+        IOptions<MovieAppConfig> appConfig,
+        IOptions<MovieApiConfig> apiConfig) : base(apiConfig.Value, appConfig.Value)
     {
         _httpService = httpService;
-        _appConfig = appConfig.Value;
-        _baseApiUri = $"{_appConfig.MovieApiBase}{_appConfig.MovieApiVersion}";
     }
 
     public async Task<CreateMovieResultDto> CreateMovie(CreateMovieDto movieDto)

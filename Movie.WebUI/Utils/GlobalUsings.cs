@@ -28,3 +28,5 @@ global using Movie.WebUI.Models.ViewModel;
 global using Movie.WebUI.Services.Handlers.Reviews.Commands;
 global using Movie.WebUI.Services.Handlers.Reviews.Queries;
 global using Movie.WebUI.Services.Handlers.Ratings.Queries;
+global using Movie.WebUI.Extensions;
+global using Movie.WebUI.Utils;

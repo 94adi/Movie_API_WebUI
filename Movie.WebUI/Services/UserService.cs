@@ -1,22 +1,15 @@
 ﻿namespace Movie.WebUI.Services;
 
-public class UserService : IUserService
+public class UserService : BaseService, IUserService
 {
 
     private readonly IBaseHttpService _httpService;
-    private readonly MovieAppConfig _appConfig;
-    private readonly IHttpClientFactory _httpClientFactory;
-    private string _baseApiUri;
 
-    public UserService(IHttpClientFactory httpClientFactory,
-        IBaseHttpService httpService,
-        IOptions<MovieAppConfig> appConfig
-        )
+    public UserService(IBaseHttpService httpService,
+        IOptions<MovieAppConfig> appConfig,
+        IOptions<MovieApiConfig> apiConfig) : base(apiConfig.Value, appConfig.Value)
     {
         _httpService = httpService;
-        _appConfig = appConfig.Value;
-        _httpClientFactory = httpClientFactory;
-        _baseApiUri = $"{_appConfig.MovieApiBase}{_appConfig.MovieApiVersion}";
     }
 
     public async Task<T> LoginAsync<T>(LoginRequestDto loginRequest)

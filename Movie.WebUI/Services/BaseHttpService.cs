@@ -1,8 +1,7 @@
 ﻿namespace Movie.WebUI.Services;
 
-public class BaseHttpService : IBaseHttpService
+public class BaseHttpService : BaseService, IBaseHttpService
 {
-    private readonly MovieAppConfig _appConfig;
     private readonly IHttpClientFactory _httpClientFactory;
     private readonly ITokenProvider _tokenProvider;
     private readonly IHttpContextAccessor _contextAccessor;
@@ -11,12 +10,12 @@ public class BaseHttpService : IBaseHttpService
     public ApiResponse ResponseModel { get; set; }
 
     public BaseHttpService(IOptions<MovieAppConfig> movieAppConfig,
+        IOptions<MovieApiConfig> apiConfig,
         IHttpClientFactory httpClientFactory,
         ITokenProvider tokenProvider,
         IHttpContextAccessor contextAccessor,
-        IApiMessageRequestBuilder apiMessageRequestBuilder)
+        IApiMessageRequestBuilder apiMessageRequestBuilder) : base(apiConfig.Value, movieAppConfig.Value)
     {
-        _appConfig = movieAppConfig.Value;
         _httpClientFactory = httpClientFactory;
         _tokenProvider = tokenProvider;
         _contextAccessor = contextAccessor;
@@ -153,7 +152,7 @@ public class BaseHttpService : IBaseHttpService
         };
 
         message.Headers.Add("Accept", "application/json");
-        message.RequestUri = new Uri($"{_appConfig.MovieApiBase}{_appConfig.MovieApiVersion}{_appConfig.RefreshTokenPath}");
+        message.RequestUri = new Uri($"{_apiConfig.MovieApiBase}{_apiConfig.MovieApiVersion}{_appConfig.RefreshTokenPath}");
         message.Method = HttpMethod.Post;
         message.Content = new StringContent(JsonConvert.SerializeObject(token), 
             Encoding.UTF8, 

@@ -39,10 +39,10 @@ public static class Utilities
         return url;
     }
 
-    public static string GetDatabaseConnectionString(this WebApplicationBuilder builder, string env)
+    public static string GetDatabaseConnectionString(this WebApplicationBuilder builder, string environment)
     {
-        env = env.ToLower();
-        return env switch
+        environment = environment.ToLower();
+        return environment switch
         {
             "local" => builder.Configuration.GetConnectionString("Database"),
             "azure" => builder.Configuration["AzureDatabase:ConnectionString"],
