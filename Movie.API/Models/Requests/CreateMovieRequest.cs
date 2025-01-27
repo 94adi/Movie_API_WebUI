@@ -1,9 +1,7 @@
 ﻿namespace Movie.API.Models.Requests;
 
-public record CreateMovieRequest(string Title, 
-    float Rating, 
+public record CreateMovieRequest(string Title,
     string Description,
-    string ImageUrl,
     string SelectedGenres,
     IFormFile? Image,
     string TrailerUrl,

@@ -1,23 +1,22 @@
-﻿namespace Movie.WebUI.Services;
+﻿using Microsoft.Identity.Client;
+
+namespace Movie.WebUI.Services;
 
 public record GetGenresResult(IEnumerable<GenreDto> Genres);
 
-public class GenreService : IGenreService
+public class GenreService : BaseService, IGenreService
 {
 
     private readonly IBaseHttpService _baseHttpService;
     private readonly IHttpClientFactory _httpClientFactory;
-    private readonly MovieAppConfig _movieAppConfig;
-    private string _baseApiUri;
 
     public GenreService(IBaseHttpService baseHttpService,
         IHttpClientFactory httpClientFactory,
-        IOptions<MovieAppConfig> movieAppConfig)
+        IOptions<MovieAppConfig> movieAppConfig,
+        IOptions<MovieApiConfig> apiConfig) : base(apiConfig.Value, movieAppConfig.Value)
     {
         _baseHttpService = baseHttpService;
         _httpClientFactory = httpClientFactory;
-        _movieAppConfig = movieAppConfig.Value;
-        _baseApiUri = $"{_movieAppConfig.MovieApiBase}{_movieAppConfig.MovieApiVersion}";
     }
 
     public async Task<GetGenresResult> GetGenres()
@@ -26,7 +25,7 @@ public class GenreService : IGenreService
         {
             ApiType = ApiType.GET,
             Data = { },
-            Url = $"{_baseApiUri}{_movieAppConfig.GetAllGenres}",
+            Url = $"{_baseApiUri}{_appConfig.GetAllGenres}",
             ContentType = ContentType.Json
         };
 

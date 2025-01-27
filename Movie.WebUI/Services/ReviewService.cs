@@ -1,17 +1,14 @@
 ﻿namespace Movie.WebUI.Services;
 
-public class ReviewService : IReviewService
+public class ReviewService : BaseService, IReviewService
 {
     private readonly IBaseHttpService _httpService;
-    private readonly MovieAppConfig _movieAppConfig;
-    private string _baseApiUri;
 
     public ReviewService(IBaseHttpService httpService,
-        IOptions<MovieAppConfig> movieAppConfigOptions)
+        IOptions<MovieAppConfig> movieAppConfig,
+        IOptions<MovieApiConfig> apiConfig) : base(apiConfig.Value, movieAppConfig.Value)
     {
         _httpService = httpService;
-        _movieAppConfig = movieAppConfigOptions.Value;
-        _baseApiUri = $"{_movieAppConfig.MovieApiBase}{_movieAppConfig.MovieApiVersion}";
     }
 
     public async Task<CreateReviewResultDto> AddReview(UpsertReviewDto reviewDto)
@@ -20,7 +17,7 @@ public class ReviewService : IReviewService
         {
             ApiType = ApiType.POST,
             Data = reviewDto,
-            Url = $"{_baseApiUri}{_movieAppConfig.AddMovieReviewPath}",
+            Url = $"{_baseApiUri}{_appConfig.AddMovieReviewPath}",
             ContentType = ContentType.MultipartFormData
         };
 
@@ -45,7 +42,7 @@ public class ReviewService : IReviewService
                                                                     int pageNumber,
                                                                     int pageSize)
     {
-        var url = _movieAppConfig.GetMovieReviewsPath
+        var url = _appConfig.GetMovieReviewsPath
                     .Replace(oldValue: "{movieId}", newValue: Convert.ToString(movieId));
 
         var request = new ApiRequest
@@ -76,7 +73,7 @@ public class ReviewService : IReviewService
 
     public async Task<GetMovieReviewsCountResultDto> GetMovieReviewsCount(int movieId)
     {
-        var url = _movieAppConfig.GetMovieReviewsCountPath.Replace(oldValue: "{movieId}", 
+        var url = _appConfig.GetMovieReviewsCountPath.Replace(oldValue: "{movieId}", 
             newValue: Convert.ToString(movieId));
 
         var request = new ApiRequest
@@ -105,7 +102,7 @@ public class ReviewService : IReviewService
 
     public async Task<GetMovieRatingByUserResultDto> GetMovieRatingByUser(int movieId)
     {
-        var url = _movieAppConfig.GetMovieRatingByUserPath
+        var url = _appConfig.GetMovieRatingByUserPath
                         .Replace(oldValue: "{movieId}", newValue: Convert.ToString(movieId));
 
         var request = new ApiRequest
@@ -137,7 +134,7 @@ public class ReviewService : IReviewService
 
     public async Task<GetReviewByIdResultDto> GetReviewById(int reviewId)
     {
-        var url = _movieAppConfig.GetReviewByIdPath
+        var url = _appConfig.GetReviewByIdPath
                 .Replace(oldValue: "{id}", newValue: Convert.ToString(reviewId));
 
         var request = new ApiRequest
@@ -168,7 +165,7 @@ public class ReviewService : IReviewService
 
     public async Task<GetUserMovieReviewResultDto> GetUserMovieReview(int movieId, string userId)
     {
-        var url = _movieAppConfig.GetUserMovieReviewPath
+        var url = _appConfig.GetUserMovieReviewPath
                     .Replace(oldValue: "{movieId}", newValue: Convert.ToString(movieId))
                     .Replace(oldValue: "{userId}", newValue: userId);
 
@@ -201,7 +198,7 @@ public class ReviewService : IReviewService
 
     public async Task<UpdateReviewResultDto> UpdateReview(UpdateReviewDto updateReviewDto)
     {
-        var url = _movieAppConfig.UpdateReviewPath;
+        var url = _appConfig.UpdateReviewPath;
 
         var request = new ApiRequest
         {
