@@ -10,6 +10,7 @@ public class UpdateMovieCommandHandler(IMovieService movieService)
     public async Task<UpdateMovieResult> Handle(UpdateMovieCommand command, 
         CancellationToken cancellationToken)
     {
+        command.Movie.LatestUpdateDate = DateTime.UtcNow;
         var result = await movieService.UpdateMovie(command.Movie);
 
         return new UpdateMovieResult(result.IsSuccess);

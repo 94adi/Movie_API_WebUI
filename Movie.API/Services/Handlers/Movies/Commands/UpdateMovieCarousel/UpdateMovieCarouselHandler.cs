@@ -5,6 +5,14 @@ public record UpdateMovieCarouselCommand(IEnumerable<string> movieIds)
 
 public record UpdateMovieCarouselResult(bool IsSuccess);
 
+public class UpdateMovieCarouselCommandValidator : AbstractValidator<UpdateMovieCarouselCommand>
+{
+    public UpdateMovieCarouselCommandValidator()
+    {
+        RuleFor(m => m.movieIds).NotEmpty().WithMessage("Movie ids collection must not be empty");
+    }
+}
+
 public class UpdateMovieCarouselCommandHandler(IMovieCarouselRepository movieCarouselRepo)
     : ICommandHandler<UpdateMovieCarouselCommand, UpdateMovieCarouselResult>
 {

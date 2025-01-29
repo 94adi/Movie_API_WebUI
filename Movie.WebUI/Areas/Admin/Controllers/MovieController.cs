@@ -1,5 +1,6 @@
 ﻿using Movie.WebUI.Models.ViewModel;
 using Movie.WebUI.Services.Handlers.Genres.Queries;
+using System.Reflection;
 
 namespace Movie.WebUI.Areas.Admin.Controllers;
 
@@ -55,9 +56,20 @@ public class MovieController : Controller
 
             if (result.IsSuccess)
             {
+                TempData["success"] = $"The movie {model.MovieDto.Title} was created successfully";
                 return RedirectToAction("Index", "Movie");
             }
         }
+
+        var genreQueryResult = await _sender.Send(new GetAllGenresQuery());
+
+        model.GenreOptions = genreQueryResult.GenreDtos.Select(g => new SelectListItem
+        {
+            Value = g.Id.ToString(),
+            Text = g.Name,
+        }).ToList();
+
+        TempData["error"] = "Error encountered";
 
         return View(model);
     }
@@ -79,15 +91,15 @@ public class MovieController : Controller
 
             var resultGenres = await _sender.Send(allGenresQuery);
 
-            var slelectedOptionIds = updateMovieDto?.Genres?.Select(g => g.Id);
+            var selectedOptionIds = updateMovieDto?.Genres?.Select(g => g.Id);
 
-            bool hasSelectedGenres = ((slelectedOptionIds != null) && (slelectedOptionIds.Count() > 0));
+            bool hasSelectedGenres = ((selectedOptionIds != null) && (selectedOptionIds.Count() > 0));
 
             updateMovieVM.GenreOptions = resultGenres.GenreDtos.Select(g => new SelectListItem
             {
                 Value = g.Id.ToString(),
                 Text = g.Name,
-                Selected = hasSelectedGenres ? slelectedOptionIds.Contains(g.Id) : false
+                Selected = hasSelectedGenres ? selectedOptionIds.Contains(g.Id) : false
             }).ToList();
 
             return View(updateMovieVM);
@@ -185,6 +197,9 @@ public class MovieController : Controller
         {
             var command = new UpdateMovieCarouselCommand(carouselItemVM.SelectedMovieOptions);
             var result = await _sender.Send(command);
+
+            TempData["success"] = $"Carousel movies selected successfully";
+
             return RedirectToAction(nameof(Index));
         }
 
@@ -197,6 +212,8 @@ public class MovieController : Controller
             Text = m.Title,
             Value = Convert.ToString(m.Id)
         }).ToList();
+
+        TempData["error"] = "Error encountered";
 
         return View(carouselItemVM);
     }

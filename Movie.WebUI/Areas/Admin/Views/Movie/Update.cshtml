@@ -7,7 +7,6 @@
         <hr />
 
         <input hidden asp-for=@Model.MovieDto.Id />
-        <input hidden asp-for=@Model.MovieDto.CreatedDate />
         <div class="row">
             <div class="col-10">
                 <div class="row">
@@ -38,7 +37,7 @@
                     </div>
 
                     <div class="col-2">
-                        <label asp-for=@Model.GenreOptions class="control-label white-label form-label-size pt-2"></label>
+                        <label asp-for=@Model.MovieDto.SelectedGenres class="control-label white-label form-label-size pt-2"></label>
                     </div>
                     <div class="col-10 pb-3">
                         <select asp-for="@Model.MovieDto.SelectedGenres"
@@ -55,7 +54,6 @@
                     <div class="col-10 pb-3">
                         <input asp-for=@Model.MovieDto.Image class="form-control" />
                         <input asp-for=@Model.MovieDto.ImageUrl hidden class="form-control" />
-                        <input asp-for=@Model.MovieDto.ImageLocalPath hidden class="form-control" />
                         <span asp-validation-for=@Model.MovieDto.Image class="text-danger"></span>
                     </div>
 

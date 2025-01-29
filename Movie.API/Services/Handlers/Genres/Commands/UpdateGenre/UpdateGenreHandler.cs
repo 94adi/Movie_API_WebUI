@@ -4,6 +4,14 @@ public record UpdateGenreCommand(int Id, string Name) : ICommand<UpdateGenreResu
 
 public record UpdateGenreResult(bool IsSuccess, string ErrorMessage);
 
+public class UpdateGenreCommandValidator : AbstractValidator<UpdateGenreCommand>
+{
+    public UpdateGenreCommandValidator()
+    {
+        RuleFor(g => g.Name).NotEmpty().WithMessage("Genre name is required");
+    }
+}
+
 internal class UpdateGenreHandler(IGenreRepository repository,
     IMapper mapper) :
     ICommandHandler<UpdateGenreCommand, UpdateGenreResult>

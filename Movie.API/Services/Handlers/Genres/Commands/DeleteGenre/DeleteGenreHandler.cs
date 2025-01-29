@@ -4,6 +4,14 @@ public record DeleteGenreCommand(int Id) : ICommand<DeleteGenreResult>;
 
 public record DeleteGenreResult(bool IsSuccess, string ErrorMessage);
 
+public class DeleteGenreCommandValidator : AbstractValidator<DeleteGenreCommand>
+{
+    public DeleteGenreCommandValidator()
+    {
+        RuleFor(g => g.Id).NotEmpty().WithMessage("Genre Id must not be empty");
+    }
+}
+
 internal class DeleteGenreCommandHandler(IGenreRepository repository)
     : ICommandHandler<DeleteGenreCommand, DeleteGenreResult>
 {

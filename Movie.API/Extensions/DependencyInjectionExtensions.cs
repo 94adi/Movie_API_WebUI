@@ -4,7 +4,7 @@ public static class DependencyInjectionExtensions
 {
     public static WebApplicationBuilder RegisterServices(this WebApplicationBuilder appBuilder)
     {
-        var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Local";
+        var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development";
 
         string connectionString = appBuilder.GetDatabaseConnectionString(environment);
 
