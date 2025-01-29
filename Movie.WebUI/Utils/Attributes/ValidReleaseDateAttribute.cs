@@ -4,11 +4,12 @@ public class ValidReleaseDateAttribute : ValidationAttribute
 {
     protected override ValidationResult IsValid(object value, ValidationContext validationContext)
     {
-        if (value is DateTime releaseDate)
+        if (value is DateOnly releaseDate)
         {
-            if (releaseDate > DateTime.Now)
+            if (releaseDate > DateOnly.FromDateTime(DateTime.Now))
             {
-                return new ValidationResult("Please enter a valid release date");
+                return new ValidationResult(
+                    $"Please enter a release date before {DateOnly.FromDateTime(DateTime.Now.AddDays(1))}");
             }
         }
         return ValidationResult.Success;

@@ -12,13 +12,17 @@ public class CreateMovieCommandValidator : AbstractValidator<CreateMovieCommand>
 {
     public CreateMovieCommandValidator()
     {
-        RuleFor(m => m.Title).NotEmpty().WithMessage("Title is required");
+        RuleFor(m => m.Title)
+            .NotEmpty()
+            .WithMessage("Title is required");
 
         RuleFor(m => m.Description)
+            .NotEmpty()
             .MaximumLength(1000)
             .WithMessage("Description must not exceed 1000 characters");
 
-        RuleFor(m => m.ReleaseDate).NotEmpty()
+        RuleFor(m => m.ReleaseDate)
+            .NotEmpty()
             .LessThanOrEqualTo(DateOnly.FromDateTime(DateTime.Now))
             .WithMessage("Please enter a valid release date");
     }

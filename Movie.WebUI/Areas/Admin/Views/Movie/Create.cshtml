@@ -37,7 +37,7 @@
             </div>
 
             <div class="col-2">
-                <label asp-for=@Model.GenreOptions class="control-label white-label form-label-size pt-2">
+                <label asp-for=@Model.MovieDto.SelectedGenres class="control-label white-label form-label-size pt-2">
                 </label>
             </div>
             <div class="col-10 pb-3">
@@ -45,11 +45,13 @@
                     asp-items=@Model.GenreOptions 
                     class="form-control" 
                     multiple="multiple">
-                    @foreach(var genre in Model.GenreOptions)
+                    @if (Model.GenreOptions != null)
                     {
-                        <option value="@genre.Value">@genre.Text</option>
+                        @foreach (var genre in Model.GenreOptions)
+                        {
+                            <option value="@genre.Value">@genre.Text</option>
+                        }
                     }
-
                 </select>
             </div>
 

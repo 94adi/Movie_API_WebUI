@@ -1,4 +1,5 @@
 ﻿using Movie.WebUI.Utils;
+using System.Reflection;
 
 namespace Movie.WebUI.Controllers;
 
@@ -120,10 +121,12 @@ public class MovieController(ISender sender,
 
             if (isReviewSubmitted && resultRateMovie.IsSuccess)
             {
+                TempData["success"] = $"The review was submitted successfully";
                 return RedirectToAction("Details", "Movie", new { id = viewModel.ReviewDto.MovieId });
             }
             else
             {
+                TempData["error"] = "Error encountered";
                 ModelState.AddModelError("Review", "Could not submit review");
             }
         }

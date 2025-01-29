@@ -5,6 +5,20 @@ public record AddGenresToMovieCommand(List<int> GenreIds, int MovieId, bool IsUp
 
 public record AddGenresToMovieResult(bool IsSucces);
 
+public class AddGenresToMovieCommandValidator : AbstractValidator<AddGenresToMovieCommand>
+{
+    public AddGenresToMovieCommandValidator()
+    {
+        RuleFor(g => g.GenreIds)
+            .NotEmpty()
+            .WithMessage("Genres collection must not be empty");
+
+        RuleFor(g => g.MovieId)
+            .NotEmpty()
+            .WithMessage("MovieId is required");
+    }
+}
+
 internal class AddGenresToMovieCommandHandler(IMovieService movieService)
     : ICommandHandler<AddGenresToMovieCommand, AddGenresToMovieResult>
 {
