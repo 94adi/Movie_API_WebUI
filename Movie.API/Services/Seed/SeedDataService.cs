@@ -6,7 +6,8 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
         IGenreRepository genreRepo,
         IMovieGenreRepository movieGenreRepo,
         IMovieCarouselRepository movieCarouselRepo,
-        IReviewRepository reviewRepository
+        IReviewRepository reviewRepository,
+        IOptions<UserPasswordSecrets> userPasswordSecretsOptions
         ) : ISeedDataService
 {
 
@@ -37,7 +38,9 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
                 EmailConfirmed = true,
                 RegisteredOn = DateTime.UtcNow
             }
-        }, isAdmin: true);
+        }, 
+        password: userPasswordSecretsOptions.Value.Admin, 
+        isAdmin: true);
 
         await AddSeedUsers(new List<ApplicationUser>
         {
@@ -49,7 +52,7 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
                 RegisteredOn = DateTime.UtcNow
             }
         },
-        password: "u$3rp@s$w0rD",
+        password: userPasswordSecretsOptions.Value.User,
         isAdmin: false);
 
         var creatorUser = await userManager.FindByEmailAsync("creator@admin.com");
@@ -106,6 +109,7 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
             Description = "A beautiful movie about hope and friendship",
             ImageUrl = url + "/LocalPosters/shawshank.jpg",
             ImageFileName = "shawshank.jpg",
+            TrailerUrl = "https://www.youtube.com/watch?v=PLl99DlL6b4",
             ReleaseDate = new DateOnly(1994, 2, 12),
             CreatedDate = DateTime.Now
         };
@@ -116,6 +120,7 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
             Description = "A modern horror masterpiece",
             ImageUrl = url + "/LocalPosters/the_shining.jpg",
             ImageFileName = "the_shining.jpg",
+            TrailerUrl = "https://www.youtube.com/watch?v=FZQvIJxG9Xs",
             ReleaseDate = new DateOnly(1980, 5, 8),
             CreatedDate = DateTime.Now
         };
@@ -126,6 +131,7 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
             Description = "A mind-bending thriller",
             ImageUrl = url + "/LocalPosters/default.jpg",
             ImageFileName = "default.jpg",
+            TrailerUrl = "https://www.youtube.com/watch?v=hstBN0Qkqhc",
             ReleaseDate = new DateOnly(2010, 7, 16),
             CreatedDate = DateTime.Now
         };
@@ -136,6 +142,7 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
             Description = "A cult classic crime film",
             ImageUrl = url + "/LocalPosters/default.jpg",
             ImageFileName = "default.jpg",
+            TrailerUrl = "https://www.youtube.com/watch?v=s7EdQ4FqbhY",
             ReleaseDate = new DateOnly(1994, 10, 14),
             CreatedDate = DateTime.Now
         };
@@ -146,6 +153,7 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
             Description = "An iconic mafia drama",
             ImageUrl = url + "/LocalPosters/default.jpg",
             ImageFileName = "default.jpg",
+            TrailerUrl = "https://www.youtube.com/watch?v=UaVTIH8mujA",
             ReleaseDate = new DateOnly(1972, 3, 24),
             CreatedDate = DateTime.Now
         };
@@ -156,6 +164,7 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
             Description = "A sci-fi epic exploring space and time",
             ImageUrl = url + "/LocalPosters/default.jpg",
             ImageFileName = "default.jpg",
+            TrailerUrl = "https://www.youtube.com/watch?v=zSWdZVtXT7E",
             ReleaseDate = new DateOnly(2014, 11, 7),
             CreatedDate = DateTime.Now
         };
@@ -166,6 +175,7 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
             Description = "A psychological drama with a twist",
             ImageUrl = url + "/LocalPosters/default.jpg",
             ImageFileName = "default.jpg",
+            TrailerUrl = "https://www.youtube.com/watch?v=qtRKdVHc-cE",
             ReleaseDate = new DateOnly(1999, 10, 15),
             CreatedDate = DateTime.Now
         };
@@ -176,6 +186,7 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
             Description = "A gritty superhero epic",
             ImageUrl = url + "/LocalPosters/default.jpg",
             ImageFileName = "default.jpg",
+            TrailerUrl = "https://www.youtube.com/watch?v=EXeTwQWrcwY",
             ReleaseDate = new DateOnly(2008, 7, 18),
             CreatedDate = DateTime.Now
         };
@@ -186,6 +197,7 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
             Description = "A heartwarming journey through history",
             ImageUrl = url + "/LocalPosters/default.jpg",
             ImageFileName = "default.jpg",
+            TrailerUrl = "https://www.youtube.com/watch?v=bLvqoHBptjg",
             ReleaseDate = new DateOnly(1994, 7, 6),
             CreatedDate = DateTime.Now
         };
@@ -196,6 +208,7 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
             Description = "A revolutionary sci-fi action film",
             ImageUrl = url + "/LocalPosters/default.jpg",
             ImageFileName = "default.jpg",
+            TrailerUrl = "https://www.youtube.com/watch?v=vKQi3bBA1y8",
             ReleaseDate = new DateOnly(1999, 3, 31),
             CreatedDate = DateTime.Now
         };
@@ -206,6 +219,7 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
             Description = "A gripping mob drama",
             ImageUrl = url + "/LocalPosters/default.jpg",
             ImageFileName = "default.jpg",
+            TrailerUrl = "https://www.youtube.com/watch?v=2ilzidi_J8Q",
             ReleaseDate = new DateOnly(1990, 9, 19),
             CreatedDate = DateTime.Now
         };
@@ -216,6 +230,7 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
             Description = "A powerful Holocaust drama",
             ImageUrl = url + "/LocalPosters/default.jpg",
             ImageFileName = "default.jpg",
+            TrailerUrl = "https://www.youtube.com/watch?v=gG22XNhtnoY",
             ReleaseDate = new DateOnly(1993, 12, 15),
             CreatedDate = DateTime.Now
         };
@@ -466,7 +481,7 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
     }
 
     private async Task AddSeedUsers(IEnumerable<ApplicationUser> users,
-        string password = "$upper@dm1nPwd",
+        string password,
         bool isAdmin = false)
     {
         foreach (var user in users)

@@ -8,6 +8,14 @@ builder.RegisterServices();
 
 var app = builder.Build();
 
+var isConverted = bool.TryParse(builder.Configuration["Settings:DeleteDatabaseOnBuild"], 
+    out bool isDeleteDatabase);
+
+if (isConverted && isDeleteDatabase)
+{
+    app.DeleteDatabase();
+}
+
 app.ApplyMigration().GetAwaiter().GetResult();
 app.SeedDatabase().GetAwaiter().GetResult();
 

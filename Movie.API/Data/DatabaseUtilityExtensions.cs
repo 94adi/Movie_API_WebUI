@@ -23,4 +23,13 @@ public static class DatabaseUtilityExtensions
 
         await serviceSeed.SeedAsync();
     }
+
+    public static void DeleteDatabase(this WebApplication app)
+    {
+        using var scope = app.Services.CreateScope();
+
+        var serviceSeed = scope.ServiceProvider.GetRequiredService<IDatabaseService>();
+
+         serviceSeed.DropAllTables();
+    }
 }

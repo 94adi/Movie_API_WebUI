@@ -46,6 +46,7 @@ public static class DependencyInjectionExtensions
         appBuilder.Services.AddScoped<ITokenService, TokenService>();
         appBuilder.Services.AddScoped<IUserRepository, UserRepository>();
         appBuilder.Services.AddScoped<ISeedDataService, SeedDataService>();
+        appBuilder.Services.AddScoped<IDatabaseService, DatabaseService>();
         appBuilder.Services.AddScoped<IUserService, UserService>();
         appBuilder.Services.AddScoped<IMovieService, MovieService>();
         appBuilder.Services.AddScoped<IReviewRepository, ReviewRepository>();
