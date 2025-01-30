@@ -44,7 +44,8 @@ public class FileShareService : IFileShareService
 
     public string GenerateFileUrl(string fileName, TimeSpan expirationTime)
     {
-        string defaultImage = "https://placehold.co/600x400";
+        string appUrl = Utilities.GetAppUrl();
+        string defaultImage = $"{appUrl}/LocalPosters/default.jpg";
 
         if (string.IsNullOrEmpty(fileName))
         {
@@ -52,21 +53,32 @@ public class FileShareService : IFileShareService
         }
 
         try
-        {
-            var rootDirectory = _shareClient.GetRootDirectoryClient();
-            var fileClient = rootDirectory.GetFileClient(fileName);
+        {          
+            var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT").ToLower();
 
-            var sasUri = fileClient.GenerateSasUri(
-            ShareFileSasPermissions.Read,
-            DateTimeOffset.UtcNow.Add(expirationTime)
-            ).ToString();
-
-            if (string.IsNullOrEmpty(sasUri))
+            if (env == EnvironmentsHelper.LOCAL)
             {
-                return defaultImage;
-            }
+                string url = $"{appUrl}/LocalPosters/{fileName}";
 
-            return sasUri;
+                return url;
+            }
+            else if(env == EnvironmentsHelper.AZURE)
+            {
+                var rootDirectory = _shareClient.GetRootDirectoryClient();
+                var fileClient = rootDirectory.GetFileClient(fileName);
+
+                var sasUri = fileClient.GenerateSasUri(
+                    ShareFileSasPermissions.Read,
+                    DateTimeOffset.UtcNow.Add(expirationTime)
+                    ).ToString();
+
+                if (string.IsNullOrEmpty(sasUri))
+                {
+                    return defaultImage;
+                }
+
+                return sasUri;
+            }
         }
         catch(Exception e)
         {

@@ -76,7 +76,7 @@ public class MovieService : IMovieService
         {
             //TO DO: store in cache and verify if exists before calling
             movie.ImageUrl = _fileShareService.GenerateFileUrl(movie.ImageFileName, 
-                new TimeSpan(1, 0, 0));
+                new TimeSpan(1,0,0,0));
         }
     }
 

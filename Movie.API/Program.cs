@@ -8,15 +8,8 @@ builder.RegisterServices();
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-    app.ApplyMigration().GetAwaiter().GetResult();
-    app.SeedDatabase().GetAwaiter().GetResult();
-}
-else
-{
-    app.ApplyMigration().GetAwaiter().GetResult();
-}
+app.ApplyMigration().GetAwaiter().GetResult();
+app.SeedDatabase().GetAwaiter().GetResult();
 
 app.UseHttpsRedirection();
 

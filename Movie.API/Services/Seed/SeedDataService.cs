@@ -12,7 +12,7 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
 
     public async Task SeedAsync()
     {
-        var url = Utilities.GetAppUrl();
+        string url = Utilities.GetAppUrl();
 
         await AddSeedRoles(new List<IdentityRole>
         {
@@ -20,6 +20,7 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
             new IdentityRole(StaticDetails.userRolesDict[UserRoles.ADMIN])
         });
 
+        //store passwords [admin/user] in azure secrets vault
         await AddSeedUsers(new List<ApplicationUser>
         {
             new ApplicationUser
@@ -103,6 +104,8 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
         {
             Title = "The Shawshank Redemption",
             Description = "A beautiful movie about hope and friendship",
+            ImageUrl = url + "/LocalPosters/shawshank.jpg",
+            ImageFileName = "shawshank.jpg",
             ReleaseDate = new DateOnly(1994, 2, 12),
             CreatedDate = DateTime.Now
         };
@@ -111,6 +114,8 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
         {
             Title = "The Shining",
             Description = "A modern horror masterpiece",
+            ImageUrl = url + "/LocalPosters/the_shining.jpg",
+            ImageFileName = "the_shining.jpg",
             ReleaseDate = new DateOnly(1980, 5, 8),
             CreatedDate = DateTime.Now
         };
@@ -119,6 +124,8 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
         {
             Title = "Inception",
             Description = "A mind-bending thriller",
+            ImageUrl = url + "/LocalPosters/default.jpg",
+            ImageFileName = "default.jpg",
             ReleaseDate = new DateOnly(2010, 7, 16),
             CreatedDate = DateTime.Now
         };
@@ -127,6 +134,8 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
         {
             Title = "Pulp Fiction",
             Description = "A cult classic crime film",
+            ImageUrl = url + "/LocalPosters/default.jpg",
+            ImageFileName = "default.jpg",
             ReleaseDate = new DateOnly(1994, 10, 14),
             CreatedDate = DateTime.Now
         };
@@ -135,6 +144,8 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
         {
             Title = "The Godfather",
             Description = "An iconic mafia drama",
+            ImageUrl = url + "/LocalPosters/default.jpg",
+            ImageFileName = "default.jpg",
             ReleaseDate = new DateOnly(1972, 3, 24),
             CreatedDate = DateTime.Now
         };
@@ -143,6 +154,8 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
         {
             Title = "Interstellar",
             Description = "A sci-fi epic exploring space and time",
+            ImageUrl = url + "/LocalPosters/default.jpg",
+            ImageFileName = "default.jpg",
             ReleaseDate = new DateOnly(2014, 11, 7),
             CreatedDate = DateTime.Now
         };
@@ -151,6 +164,8 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
         {
             Title = "Fight Club",
             Description = "A psychological drama with a twist",
+            ImageUrl = url + "/LocalPosters/default.jpg",
+            ImageFileName = "default.jpg",
             ReleaseDate = new DateOnly(1999, 10, 15),
             CreatedDate = DateTime.Now
         };
@@ -159,6 +174,8 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
         {
             Title = "The Dark Knight",
             Description = "A gritty superhero epic",
+            ImageUrl = url + "/LocalPosters/default.jpg",
+            ImageFileName = "default.jpg",
             ReleaseDate = new DateOnly(2008, 7, 18),
             CreatedDate = DateTime.Now
         };
@@ -167,6 +184,8 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
         {
             Title = "Forrest Gump",
             Description = "A heartwarming journey through history",
+            ImageUrl = url + "/LocalPosters/default.jpg",
+            ImageFileName = "default.jpg",
             ReleaseDate = new DateOnly(1994, 7, 6),
             CreatedDate = DateTime.Now
         };
@@ -175,6 +194,8 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
         {
             Title = "The Matrix",
             Description = "A revolutionary sci-fi action film",
+            ImageUrl = url + "/LocalPosters/default.jpg",
+            ImageFileName = "default.jpg",
             ReleaseDate = new DateOnly(1999, 3, 31),
             CreatedDate = DateTime.Now
         };
@@ -183,6 +204,8 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
         {
             Title = "Goodfellas",
             Description = "A gripping mob drama",
+            ImageUrl = url + "/LocalPosters/default.jpg",
+            ImageFileName = "default.jpg",
             ReleaseDate = new DateOnly(1990, 9, 19),
             CreatedDate = DateTime.Now
         };
@@ -191,6 +214,8 @@ public class SeedDataService(UserManager<ApplicationUser> userManager,
         {
             Title = "Schindler's List",
             Description = "A powerful Holocaust drama",
+            ImageUrl = url + "/LocalPosters/default.jpg",
+            ImageFileName = "default.jpg",
             ReleaseDate = new DateOnly(1993, 12, 15),
             CreatedDate = DateTime.Now
         };
