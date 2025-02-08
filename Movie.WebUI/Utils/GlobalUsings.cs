@@ -30,3 +30,5 @@ global using Movie.WebUI.Services.Handlers.Reviews.Queries;
 global using Movie.WebUI.Services.Handlers.Ratings.Queries;
 global using Movie.WebUI.Extensions;
 global using Movie.WebUI.Utils;
+global using Movie.BuildingBlocks.Models;
+global using Movie.WebUI.Middleware;

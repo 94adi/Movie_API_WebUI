@@ -80,32 +80,32 @@ public class MovieController : Controller
 		var query = new GetMovieByIdQuery(movieId);
         var result = await _sender.Send(query);
 
-        if(result != null && result.Movie != null)
+        if(result == null || result.Movie == null)
         {
-            var updateMovieDto = _mapper.Map<UpdateMovieDto>(result.Movie);
-            var updateMovieVM = new UpdateMovieVM();
+            return NotFound();
+        }
 
-            updateMovieVM.MovieDto = updateMovieDto;
+        var updateMovieDto = _mapper.Map<UpdateMovieDto>(result.Movie);
+        var updateMovieVM = new UpdateMovieVM();
 
-            var allGenresQuery = new GetAllGenresQuery();
+        updateMovieVM.MovieDto = updateMovieDto;
 
-            var resultGenres = await _sender.Send(allGenresQuery);
+        var allGenresQuery = new GetAllGenresQuery();
 
-            var selectedOptionIds = updateMovieDto?.Genres?.Select(g => g.Id);
+        var resultGenres = await _sender.Send(allGenresQuery);
 
-            bool hasSelectedGenres = ((selectedOptionIds != null) && (selectedOptionIds.Count() > 0));
+        var selectedOptionIds = updateMovieDto?.Genres?.Select(g => g.Id);
 
-            updateMovieVM.GenreOptions = resultGenres.GenreDtos.Select(g => new SelectListItem
-            {
-                Value = g.Id.ToString(),
-                Text = g.Name,
-                Selected = hasSelectedGenres ? selectedOptionIds.Contains(g.Id) : false
-            }).ToList();
+        bool hasSelectedGenres = ((selectedOptionIds != null) && (selectedOptionIds.Count() > 0));
 
-            return View(updateMovieVM);
-		}
+        updateMovieVM.GenreOptions = resultGenres.GenreDtos.Select(g => new SelectListItem
+        {
+            Value = g.Id.ToString(),
+            Text = g.Name,
+            Selected = hasSelectedGenres ? selectedOptionIds.Contains(g.Id) : false
+        }).ToList();
 
-        return RedirectToAction("Index", "Movie");
+        return View(updateMovieVM);
     }
 
     [HttpPost]
@@ -124,7 +124,7 @@ public class MovieController : Controller
                 return RedirectToAction(nameof(Index));
             }
         }
-        TempData["error"] = "Error encountered";
+        TempData["error"] = "Movie could not be updated";
         return View(model);
     }
 
@@ -198,9 +198,15 @@ public class MovieController : Controller
             var command = new UpdateMovieCarouselCommand(carouselItemVM.SelectedMovieOptions);
             var result = await _sender.Send(command);
 
-            TempData["success"] = $"Carousel movies selected successfully";
-
-            return RedirectToAction(nameof(Index));
+            if (result.IsSuccess)
+            {
+                TempData["success"] = $"Carousel movies selected successfully";
+            }
+            else
+            {
+                TempData["error"] = "Error encountered";
+            }
+            return RedirectToAction(nameof(CarouselMovies));
         }
 
         var allMoviesQueryResult = await _sender.Send(new GetAllMoviesQuery());

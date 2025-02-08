@@ -20,7 +20,16 @@ public static class DependencyInjectionExtensions
             });
         });
 
-        appBuilder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+        appBuilder.Services.AddIdentity<ApplicationUser, IdentityRole>(opt =>
+        {
+            opt.Password.RequireDigit = true;
+            opt.Password.RequireUppercase = true;
+            opt.Password.RequireLowercase = true;
+            opt.Password.RequireNonAlphanumeric = false;
+            opt.Password.RequiredLength = 10;
+            opt.Lockout.MaxFailedAccessAttempts = 3;
+            opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
+        })
             .AddEntityFrameworkStores<ApplicationDbContext>();
 
         appBuilder.Services.AddControllers();

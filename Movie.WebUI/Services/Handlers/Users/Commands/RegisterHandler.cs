@@ -1,4 +1,7 @@
-﻿namespace Movie.WebUI.Services.Handlers.Users.Commands;
+﻿using FluentValidation;
+
+
+namespace Movie.WebUI.Services.Handlers.Users.Commands;
 
 public class RegisterCommand : ICommand<RegisterResult>
 {
@@ -8,7 +11,7 @@ public class RegisterCommand : ICommand<RegisterResult>
     public string Role { get; set; }
 }
 
-public record RegisterResult(bool IsSuccess, List<string> ErrorMessages);
+public record RegisterResult(bool IsSuccess, List<string>? ErrorMessages);
 
 public class RegisterHandler(IUserService authService,
     IMapper mapper) 
@@ -24,8 +27,8 @@ public class RegisterHandler(IUserService authService,
 
         var apiRequest = mapper.Map<RegisterationRequestDto>(command);
 
-        var result = await authService.RegisterAsync<ApiResponse>(apiRequest);
+        var result = await authService.RegisterAsync<APIResponse>(apiRequest);
 
-        return new RegisterResult(result.IsSuccess, result.ErrorMessages);
+        return new RegisterResult(result.IsSuccess, result.Errors);
     }
 }

@@ -57,10 +57,10 @@ public class UserController : Controller
 
         if (result.IsSuccess)
         {
-            return RedirectToAction("Index", "Home", new { area = "" });
+            return RedirectToAction(nameof(RegistrationSuccessful));
         }
 
-        if (result.ErrorMessages.Count() > 0)
+        if (result.ErrorMessages?.Count() > 0)
         {
             foreach (var error in result.ErrorMessages)
             {
@@ -69,6 +69,12 @@ public class UserController : Controller
         }
 
         ViewBag.RoleList = LoadUserRoles();
+        return View();
+    }
+
+    [HttpGet]
+    public IActionResult RegistrationSuccessful()
+    {
         return View();
     }
 

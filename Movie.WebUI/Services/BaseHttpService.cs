@@ -7,7 +7,7 @@ public class BaseHttpService : BaseService, IBaseHttpService
     private readonly IHttpContextAccessor _contextAccessor;
     private readonly IApiMessageRequestBuilder _apiMessageRequestBuilder;
 
-    public ApiResponse ResponseModel { get; set; }
+    public APIResponse ResponseModel { get; set; }
 
     public BaseHttpService(IOptions<MovieAppConfig> movieAppConfig,
         IOptions<MovieApiConfig> apiConfig,
@@ -41,7 +41,7 @@ public class BaseHttpService : BaseService, IBaseHttpService
                 httpResponse = await SendRequestWithRefreshToken(httpClient, httpMessage);
             }
 
-            var apiResponse = new ApiResponse
+            var apiResponse = new APIResponse
             {
                 IsSuccess = false
             };
@@ -49,7 +49,7 @@ public class BaseHttpService : BaseService, IBaseHttpService
             try
             {
 #pragma warning disable CS8601 // Possible null reference assignment.
-                apiResponse.ErrorMessages = httpResponse.StatusCode switch
+                apiResponse.Errors = httpResponse.StatusCode switch
                 {
                     HttpStatusCode.NotFound => new() { "Not Found" },
                     HttpStatusCode.Forbidden => new() { "Access Denied" },
@@ -59,16 +59,16 @@ public class BaseHttpService : BaseService, IBaseHttpService
                 };
 #pragma warning restore CS8601 // Possible null reference assignment.
 
-                if (apiResponse.ErrorMessages is null)
+                if (apiResponse.Errors is null)
                 {
                     var apiContent = await httpResponse.Content.ReadAsStringAsync();
                     apiResponse.IsSuccess = true;
-                    apiResponse = JsonConvert.DeserializeObject<ApiResponse>(apiContent);
+                    apiResponse = JsonConvert.DeserializeObject<APIResponse>(apiContent);
                 }
             }
             catch (Exception e)
             {
-                apiResponse.ErrorMessages = new List<string>() { "Error Encountered", e.Message.ToString() };
+                apiResponse.Errors = new List<string>() { "Error Encountered", e.Message.ToString() };
             }
 
             var resultString = JsonConvert.SerializeObject(apiResponse);
@@ -81,9 +81,9 @@ public class BaseHttpService : BaseService, IBaseHttpService
         }
         catch(Exception e)
         {
-            var apiResponse = new ApiResponse
+            var apiResponse = new APIResponse
             {
-                ErrorMessages = new List<string>() { e.Message.ToString() },
+                Errors = new List<string>() { e.Message.ToString() },
                 IsSuccess = false
             };
 
@@ -162,7 +162,7 @@ public class BaseHttpService : BaseService, IBaseHttpService
 
         var content = await response.Content.ReadAsStringAsync();
 
-        var apiResponse = JsonConvert.DeserializeObject<ApiResponse>(content);
+        var apiResponse = JsonConvert.DeserializeObject<APIResponse>(content);
 
         if (!apiResponse.IsSuccess)
         {

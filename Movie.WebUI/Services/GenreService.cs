@@ -1,6 +1,4 @@
-﻿using Microsoft.Identity.Client;
-
-namespace Movie.WebUI.Services;
+﻿namespace Movie.WebUI.Services;
 
 public record GetGenresResult(IEnumerable<GenreDto> Genres);
 
@@ -9,14 +7,17 @@ public class GenreService : BaseService, IGenreService
 
     private readonly IBaseHttpService _baseHttpService;
     private readonly IHttpClientFactory _httpClientFactory;
+    private readonly ILogger<GenreService> _logger;
 
     public GenreService(IBaseHttpService baseHttpService,
         IHttpClientFactory httpClientFactory,
         IOptions<MovieAppConfig> movieAppConfig,
-        IOptions<MovieApiConfig> apiConfig) : base(apiConfig.Value, movieAppConfig.Value)
+        IOptions<MovieApiConfig> apiConfig,
+        ILogger<GenreService> logger) : base(apiConfig.Value, movieAppConfig.Value)
     {
         _baseHttpService = baseHttpService;
         _httpClientFactory = httpClientFactory;
+        _logger = logger;
     }
 
     public async Task<GetGenresResult> GetGenres()
@@ -29,7 +30,7 @@ public class GenreService : BaseService, IGenreService
             ContentType = ContentType.Json
         };
 
-        var response = await _baseHttpService.SendAsync<ApiResponse>(request, 
+        var response = await _baseHttpService.SendAsync<APIResponse>(request, 
             isAuthenticated: false);
 
 
@@ -41,10 +42,17 @@ public class GenreService : BaseService, IGenreService
 
         if (isresponseValid)
         {
-            var conversionResult = JsonConvert
-                .DeserializeObject<GetGenresResult>(resultString);
+            try
+            {
+                var conversionResult = JsonConvert
+                    .DeserializeObject<GetGenresResult>(resultString);
 
-            return conversionResult;
+                return conversionResult;
+            }
+            catch (JsonException e)
+            {
+                _logger.LogError(e, "Error deserializing movie data.");
+            }
         }
 
         return new GetGenresResult(new List<GenreDto> { });

@@ -13,6 +13,10 @@ public class GetAllMoviesQueryHandler(IMovieService movieService)
     {
         var result = await movieService.GetAllMovies();
 
-        return new GetAllMoviesResult(result.MovieDtos);
+        if(result == null || result.MovieDtos == null || (!result.MovieDtos.Any()))
+        {
+            return new GetAllMoviesResult(new List<MovieDto>());
+        }
+        return new GetAllMoviesResult(result.MovieDtos);      
     }
 }

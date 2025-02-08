@@ -1,0 +1,40 @@
+﻿<section id="registrationSuccessfulSection">
+    <h1>Registration Successful!</h1>
+    <p>Thank you for signing up. You can now proceed to the login page.</p>
+    <a asp-area="Identity" asp-controller="User" asp-action="Login" class="button">Login</a>
+</section>
+
+<style>
+    #registrationSuccessfulSection {
+        text-align: center;
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        margin-top: 20%;
+    }
+
+    h1 {
+        color: #157347;
+    }
+
+    p {
+        font-size: 25px;
+    }
+
+    .button {
+        display: inline-block;
+        margin-top: 15px;
+        padding: 10px 20px;
+        text-decoration: none;
+        color: white;
+        background: #157347;
+        width: 20%;
+        border-radius: 15px;
+        font-size: 23px;
+    }
+
+        .button:hover {
+            background: #45a049;
+        }
+</style>

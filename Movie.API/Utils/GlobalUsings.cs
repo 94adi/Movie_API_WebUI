@@ -63,3 +63,4 @@ global using Azure.Identity;
 global using Azure.Security.KeyVault.Secrets;
 global using Movie.API.Services.File;
 global using Movie.API.Extensions;
+global using Movie.BuildingBlocks.Models;

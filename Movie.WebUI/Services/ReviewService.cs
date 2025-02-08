@@ -3,12 +3,15 @@
 public class ReviewService : BaseService, IReviewService
 {
     private readonly IBaseHttpService _httpService;
+    private ILogger<ReviewService> _logger;
 
     public ReviewService(IBaseHttpService httpService,
         IOptions<MovieAppConfig> movieAppConfig,
-        IOptions<MovieApiConfig> apiConfig) : base(apiConfig.Value, movieAppConfig.Value)
+        IOptions<MovieApiConfig> apiConfig,
+        ILogger<ReviewService> logger) : base(apiConfig.Value, movieAppConfig.Value)
     {
         _httpService = httpService;
+        _logger = logger;
     }
 
     public async Task<CreateReviewResultDto> AddReview(UpsertReviewDto reviewDto)
@@ -21,21 +24,29 @@ public class ReviewService : BaseService, IReviewService
             ContentType = ContentType.MultipartFormData
         };
 
-        var response = await _httpService.SendAsync<ApiResponse>(request, isAuthenticated: true);
+        var response = await _httpService.SendAsync<APIResponse>(request, isAuthenticated: true);
 
         bool isReviewCreated = (response != null && response.IsSuccess && response.Result != null);
 
+        if (!isReviewCreated)
+        {
+            throw new Exception("Review could not be created");
+        }
+
         string resultString = Convert.ToString(response.Result);
 
-        if (isReviewCreated)
+        try
         {
             CreateReviewResultDto createdReview = JsonConvert
                 .DeserializeObject<CreateReviewResultDto>(resultString);
 
             return createdReview;
         }
-
-        return new CreateReviewResultDto { Id = int.MinValue };
+        catch (JsonException e)
+        {
+            _logger.LogError(e, "Error deserializing movie data.");
+            throw;
+        }
     }
 
     public async Task<GetAllMovieReviewsResultDto> GetMovieReviews(int movieId, 
@@ -52,7 +63,7 @@ public class ReviewService : BaseService, IReviewService
             Url = $"{_baseApiUri}{url}?pageNumber={pageNumber}&pageSize={pageSize}"
         };
 
-        var response = await _httpService.SendAsync<ApiResponse>(request, isAuthenticated: false);
+        var response = await _httpService.SendAsync<APIResponse>(request, isAuthenticated: false);
 
         bool isListAvailable = (response != null) &&
             (response.IsSuccess == true) &&
@@ -60,15 +71,25 @@ public class ReviewService : BaseService, IReviewService
 
         var stringResult = Convert.ToString(response.Result);
 
-        GetAllMovieReviewsResultDto getAllMovieReviewsResult = null;
-
         if (isListAvailable)
         {
-            getAllMovieReviewsResult = JsonConvert.
-                DeserializeObject<GetAllMovieReviewsResultDto>(stringResult);
+            try
+            {
+                var getAllMovieReviewsResult = JsonConvert.
+                    DeserializeObject<GetAllMovieReviewsResultDto>(stringResult);
+
+                return getAllMovieReviewsResult;
+            }
+            catch (JsonException e)
+            {
+                _logger.LogError(e, "Error deserializing movie data.");
+            }
         }
 
-        return getAllMovieReviewsResult;
+        return new GetAllMovieReviewsResultDto 
+        {
+            ReviewDtos = new List<ReviewDto>() 
+        };
     }
 
     public async Task<GetMovieReviewsCountResultDto> GetMovieReviewsCount(int movieId)
@@ -83,7 +104,7 @@ public class ReviewService : BaseService, IReviewService
             Url = $"{_baseApiUri}{url}"
         };
 
-        var response = await _httpService.SendAsync<ApiResponse>(request, isAuthenticated: false);
+        var response = await _httpService.SendAsync<APIResponse>(request, isAuthenticated: false);
 
         bool isResponseAvailable = (response != null) &&
             (response.IsSuccess == true) &&
@@ -97,7 +118,11 @@ public class ReviewService : BaseService, IReviewService
             return result;
         }
 
-        throw new Exception("Could not get result");
+        _logger.LogWarning("Failed to retrieve movie reviews count. Response: {response}", response);
+        return new GetMovieReviewsCountResultDto
+        {
+            Count = 0
+        };
     }
 
     public async Task<GetMovieRatingByUserResultDto> GetMovieRatingByUser(int movieId)
@@ -112,7 +137,7 @@ public class ReviewService : BaseService, IReviewService
             Url = $"{_baseApiUri}{url}"
         };
 
-        var response = await _httpService.SendAsync<ApiResponse>(request, isAuthenticated: true);
+        var response = await _httpService.SendAsync<APIResponse>(request, isAuthenticated: true);
 
         bool isResponseAvailable = (response != null) &&
             (response.IsSuccess == true) &&
@@ -120,15 +145,14 @@ public class ReviewService : BaseService, IReviewService
 
         var stringResult = Convert.ToString(response.Result);
 
-        GetMovieRatingByUserResultDto getMovieRatingByUserResult = null;
-
         if (isResponseAvailable)
         {
-            getMovieRatingByUserResult = JsonConvert.
+            var getMovieRatingByUserResult = JsonConvert.
                 DeserializeObject<GetMovieRatingByUserResultDto>(stringResult);
+            return getMovieRatingByUserResult;
         }
 
-        return getMovieRatingByUserResult;
+        return new GetMovieRatingByUserResultDto();
 
     }
 
@@ -144,23 +168,31 @@ public class ReviewService : BaseService, IReviewService
             Url = $"{_baseApiUri}{url}"
         };
 
-        var response = await _httpService.SendAsync<ApiResponse>(request, isAuthenticated: true);
+        var response = await _httpService.SendAsync<APIResponse>(request, isAuthenticated: true);
 
         bool isResponseAvailable = (response != null) &&
             (response.IsSuccess == true) &&
             (response.Result != null);
 
-        var stringResult = Convert.ToString(response.Result);
-
-        GetReviewByIdResultDto getMovieRatingByUserResult = null;
-
-        if (isResponseAvailable)
+        if (!isResponseAvailable)
         {
-            getMovieRatingByUserResult = JsonConvert.
-                DeserializeObject<GetReviewByIdResultDto>(stringResult);
+            throw new Exception($"Could not get review with id {reviewId}");
         }
 
-        return getMovieRatingByUserResult;
+        var stringResult = Convert.ToString(response.Result);
+
+        try
+        {
+            var getMovieRatingByUserResult = JsonConvert.
+                DeserializeObject<GetReviewByIdResultDto>(stringResult);
+
+            return getMovieRatingByUserResult;
+        }
+        catch (JsonException e)
+        {
+            _logger.LogError(e, "Error deserializing movie data.");
+            throw;
+        }
     }
 
     public async Task<GetUserMovieReviewResultDto> GetUserMovieReview(int movieId, string userId)
@@ -177,7 +209,7 @@ public class ReviewService : BaseService, IReviewService
             Url = $"{_baseApiUri}{url}"
         };
 
-        var response = await _httpService.SendAsync<ApiResponse>(request, isAuthenticated: true);
+        var response = await _httpService.SendAsync<APIResponse>(request, isAuthenticated: true);
 
         bool isResponseAvailable = (response != null) &&
            (response.IsSuccess == true) &&
@@ -185,15 +217,22 @@ public class ReviewService : BaseService, IReviewService
 
         var stringResult = Convert.ToString(response.Result);
 
-        GetUserMovieReviewResultDto getUserMovieReviewResult = null;
-
         if (isResponseAvailable)
         {
-            getUserMovieReviewResult = JsonConvert.
-                DeserializeObject<GetUserMovieReviewResultDto>(stringResult);
+            try
+            {
+                var getUserMovieReviewResult = JsonConvert.
+                    DeserializeObject<GetUserMovieReviewResultDto>(stringResult);
+
+                return getUserMovieReviewResult;
+            }
+            catch (JsonException e)
+            {
+                _logger.LogError(e, "Error deserializing movie data.");
+            }
         }
 
-        return getUserMovieReviewResult;
+        return new GetUserMovieReviewResultDto();
     }
 
     public async Task<UpdateReviewResultDto> UpdateReview(UpdateReviewDto updateReviewDto)
@@ -207,7 +246,7 @@ public class ReviewService : BaseService, IReviewService
             Url = $"{_baseApiUri}{url}"
         };
 
-        var response = await _httpService.SendAsync<ApiResponse>(request, isAuthenticated: true);
+        var response = await _httpService.SendAsync<APIResponse>(request, isAuthenticated: true);
 
         bool isResponseAvailable = (response != null) &&
             (response.IsSuccess == true) &&

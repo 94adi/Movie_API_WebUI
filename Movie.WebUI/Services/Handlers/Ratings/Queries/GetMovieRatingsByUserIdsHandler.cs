@@ -15,6 +15,11 @@ public class GetMovieRatingsByUserIdsQueryHandler(IMovieService movieService)
         var request = new GetMovieRatingsRequestDto(query.UserIds);
         var result = await movieService.GetMovieRatings(query.MovieId, request);
 
-        return new GetMovieRatingsByUserIdsResult(result.Ratings);
+        if(result != null && result.Ratings != null && result.Ratings.Any())
+        {
+            return new GetMovieRatingsByUserIdsResult(result.Ratings);
+        }
+
+        return new GetMovieRatingsByUserIdsResult(new List<Models.Dto.RatingDto>());
     }
 }

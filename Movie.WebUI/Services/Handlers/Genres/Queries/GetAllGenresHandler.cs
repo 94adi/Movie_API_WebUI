@@ -11,7 +11,12 @@ public class GetAllGenresQueryHandler(IGenreService genreService)
         CancellationToken cancellationToken)
     {
         var result = await genreService.GetGenres();
+        bool isResultValid = (result != null && result.Genres != null && result.Genres.Any());
+        if (isResultValid)
+        {
+            return new GetAllGenresResult(result.Genres);
+        }
 
-        return new GetAllGenresResult(result.Genres);
+        return new GetAllGenresResult(new List<GenreDto>());
     }
 }

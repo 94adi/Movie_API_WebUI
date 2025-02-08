@@ -10,7 +10,7 @@ public class LogoutCommandHandler(IUserService userService,
     public async Task<LogoutResult> Handle(LogoutCommand command, CancellationToken cancellationToken)
     {
         var apiRequest = mapper.Map<LogoutRequestDto>(command);
-        var apiResponse = await userService.LogoutAsync<ApiResponse>(apiRequest);
+        var apiResponse = await userService.LogoutAsync<APIResponse>(apiRequest);
 
         if (apiResponse != null && apiResponse.IsSuccess) 
         {

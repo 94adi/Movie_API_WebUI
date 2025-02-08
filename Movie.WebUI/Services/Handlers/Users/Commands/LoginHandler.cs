@@ -7,23 +7,25 @@ public record LoginResult(bool IsSuccess, string ErrorMessage);
 internal class LoginHandler(IUserService authService,
     ITokenProvider tokenProvider,
     IMapper mapper,
-    IHttpContextAccessor httpContextAccessor) 
+    IHttpContextAccessor httpContextAccessor, 
+    ILogger<LoginHandler> logger) 
     : ICommandHandler<LoginCommand, LoginResult>
 {
     public async Task<LoginResult> Handle(LoginCommand command, 
         CancellationToken cancellationToken)
     {
-        ApiResponse? apiResponse;
+        APIResponse? APIResponse;
+        LoginRequestDto apiRequest;
+        apiRequest = mapper.Map<LoginRequestDto>(command);
+        APIResponse = await authService.LoginAsync<APIResponse>(apiRequest);
+
         try
         {
-            var apiRequest = mapper.Map<LoginRequestDto>(command);
-            apiResponse = await authService.LoginAsync<ApiResponse>(apiRequest);
-
-            if (apiResponse != null && apiResponse.IsSuccess)
+            if (APIResponse != null && APIResponse.IsSuccess)
             {
                 //deserialize result and create token obj
                 var token = JsonConvert.DeserializeObject<TokenDTO>(
-                    Convert.ToString(apiResponse.Result));
+                    Convert.ToString(APIResponse.Result));
 
                 //create jwt out of it
                 var handler = new JsonWebTokenHandler();
@@ -50,11 +52,11 @@ internal class LoginHandler(IUserService authService,
                 return new LoginResult(true, string.Empty);
             }
         }
-        catch (Exception) 
+        catch (Exception e) 
         {
-            throw;
+            logger.LogError(e, "Login error");
         }
 
-        return new LoginResult(false, apiResponse?.ErrorMessages.FirstOrDefault());
+        return new LoginResult(false, APIResponse?.Errors.FirstOrDefault());
     }
 }

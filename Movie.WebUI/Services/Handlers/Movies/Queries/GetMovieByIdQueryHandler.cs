@@ -15,6 +15,11 @@ public class GetMovieByIdQueryHandler(IMovieService movieService)
 	{
 		var getMovieByResultDto = await movieService.GetMovieById(query.Id);
 
+		if(getMovieByResultDto?.MovieDto == null)
+		{
+			throw new Exception($"Movie with id {query.Id} could not be found");
+		}
+
         return new GetMovieByIdResult(getMovieByResultDto.MovieDto);
 	}
 }

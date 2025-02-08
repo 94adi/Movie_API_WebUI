@@ -1,0 +1,11 @@
+﻿@model ErrorViewModel
+
+<section id="errorSection">
+    <h1 id="erorrHeading">Something Went Wrong</h1>
+    <p id="errorMessage">An unexpected error occurred. Please try again later or contact support.</p>
+
+    @if (!string.IsNullOrEmpty(Model.Message))
+    {
+        <p>@Model.Message</p>
+    }
+</section>

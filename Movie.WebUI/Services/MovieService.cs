@@ -1,14 +1,19 @@
-﻿namespace Movie.WebUI.Services;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Movie.WebUI.Services.Handlers.Movies.Queries;
+
+namespace Movie.WebUI.Services;
 
 public class MovieService : BaseService, IMovieService
 {
     private readonly IBaseHttpService _httpService;
-
+    private readonly ILogger<MovieService> _logger;
     public MovieService(IBaseHttpService httpService,
         IOptions<MovieAppConfig> appConfig,
-        IOptions<MovieApiConfig> apiConfig) : base(apiConfig.Value, appConfig.Value)
+        IOptions<MovieApiConfig> apiConfig,
+        ILogger<MovieService> logger) : base(apiConfig.Value, appConfig.Value)
     {
         _httpService = httpService;
+        _logger = logger;
     }
 
     public async Task<CreateMovieResultDto> CreateMovie(CreateMovieDto movieDto)
@@ -21,24 +26,31 @@ public class MovieService : BaseService, IMovieService
             ContentType = ContentType.MultipartFormData
         };
 
-        var response = await _httpService.SendAsync<ApiResponse>(request, 
+        var response = await _httpService.SendAsync<APIResponse>(request, 
             isAuthenticated: true);
 
         bool isMovieCreated = (response != null && 
             response.IsSuccess && 
             response.Result != null);
 
-        string resultString = Convert.ToString(response.Result);
-
         if (isMovieCreated)
         {
-            CreateMovieResultDto createdMovie = JsonConvert
-                    .DeserializeObject<CreateMovieResultDto>(resultString);
+            string resultString = Convert.ToString(response.Result);
 
-            return createdMovie;
+            try
+            {
+                CreateMovieResultDto createdMovie = JsonConvert
+        .           DeserializeObject<CreateMovieResultDto>(resultString);
+                createdMovie.IsSuccess = true;
+                return createdMovie;
+            }
+            catch (JsonException e)
+            {
+                _logger.LogError(e, "Error deserializing movie data.");
+            }
         }
 
-        return new CreateMovieResultDto { Id = int.MinValue };
+        return new CreateMovieResultDto { Id = int.MinValue, IsSuccess = false };
     }
 
     public async Task<GetAllMoviesResultDto> GetAllMovies()
@@ -50,22 +62,32 @@ public class MovieService : BaseService, IMovieService
             Url = $"{_baseApiUri}{_appConfig.GetAllMoviesPath}"
         };
 
-        var response = await _httpService.SendAsync<ApiResponse>(request, 
+        var response = await _httpService.SendAsync<APIResponse>(request, 
             isAuthenticated: false);
 
-        GetAllMoviesResultDto getAllMoviesResult = null;
+        GetAllMoviesResultDto getAllMoviesResult = 
+            new GetAllMoviesResultDto 
+            { 
+                MovieDtos = new List<MovieDto>() 
+            };
 
-        bool isListAvailable = (response != null) &&
+        bool isListAvailable = ((response != null) &&
             (response.IsSuccess == true) &&
-            (response.Result != null);
-
-        var stringResult = Convert.ToString(response.Result);
-
-
+            (response.Result != null));
+    
 		if (isListAvailable)
         {
-			getAllMoviesResult = JsonConvert.
-                DeserializeObject<GetAllMoviesResultDto>(stringResult);
+            var stringResult = Convert.ToString(response.Result);
+
+            try
+            {
+                getAllMoviesResult = JsonConvert.
+                    DeserializeObject<GetAllMoviesResultDto>(stringResult);
+            }
+            catch(JsonException e)
+            {
+                _logger.LogError(e, "Error deserializing movie data.");
+            }
         }
 
         return getAllMoviesResult;
@@ -80,25 +102,32 @@ public class MovieService : BaseService, IMovieService
             Url = $"{_baseApiUri}{_appConfig.MovieApiPath}{id}"
 		};
 
-		var response = await _httpService.SendAsync<ApiResponse>(apiRequest,
+		var response = await _httpService.SendAsync<APIResponse>(apiRequest,
 	            isAuthenticated: true);
 
-		GetMovieByIdResultDto getMovieByIdResultDto = null;
-
-		bool isResponseValid = (response != null) &&
+		bool isResponseValid = ((response != null) &&
 			(response.IsSuccess == true) &&
-			(response.Result != null);
+			(response.Result != null));
 
-		var stringResult = Convert.ToString(response.Result);
+        if (!isResponseValid)
+        {
+            throw new Exception($"Movie with id {id} could not be found");
+        }
 
+        var stringResult = Convert.ToString(response.Result);
 
-		if (isResponseValid)
-		{
-			getMovieByIdResultDto = JsonConvert.
-				DeserializeObject<GetMovieByIdResultDto>(stringResult);
-		}
+        try
+        {
+            var getMovieByIdResultDto = JsonConvert.
+                        DeserializeObject<GetMovieByIdResultDto>(stringResult);
 
-		return getMovieByIdResultDto;
+            return getMovieByIdResultDto;
+        }
+        catch (JsonException e)
+        {
+            _logger.LogError(e, "Error deserializing movie data.");
+            throw;
+        }      
 	}
 
 	public async Task<GetMoviesPagingResultDto> GetMovies(int pageNumber = 1, int pageSize = 0)
@@ -111,28 +140,34 @@ public class MovieService : BaseService, IMovieService
             ContentType = ContentType.MultipartFormData
         };
 
-        var response = await _httpService.SendAsync<ApiResponse>(apiRequest,
+        var response = await _httpService.SendAsync<APIResponse>(apiRequest,
         isAuthenticated: true);
 
-        bool isResponseValid = (response != null) &&
+        bool isResponseValid = ((response != null) &&
                             (response.IsSuccess == true) &&
-                            (response.Result != null);
+                            (response.Result != null));
 
-        var stringResult = Convert.ToString(response.Result);
-
-        GetMoviesPagingResultDto resultDto = new GetMoviesPagingResultDto(new List<MovieDto> { });
+        GetMoviesPagingResultDto resultDto = 
+            new GetMoviesPagingResultDto(new List<MovieDto> { });
 
         if (isResponseValid)
         {
-            resultDto = JsonConvert.DeserializeObject<GetMoviesPagingResultDto>(stringResult);
+            try
+            {
+                var stringResult = Convert.ToString(response.Result);
+                resultDto = JsonConvert.DeserializeObject<GetMoviesPagingResultDto>(stringResult);
+            }
+            catch (JsonException e)
+            {
+                _logger.LogError(e, "Error deserializing movie data.");
+            }
         }
 
         return resultDto;
     }
 
     public async Task<UpdateMovieResultDto> UpdateMovie(UpdateMovieDto movieDto)
-    {
-        
+    {     
         var apiRequest = new ApiRequest
         {
             ApiType = ApiType.PUT,
@@ -141,7 +176,7 @@ public class MovieService : BaseService, IMovieService
             ContentType = ContentType.MultipartFormData
         };
 
-        var response = await _httpService.SendAsync<ApiResponse>(apiRequest,
+        var response = await _httpService.SendAsync<APIResponse>(apiRequest,
         isAuthenticated: true);
 
         bool isMovieUpdated = (response != null) &&
@@ -159,7 +194,7 @@ public class MovieService : BaseService, IMovieService
             Url = $"{_baseApiUri}{_appConfig.DeleteMoviePath}{movieId}"
         };
 
-        var result = await _httpService.SendAsync<ApiResponse>(apiRequest, 
+        var result = await _httpService.SendAsync<APIResponse>(apiRequest, 
             isAuthenticated: true);
 
         bool isSucess = (result != null) && (result.IsSuccess == true);
@@ -177,19 +212,28 @@ public class MovieService : BaseService, IMovieService
             ContentType = ContentType.Json
         };
 
-        var response = await _httpService.SendAsync<ApiResponse>(apiRequest, isAuthenticated: false);
+        var response = await _httpService.SendAsync<APIResponse>(apiRequest, isAuthenticated: false);
 
         bool isResponseValid = (response != null) &&
                     (response.IsSuccess == true) &&
                     (response.Result != null);
 
-        var stringResult = Convert.ToString(response.Result);
-
-        var resultDto = new GetAllMoviesCarouselResultDto();
+        var resultDto = new GetAllMoviesCarouselResultDto
+        {
+            MovieCarousels = new List<Models.Dto.MovieDto>()
+        };
 
         if (isResponseValid)
         {
-            resultDto = JsonConvert.DeserializeObject<GetAllMoviesCarouselResultDto>(stringResult);
+            try
+            {
+                var stringResult = Convert.ToString(response.Result);
+                resultDto = JsonConvert.DeserializeObject<GetAllMoviesCarouselResultDto>(stringResult);
+            }
+            catch (JsonException e)
+            {
+                _logger.LogError(e, "Error deserializing movie data.");
+            }
         }
 
         return resultDto;
@@ -205,9 +249,9 @@ public class MovieService : BaseService, IMovieService
             ContentType = ContentType.MultipartFormData
         };
 
-        var result = await _httpService.SendAsync<ApiResponse>(apiRequest, isAuthenticated: true);
+        var result = await _httpService.SendAsync<APIResponse>(apiRequest, isAuthenticated: true);
 
-        bool isSucess = (result != null) && (result.IsSuccess == true);
+        bool isSucess = (result != null) && (result.IsSuccess);
 
         return new UpdateMovieCarouselResultDto(isSucess);
     }
@@ -221,19 +265,20 @@ public class MovieService : BaseService, IMovieService
             Url = $"{_baseApiUri}{_appConfig.GetMoviesCountPath}"
         };
 
-        var response = await _httpService.SendAsync<ApiResponse>(request, isAuthenticated: false);
+        var response = await _httpService.SendAsync<APIResponse>(request, isAuthenticated: false);
 
         bool isResponseAvailable = (response != null) &&
             (response.IsSuccess == true) &&
             (response.Result != null);
 
-        var stringResult = Convert.ToString(response.Result);
-
         if (isResponseAvailable)
         {
+            var stringResult = Convert.ToString(response.Result);
             var result = JsonConvert.DeserializeObject<GetMoviesCountResultDto>(stringResult);
             return result;
         }
+
+        _logger.LogWarning("Failed to retrieve movies count. Response: {response}", response);
 
         return new GetMoviesCountResultDto(0);
     }
@@ -255,7 +300,7 @@ public class MovieService : BaseService, IMovieService
             Url = $"{_baseApiUri}{url}"
         };
 
-        var result = await _httpService.SendAsync<ApiResponse>(request, isAuthenticated: true);
+        var result = await _httpService.SendAsync<APIResponse>(request, isAuthenticated: true);
 
         bool isSucess = (result != null) && (result.IsSuccess == true);
 
@@ -274,20 +319,26 @@ public class MovieService : BaseService, IMovieService
             Url = $"{_baseApiUri}{url}"
         };
 
-        var response = await _httpService.SendAsync<ApiResponse>(request, isAuthenticated: false);
+        var response = await _httpService.SendAsync<APIResponse>(request, isAuthenticated: false);
 
         bool isResponseAvailable = (response != null) &&
                                     (response.IsSuccess == true) &&
                                     (response.Result != null);
 
-        var stringResult = Convert.ToString(response.Result);
-
         GetMovieRatingResultDto result = null;
 
         if (isResponseAvailable)
         {
-            result = JsonConvert.
-                DeserializeObject<GetMovieRatingResultDto>(stringResult);
+            try
+            {
+                var stringResult = Convert.ToString(response.Result);
+                result = JsonConvert.
+                    DeserializeObject<GetMovieRatingResultDto>(stringResult);
+            }
+            catch (JsonException e)
+            {
+                _logger.LogError(e, "Error deserializing movie data.");
+            }
         }
 
         return result;
@@ -307,20 +358,29 @@ public class MovieService : BaseService, IMovieService
         };
 
 
-        var response = await _httpService.SendAsync<ApiResponse>(apiRequest, isAuthenticated: false);
+        var response = await _httpService.SendAsync<APIResponse>(apiRequest, isAuthenticated: false);
 
         bool isResponseAvailable = (response != null) &&
                                     (response.IsSuccess == true) &&
                                     (response.Result != null);
 
-        var stringResult = Convert.ToString(response.Result);
-
-        GetMovieRatingsResultDto result = null;
+        GetMovieRatingsResultDto result = new GetMovieRatingsResultDto
+        {
+            Ratings = new List<RatingDto>()
+        };
 
         if (isResponseAvailable)
         {
-            result = JsonConvert.
-                DeserializeObject<GetMovieRatingsResultDto>(stringResult);
+            try
+            {
+                var stringResult = Convert.ToString(response.Result);
+                result = JsonConvert.
+                    DeserializeObject<GetMovieRatingsResultDto>(stringResult);
+            }
+            catch (JsonException e)
+            {
+                _logger.LogError(e, "Error deserializing movie data.");
+            }
         }
 
         return result;

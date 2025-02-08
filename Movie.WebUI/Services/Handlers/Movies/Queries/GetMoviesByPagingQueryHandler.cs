@@ -15,7 +15,12 @@ namespace Movie.WebUI.Services.Handlers.Movies.Queries
         {
             var result = await movieService.GetMovies(query.PageNumber, query.PageSize);
 
-            return new GetMoviesByPagingResult(result.MovieDtos);
+            if(result != null && result.MovieDtos !=null && result.MovieDtos.Any())
+            {
+                return new GetMoviesByPagingResult(result.MovieDtos);
+            }
+
+            return new GetMoviesByPagingResult(new List<MovieDto>());
         }
     }
 }

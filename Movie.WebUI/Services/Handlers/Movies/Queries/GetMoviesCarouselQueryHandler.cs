@@ -13,7 +13,11 @@ public class GetMoviesCarouselQueryHandler(IMovieService movieService)
         CancellationToken cancellationToken)
     {
         var result = await movieService.GetAllMoviesCarousel();
+        if(result != null && result.MovieCarousels != null && result.MovieCarousels.Any())
+        {
+            return new GetMoviesCarouselResult(result.MovieCarousels);
+        }
 
-        return new GetMoviesCarouselResult(result.MovieCarousels);
+        return new GetMoviesCarouselResult(new List<MovieDto>());
     }
 }

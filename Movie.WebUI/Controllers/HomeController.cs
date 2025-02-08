@@ -44,4 +44,13 @@ public class HomeController : Controller
 
         return View(indexMovieVM);
     }
+
+    public IActionResult Error(string message)
+    {
+        var errorViewModel = new ErrorViewModel
+        {
+            Message = message
+        };
+        return View(errorViewModel);
+    }
 }
