@@ -64,3 +64,6 @@ global using Azure.Security.KeyVault.Secrets;
 global using Movie.API.Services.File;
 global using Movie.API.Extensions;
 global using Movie.BuildingBlocks.Models;
+global using Movie.API.Services.Factory;
+global using Movie.API.Services.Poster;
+global using Movie.BuildingBlocks.Utils;

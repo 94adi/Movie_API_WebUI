@@ -1,8 +1,13 @@
 var builder = WebApplication.CreateBuilder(args);
 
+var environment = EnvironmentUtils.GetEnvironmentVariable();
+//builder.Environment.EnvironmentName = environment;
+
+builder.Configuration.AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true);
+
 builder.Configuration.AddUserSecrets<Program>();
 
-builder.RegisterAzureConfigs();
+builder.RegisterConfigs();
 
 builder.RegisterServices();
 

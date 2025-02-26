@@ -3,24 +3,34 @@ version: '3.4'
 services:
   moviedb:
     container_name: moviedb
-    environment:
-        - ACCEPT_EULA=Y
-        - SA_PASSWORD=s3creTPassW0rD4332948
     restart: always
     ports:
-        - "1593:1593"
+      - "1593:1593"
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=${DB_PASSWORD}
+    env_file:
+      - .env
 
   movie.api:
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_HTTP_PORTS=8080
-      - ASPNETCORE_HTTPS_PORTS=8081
-      - ConnectionStrings__Database=Server=moviedb;Database=MovieDb;User Id=sa;Password=s3creTPassW0rD4332948;Encrypt=False;TrustServerCertificate=True
     depends_on:
       - moviedb
+    environment:
+      - ASPNETCORE_URLS=http://0.0.0.0:8080
+      - PUBLIC_API_URL=http://localhost:8080
+      - ConnectionStrings__Database=Server=moviedb;Database=MovieDb;User Id=sa;Password=${DB_PASSWORD};Encrypt=False;TrustServerCertificate=True
     ports:
-      - "5020:8080"
-      - "5021:8081"
-    volumes:
-      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
-      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+      - "8080:8080"
+    env_file:
+      - .env
+
+  movie.ui:
+    depends_on:
+      - movie.api
+    environment:
+      - ASPNETCORE_URLS=http://0.0.0.0:8081
+      - ASPNETCORE_ENVIRONMENT=Docker 
+      - ApiConfig__MovieApiBase=http://movie.api:8080/api/
+      - ApiConfig__MovieApiVersion=v2
+    ports:
+      - "8081:8081"

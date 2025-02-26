@@ -1,12 +1,41 @@
 ﻿using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
 using Movie.API.Utils;
+using Movie.BuildingBlocks.Utils;
+using System;
 
 namespace Movie.WebUI.Extensions;
 
 public static class ConfigureExtensions
 {
-    public static WebApplicationBuilder RegisterAzureConfigs(this WebApplicationBuilder appBuilder)
+    public static void RegisterConfigs(this WebApplicationBuilder appBuilder)
+    {
+        var environment = EnvironmentUtils.GetEnvironmentVariable();
+        switch (environment)
+        {
+            case EnvironmentConstants.DEVELOPMENT:
+            case EnvironmentConstants.DOCKER:
+                RegisterLocalConfigs(appBuilder);
+            break;
+
+            case EnvironmentConstants.AZURE:
+                RegisterAzureConfigs(appBuilder);
+            break;
+
+            default:
+                throw new InvalidOperationException("Unknown environment");
+
+        }
+    }
+
+    public static void RegisterLocalConfigs(WebApplicationBuilder appBuilder)
+    {
+        appBuilder.Services.Configure<MovieApiConfig>(appBuilder.Configuration.GetSection("ApiConfig"));
+        appBuilder.Services.Configure<MovieAppConfig>(appBuilder.Configuration.GetSection("AppConfig"));
+    }
+
+
+    public static void RegisterAzureConfigs(WebApplicationBuilder appBuilder)
     {
         var keyVaultName = appBuilder.Configuration["AzureConfig:KeyVaultName"];
 
@@ -20,10 +49,22 @@ public static class ConfigureExtensions
 
         appBuilder.Configuration.AddInMemoryCollection(new Dictionary<string, string?>
         {
-            { "AzureApiConfig:MovieApiBase",  movieApiBaseSecret.Value.Value},
-            { "AzureApiConfig:MovieApiVersion", movieApiVersionSecret.Value.Value }
+            { "ApiConfig:MovieApiBase",  movieApiBaseSecret.Value.Value},
+            { "ApiConfig:MovieApiVersion", movieApiVersionSecret.Value.Value }
         });
 
-        return appBuilder;
+        appBuilder.Services.Configure<MovieApiConfig>(appBuilder.Configuration.GetSection("ApiConfig"));
+        appBuilder.Services.Configure<MovieAppConfig>(appBuilder.Configuration.GetSection("AppConfig"));
+    }
+
+    public static bool IsDockerEnv(this IHostEnvironment env)
+    {
+        bool result = false;
+        if(env.EnvironmentName.ToLower() == EnvironmentConstants.DOCKER)
+        {
+            result = true;
+        }
+
+        return result; 
     }
 }

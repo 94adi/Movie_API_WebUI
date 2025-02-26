@@ -3,12 +3,12 @@ using Azure.Storage.Sas;
 
 namespace Movie.API.Services.File;
 
-public class FileShareService : IFileShareService
+public class AzureFileShareService : IFileShareService
 {
     private readonly FileShareConfig _fileShareConfig;
     private readonly ShareClient _shareClient;
 
-    public FileShareService(IOptions<FileShareConfig> config)
+    public AzureFileShareService(IOptions<FileShareConfig> config)
     {
         _fileShareConfig = config.Value;
         _shareClient = new ShareClient(_fileShareConfig.ConnectionString, 
@@ -54,31 +54,20 @@ public class FileShareService : IFileShareService
 
         try
         {          
-            var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT").ToLower();
+            var rootDirectory = _shareClient.GetRootDirectoryClient();
+            var fileClient = rootDirectory.GetFileClient(fileName);
 
-            if (env == EnvironmentsHelper.LOCAL)
+            var sasUri = fileClient.GenerateSasUri(
+                ShareFileSasPermissions.Read,
+                DateTimeOffset.UtcNow.Add(expirationTime)
+                ).ToString();
+
+            if (string.IsNullOrEmpty(sasUri))
             {
-                string url = $"{appUrl}/LocalPosters/{fileName}";
-
-                return url;
+                return defaultImage;
             }
-            else if(env == EnvironmentsHelper.AZURE)
-            {
-                var rootDirectory = _shareClient.GetRootDirectoryClient();
-                var fileClient = rootDirectory.GetFileClient(fileName);
 
-                var sasUri = fileClient.GenerateSasUri(
-                    ShareFileSasPermissions.Read,
-                    DateTimeOffset.UtcNow.Add(expirationTime)
-                    ).ToString();
-
-                if (string.IsNullOrEmpty(sasUri))
-                {
-                    return defaultImage;
-                }
-
-                return sasUri;
-            }
+            return sasUri;
         }
         catch(Exception e)
         {

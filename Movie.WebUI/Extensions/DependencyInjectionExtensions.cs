@@ -1,25 +1,12 @@
-﻿namespace Movie.WebUI.Utils;
+﻿using Movie.BuildingBlocks.Utils;
 
-public static class BuilderUtils
+namespace Movie.WebUI.Extensions;
+
+public static class DependencyInjectionExtensions
 {
-    public static string GetAPIConfigKey(string environment)
-    {
-        environment = environment.ToLower();
-        return environment switch
-        {
-            "development" => "LocalApiConfig",
-            "azure" => "AzureApiConfig",
-            _ => "LocalApiConfig"
-        };
-    }
-
     public static WebApplicationBuilder RegisterServices(this WebApplicationBuilder appBuilder)
     {
-        var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development";
-        var apiConfigkey = GetAPIConfigKey(environment);
-
-        appBuilder.Services.Configure<MovieApiConfig>(appBuilder.Configuration.GetSection(apiConfigkey));
-        appBuilder.Services.Configure<MovieAppConfig>(appBuilder.Configuration.GetSection("AppConfig"));
+        var environment = EnvironmentUtils.GetEnvironmentVariable();
 
         var assembly = typeof(Program).Assembly;
 

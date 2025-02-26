@@ -23,7 +23,7 @@ public static class Utilities
 
     public static string GetAppUrl()
     {
-        var urlsEnv = Environment.GetEnvironmentVariable("ASPNETCORE_URLS");
+        var urlsEnv = Environment.GetEnvironmentVariable("PUBLIC_API_URL");
         string url = "";
 
         if (urlsEnv.Contains(";"))
@@ -37,16 +37,5 @@ public static class Utilities
         }
 
         return url;
-    }
-
-    public static string GetDatabaseConnectionString(this WebApplicationBuilder builder, string environment)
-    {
-        environment = environment.ToLower();
-        return environment switch
-        {
-            "development" => builder.Configuration.GetConnectionString("Database"),
-            "azure" => builder.Configuration["AzureDatabase:ConnectionString"],
-            _ => builder.Configuration.GetConnectionString("Database")
-        };
     }
 }

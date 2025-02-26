@@ -9,3 +9,9 @@ services:
     build:
       context: .
       dockerfile: Movie.API/Dockerfile
+
+  movie.ui:
+    image: ${DOCKER_REGISTRY-}movieui
+    build:
+      context: .
+      dockerfile: Movie.WebUI/Dockerfile

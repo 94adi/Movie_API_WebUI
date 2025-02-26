@@ -17,6 +17,7 @@ public class CreateMovieDto
     [Display(Name = "Genre(s)")]
     public IEnumerable<string> SelectedGenres { get; set; }
 
+    [Display(Name = "Poster Image")]
     public string? ImageUrl { get; set; }
 
     public IFormFile? Image { get; set; }
