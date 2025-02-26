@@ -44,8 +44,9 @@ public static class Utilities
         environment = environment.ToLower();
         return environment switch
         {
-            "development" => builder.Configuration.GetConnectionString("Database"),
-            "azure" => builder.Configuration["AzureDatabase:ConnectionString"],
+            EnvironmentConstants.DEVELOPMENT or EnvironmentConstants.DOCKER => 
+                builder.Configuration.GetConnectionString("Database"),
+            EnvironmentConstants.AZURE => builder.Configuration["AzureDatabase:ConnectionString"],
             _ => builder.Configuration.GetConnectionString("Database")
         };
     }

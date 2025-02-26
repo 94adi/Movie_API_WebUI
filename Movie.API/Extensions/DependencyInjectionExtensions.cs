@@ -65,7 +65,18 @@ public static class DependencyInjectionExtensions
         appBuilder.Services.AddScoped<IMovieCarouselRepository, MovieCarouselRepository>();
         appBuilder.Services.AddScoped<IRatingRepository, RatingRepository>();
         appBuilder.Services.AddScoped<IRatingService, RatingService>();
-        appBuilder.Services.AddSingleton<IFileShareService, FileShareService>();
+
+        appBuilder.Services.AddSingleton<LocalMoviePosterService>();
+        appBuilder.Services.AddSingleton<AzureMoviePosterService>();
+
+        appBuilder.Services.AddSingleton<LocalFileShareService>();
+        appBuilder.Services.AddSingleton<AzureFileShareService>();
+
+        appBuilder.Services.AddSingleton<IFileShareService>(provider =>
+        FileShareServiceFactory.Create(provider));
+
+        appBuilder.Services.AddSingleton<IMoviePosterService>(provider => 
+            MoviePosterServiceFactory.Create(provider));
 
         appBuilder.Services.AddSwaggerGen();
 

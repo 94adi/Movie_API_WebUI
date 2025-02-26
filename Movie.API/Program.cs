@@ -2,7 +2,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration.AddUserSecrets<Program>();
 
-builder.RegisterAzureConfigs();
+builder.RegisterConfigs();
 
 builder.RegisterServices();
 

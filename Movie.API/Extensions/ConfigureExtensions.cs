@@ -1,10 +1,38 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-
-namespace Movie.API.Extensions;
+﻿namespace Movie.API.Extensions;
 
 public static class ConfigureExtensions
 {
-    public static WebApplicationBuilder RegisterAzureConfigs(this WebApplicationBuilder appBuilder)
+
+    public static WebApplicationBuilder RegisterConfigs(this WebApplicationBuilder appBuilder)
+    {
+        var environment = Environment
+                .GetEnvironmentVariable(EnvironmentConstants.ENVIRONMENT_STRING)
+                .ToLower();
+
+        RegisterConfigsHelper(appBuilder, environment);
+
+        return appBuilder;
+    }
+
+    private static void RegisterConfigsHelper(WebApplicationBuilder appBuilder, string environment)
+    {
+        switch (environment)
+        {
+            case EnvironmentConstants.DEVELOPMENT:
+                RegisterLocalConfigs(appBuilder);
+                break;
+            case EnvironmentConstants.DOCKER:
+                RegisterDockerConfigs(appBuilder);
+                break;
+            case EnvironmentConstants.AZURE:
+                RegisterAzureConfigs(appBuilder);
+                break;
+            default:
+                throw new InvalidOperationException("Unknown environment");
+        }
+    }
+
+    private static void RegisterAzureConfigs(WebApplicationBuilder appBuilder) 
     {
         var keyVaultName = appBuilder.Configuration["AzureConfig:KeyVaultName"];
 
@@ -32,7 +60,16 @@ public static class ConfigureExtensions
         appBuilder.Services.Configure<FileShareConfig>(appBuilder.Configuration.GetSection("AzureFileShare"));
 
         appBuilder.Services.Configure<UserPasswordSecrets>(appBuilder.Configuration.GetSection("UserPasswordSecrets"));
-
-        return appBuilder;
     }
+
+    private static void RegisterLocalConfigs(WebApplicationBuilder appBuilder)
+    {
+
+    }
+
+    private static void RegisterDockerConfigs(WebApplicationBuilder appBuilder)
+    {
+
+    }
+
 }
