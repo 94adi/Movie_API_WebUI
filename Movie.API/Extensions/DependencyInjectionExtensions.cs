@@ -4,7 +4,7 @@ public static class DependencyInjectionExtensions
 {
     public static WebApplicationBuilder RegisterServices(this WebApplicationBuilder appBuilder)
     {
-        var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development";
+        var environment = EnvironmentUtils.GetEnvironmentVariable();
 
         string connectionString = appBuilder.GetDatabaseConnectionString(environment);
 
@@ -65,7 +65,18 @@ public static class DependencyInjectionExtensions
         appBuilder.Services.AddScoped<IMovieCarouselRepository, MovieCarouselRepository>();
         appBuilder.Services.AddScoped<IRatingRepository, RatingRepository>();
         appBuilder.Services.AddScoped<IRatingService, RatingService>();
-        appBuilder.Services.AddSingleton<IFileShareService, FileShareService>();
+
+        appBuilder.Services.AddScoped<LocalMoviePosterService>();
+        appBuilder.Services.AddScoped<AzureMoviePosterService>();
+
+        appBuilder.Services.AddSingleton<LocalFileShareService>();
+        appBuilder.Services.AddSingleton<AzureFileShareService>();
+
+        appBuilder.Services.AddSingleton<IFileShareService>(provider =>
+        FileShareServiceFactory.Create(provider));
+
+        appBuilder.Services.AddScoped<IMoviePosterService>(provider => 
+            MoviePosterServiceFactory.Create(provider));
 
         appBuilder.Services.AddSwaggerGen();
 

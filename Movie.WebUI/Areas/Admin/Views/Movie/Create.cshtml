@@ -45,13 +45,6 @@
                     asp-items=@Model.GenreOptions 
                     class="form-control" 
                     multiple="multiple">
-                    @if (Model.GenreOptions != null)
-                    {
-                        @foreach (var genre in Model.GenreOptions)
-                        {
-                            <option value="@genre.Value">@genre.Text</option>
-                        }
-                    }
                 </select>
             </div>
 

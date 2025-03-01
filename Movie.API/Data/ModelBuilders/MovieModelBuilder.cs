@@ -24,9 +24,6 @@
 
             modelBuilder.Entity<Models.Movie>()
                 .Ignore(m => m.FinalScore);
-
-            modelBuilder.Entity<Models.Movie>()
-                .Ignore(m => m.ImageUrl);
         }
     }
 }

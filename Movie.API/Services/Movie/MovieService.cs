@@ -1,4 +1,5 @@
 ﻿using Movie.API.Services.File;
+using Movie.API.Services.Poster;
 
 namespace Movie.API.Services.Movie;
 
@@ -7,14 +8,17 @@ public class MovieService : IMovieService
     private readonly IMovieRepository _movieRepository;
     private readonly IMovieGenreRepository _movieGenreRepository;
     private readonly IFileShareService _fileShareService;
+    private readonly IMoviePosterService _moviePosterService;
 
     public MovieService(IMovieRepository movieRepository,
         IMovieGenreRepository movieGenreRepository,
-        IFileShareService fileShareService)
+        IFileShareService fileShareService,
+        IMoviePosterService moviePosterService)
     {
         _movieRepository = movieRepository;
         _movieGenreRepository = movieGenreRepository;
         _fileShareService = fileShareService;
+        _moviePosterService = moviePosterService;
     }
 
     public async Task<Models.Movie> GetByIdAsync(int id, bool includeGenres = false)
@@ -30,25 +34,7 @@ public class MovieService : IMovieService
 
     public async Task StoreMoviePoster(Models.Movie movie, IFormFile poster)
     {
-        if(poster != null && poster.Length > 0)
-        {
-            var movieId = movie.Id;
-            string fileGuid = Guid.NewGuid().ToString();
-            string fileName = $"{movieId}_{fileGuid}{Path.GetExtension(poster.FileName)}";
-
-            await _fileShareService.UploadFileAsync(fileName, poster.OpenReadStream());
-          
-            movie.ImageFileName = fileName;
-        }
-        else
-        {
-            var movieFromDb = await _movieRepository.GetByIdAsync(movie.Id);
-            if(!String.IsNullOrEmpty(movieFromDb.ImageFileName))
-            {
-                movie.ImageFileName = movieFromDb.ImageFileName;
-            }
-        }
-
+        await _moviePosterService.StoreMoviePoster(movie, poster);
     }
 
     public async Task RemoveMovieGenres(int movieId)
@@ -75,6 +61,11 @@ public class MovieService : IMovieService
         foreach(var movie in movies)
         {
             //TO DO: store in cache and verify if exists before calling
+            //If current movie has an ImageUrl persisted (not using Azure), skip the url generation
+            if(movie.ImageUrl != null)
+            {
+                continue;
+            }
             movie.ImageUrl = _fileShareService.GenerateFileUrl(movie.ImageFileName, 
                 new TimeSpan(1,0,0,0));
         }
