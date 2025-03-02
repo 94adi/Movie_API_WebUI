@@ -56,9 +56,11 @@ public class LocalFileShareService : IFileShareService
 
     private string GenerateFilePath(string fileName)
     {
-        var filePath = Path.Combine(Directory.GetCurrentDirectory(),
+        var filePath = Path.Join(Directory.GetCurrentDirectory(),
                             _fileLocalConfig.ImageStoragePath,
                             fileName);
+
+        filePath = Path.GetFullPath(filePath);
 
         return filePath;
     }

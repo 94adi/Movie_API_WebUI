@@ -89,7 +89,7 @@ public static class ConfigureExtensions
     private static void RegisterDockerConfigs(WebApplicationBuilder appBuilder)
     {
         appBuilder.Services.Configure<UserPasswordSecrets>(appBuilder.Configuration.GetSection("UserPasswordSecrets"));
-        appBuilder.Services.Configure<FileLocalConfig>(appBuilder.Configuration.GetSection("UserPasswordSecrets"));
+        appBuilder.Services.Configure<FileLocalConfig>(appBuilder.Configuration.GetSection("FileLocalConfig"));
     }
 
 }
